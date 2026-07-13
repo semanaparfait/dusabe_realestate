@@ -9,7 +9,6 @@ import {
   User, 
   Menu, 
   X,
-  Settings,
   PlusCircle,
   Shield,
   Briefcase

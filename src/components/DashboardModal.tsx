@@ -217,7 +217,7 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
                     <h4 style={{ fontSize: '0.95rem' }}>The Obsidian Glass Oasis (Bel Air)</h4>
                     <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>July 24, 2026 at 06:00 PM • Managed by Sophia Sterling</p>
                   </div>
-                  <span style={{ fontSize: '0.75rem', background: 'rgba(16, 185, 129, 0.1)', color: 'var(--accent-gold-dark)', padding: '4px 10px', borderRadius: '4px', fontWeight: 'bold' }}>
+                  <span style={{ fontSize: '0.75rem', background: 'rgba(200, 122, 83, 0.15)', color: 'var(--accent-gold-dark)', padding: '4px 10px', borderRadius: '4px', fontWeight: 'bold' }}>
                     Awaiting Gate Pass
                   </span>
                 </div>

@@ -174,7 +174,7 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
                 <div className="detail-amenities-grid">
                   {property.amenities.map((amenity, idx) => (
                     <div key={idx} className="detail-amenity-item">
-                      <div style={{ background: 'rgba(16, 185, 129, 0.1)', color: 'var(--accent-gold-dark)', borderRadius: '50%', padding: '4px', display: 'flex' }}>
+                      <div style={{ background: 'rgba(200, 122, 83, 0.15)', color: 'var(--accent-gold-dark)', borderRadius: '50%', padding: '4px', display: 'flex' }}>
                         <Check size={14} />
                       </div>
                       <span>{amenity}</span>

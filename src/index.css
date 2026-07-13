@@ -10,56 +10,56 @@
   --transition-slow: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 
   /* Light Theme Color Tokens */
-  --primary: #090D16;
-  --primary-hover: #1E293B;
-  --secondary: #2563EB;
-  --accent-gold: #059669; /* Elegant Emerald Green (Growth/Sustainability) */
-  --accent-gold-dark: #047857;
-  --bg-primary: #FFFFFF;
-  --bg-secondary: #F8FAFC;
-  --bg-tertiary: #F1F5F9;
-  --text-primary: #090D16;
-  --text-secondary: #475569;
-  --text-tertiary: #94A3B8;
-  --border-light: rgba(226, 232, 240, 0.8);
-  --border-glass: rgba(255, 255, 255, 0.4);
+  --primary: #1C2A27;
+  --primary-hover: #121C1A;
+  --secondary: #1C2A27;
+  --accent-gold: #C87A53; /* Warm Terracotta (Accent/CTA) */
+  --accent-gold-dark: #B0653F;
+  --bg-primary: #F6F5F2; /* Warm Canvas */
+  --bg-secondary: #FFFFFF; /* Pure White Surfaces */
+  --bg-tertiary: #ECEBE6;
+  --text-primary: #1C2A27; /* Deep Forest */
+  --text-secondary: #2E423E;
+  --text-tertiary: #6D8681;
+  --border-light: rgba(28, 42, 39, 0.12);
+  --border-glass: rgba(200, 122, 83, 0.15);
   
   /* Glassmorphism Tokens - Light */
-  --glass-bg: rgba(255, 255, 255, 0.65);
-  --glass-border: rgba(255, 255, 255, 0.4);
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(200, 122, 83, 0.15);
   --glass-blur: blur(12px);
-  --glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.08);
-  --card-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.08);
-  --glow-shadow: 0 0 20px rgba(5, 150, 105, 0.15);
+  --glass-shadow: 0 8px 32px 0 rgba(28, 42, 39, 0.08);
+  --card-shadow: 0 10px 30px -10px rgba(28, 42, 39, 0.08);
+  --glow-shadow: 0 0 20px rgba(200, 122, 83, 0.18);
 
   /* Neumorphic Shadows - Light */
-  --neu-flat: 6px 6px 12px #e2e8f0, -6px -6px 12px #ffffff;
-  --neu-inset: inset 4px 4px 8px #e2e8f0, inset -4px -4px 8px #ffffff;
+  --neu-flat: 6px 6px 12px #ECEBE6, -6px -6px 12px #FFFFFF;
+  --neu-inset: inset 4px 4px 8px #ECEBE6, inset -4px -4px 8px #FFFFFF;
 }
 
 [data-theme="dark"] {
   /* Dark Theme Color Tokens */
-  --primary: #1F2937;
-  --primary-hover: #374151;
-  --secondary: #3B82F6;
-  --accent-gold: #10B981; /* Bright Emerald Green (Growth/Sustainability) */
-  --accent-gold-dark: #059669;
-  --bg-primary: #090D16;
-  --bg-secondary: #0F172A;
-  --bg-tertiary: #1E293B;
-  --text-primary: #F8FAFC;
-  --text-secondary: #CBD5E1;
-  --text-tertiary: #64748B;
-  --border-light: rgba(51, 65, 85, 0.6);
-  --border-glass: rgba(15, 23, 42, 0.4);
+  --primary: #E4ECEB;
+  --primary-hover: #F0F6F5;
+  --secondary: #C87A53;
+  --accent-gold: #C87A53; /* Warm Terracotta (Accent/CTA) */
+  --accent-gold-dark: #B0653F;
+  --bg-primary: #111A18; /* Deep Forest Background */
+  --bg-secondary: #1C2A27; /* Muted Pine Surfaces */
+  --bg-tertiary: #2A3F3B;
+  --text-primary: #E4ECEB; /* Light Sage Text */
+  --text-secondary: #B2C6C3;
+  --text-tertiary: #7C9591;
+  --border-light: rgba(228, 236, 235, 0.12);
+  --border-glass: rgba(200, 122, 83, 0.12);
   
   /* Glassmorphism Tokens - Dark */
-  --glass-bg: rgba(15, 23, 42, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-bg: rgba(28, 42, 39, 0.8);
+  --glass-border: rgba(228, 236, 235, 0.08);
   --glass-blur: blur(16px);
   --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   --card-shadow: 0 10px 40px -15px rgba(0, 0, 0, 0.5);
-  --glow-shadow: 0 0 25px rgba(16, 185, 129, 0.3);
+  --glow-shadow: 0 0 25px rgba(200, 122, 83, 0.3);
 
   /* Neumorphic Shadows - Dark */
   --neu-flat: 6px 6px 12px #05070c, -6px -6px 12px #111726;
@@ -138,7 +138,7 @@ a {
 }
 
 .gold-gradient-text {
-  background: linear-gradient(135deg, #34D399 0%, #10B981 100%);
+  background: linear-gradient(135deg, #E09B75 0%, #C87A53 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -160,7 +160,7 @@ a {
 .luxury-gold-button:hover {
   transform: translateY(-2px);
   filter: brightness(1.1);
-  box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 0 25px rgba(200, 122, 83, 0.4);
 }
 
 .luxury-gold-button:active {
@@ -244,7 +244,7 @@ section {
 .preloader-spinner {
   width: 50px;
   height: 50px;
-  border: 2px solid rgba(16, 185, 129, 0.1);
+  border: 2px solid rgba(200, 122, 83, 0.15);
   border-top-color: var(--accent-gold);
   border-radius: 50%;
   animation: spin 1s infinite linear;
