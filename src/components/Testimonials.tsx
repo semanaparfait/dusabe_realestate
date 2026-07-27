@@ -33,10 +33,10 @@ export const Testimonials: React.FC<TestimonialsProps> = ({ testimonials }) => {
   return (
     <section id="testimonials" className="container" style={{ borderBottom: '1px solid var(--border-light)' }}>
       <div className="section-header">
-        <span className="section-subtitle">Client Audits</span>
-        <h2 className="section-title">Endorsements from Global Investors</h2>
+        <span className="section-subtitle">Reviews</span>
+        <h2 className="section-title">What Our Clients Say</h2>
         <p className="section-desc">
-          Discretion, integrity, and flawless execution. Read reviews from our high-net-worth property patrons.
+          Read real reviews from happy homeowners and investors who bought properties with DUSABE Real Estate.
         </p>
       </div>
 

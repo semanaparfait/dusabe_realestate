@@ -45,10 +45,10 @@ export const WhyChooseUs: React.FC = () => {
     <section id="why-choose-us" className="dark-section" style={{ background: 'var(--bg-secondary)', borderTop: '1px solid var(--border-light)', borderBottom: '1px solid var(--border-light)' }}>
       <div className="container">
         <div className="section-header">
-          <span className="section-subtitle">Excellence Standards</span>
-          <h2 className="section-title">Why Sophisticated Investors Choose AURA</h2>
+          <span className="section-subtitle">Our Promise</span>
+          <h2 className="section-title">Why Choose DUSABE Real Estate</h2>
           <p className="section-desc">
-            We transcend standard real estate transactions, curating seamless residential assets, tax-efficient configurations, and structural masterpieces.
+            We help you find, buy, and rent top quality homes with honest advice and simple steps.
           </p>
         </div>
 
@@ -56,49 +56,49 @@ export const WhyChooseUs: React.FC = () => {
         <div className="why-grid">
           <div className="why-card glass-panel" style={{ background: 'var(--bg-primary)' }}>
             <div className="why-icon"><ShieldCheck size={28} /></div>
-            <h3 style={{ fontSize: '1.2rem', marginBottom: '12px' }}>Verified Telemetry</h3>
+            <h3 style={{ fontSize: '1.2rem', marginBottom: '12px' }}>100% Verified Homes</h3>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-              100% of our portfolio undergoes strict structural integrity, thermal scanning, and legal verification before listing.
+              Every property is checked for safety, legal ownership, and top quality before listing.
             </p>
           </div>
 
           <div className="why-card glass-panel" style={{ background: 'var(--bg-primary)' }}>
             <div className="why-icon"><Users size={28} /></div>
-            <h3 style={{ fontSize: '1.2rem', marginBottom: '12px' }}>Discreet Elite Advisors</h3>
+            <h3 style={{ fontSize: '1.2rem', marginBottom: '12px' }}>Expert Real Estate Agents</h3>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-              Our agents are certified luxury consultants specializing in asset sheltering, trust ownerships, and private transactions.
+              Our friendly agents help you find the right property for your family or investment.
             </p>
           </div>
 
           <div className="why-card glass-panel" style={{ background: 'var(--bg-primary)' }}>
             <div className="why-icon"><Lock size={28} /></div>
-            <h3 style={{ fontSize: '1.2rem', marginBottom: '12px' }}>Structured Acquisitions</h3>
+            <h3 style={{ fontSize: '1.2rem', marginBottom: '12px' }}>Safe & Secure Payments</h3>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-              High-security escrow operations cooperating with elite financial bodies to secure capital positioning during transfers.
+              Your money and paperwork are protected every step of the way.
             </p>
           </div>
 
           <div className="why-card glass-panel" style={{ background: 'var(--bg-primary)' }}>
             <div className="why-icon"><Award size={28} /></div>
-            <h3 style={{ fontSize: '1.2rem', marginBottom: '12px' }}>Guaranteed Pricing Index</h3>
+            <h3 style={{ fontSize: '1.2rem', marginBottom: '12px' }}>Best Price Guarantee</h3>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-              Private access to off-market auctions, builder closeouts, and distressed estates at genuine market-aligned valuation.
+              Get direct access to fair market deals and high-value properties.
             </p>
           </div>
 
           <div className="why-card glass-panel" style={{ background: 'var(--bg-primary)' }}>
             <div className="why-icon"><Headphones size={28} /></div>
-            <h3 style={{ fontSize: '1.2rem', marginBottom: '12px' }}>24/7 Digital Concierge</h3>
+            <h3 style={{ fontSize: '1.2rem', marginBottom: '12px' }}>24/7 Customer Support</h3>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-              Your private client liaison is always available for site modifications, structural audits, or local services onboarding.
+              Our team is always available to answer your questions and guide your visits.
             </p>
           </div>
 
           <div className="why-card glass-panel" style={{ background: 'var(--bg-primary)' }}>
             <div className="why-icon"><Scale size={28} /></div>
-            <h3 style={{ fontSize: '1.2rem', marginBottom: '12px' }}>Legal Compliance Wings</h3>
+            <h3 style={{ fontSize: '1.2rem', marginBottom: '12px' }}>Full Legal Assistance</h3>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-              Complete international cross-border advisory, helping secure residency-by-investment, golden visas, and tax exemptions.
+              We take care of all legal documents, contracts, and transfer requirements for you.
             </p>
           </div>
         </div>

@@ -29,10 +29,10 @@ export const AgentProfiles: React.FC<AgentProfilesProps> = ({ agents }) => {
   return (
     <section id="agents" className="container hidden">
       <div className="section-header">
-        <span className="section-subtitle">AURA Advising Group</span>
-        <h2 className="section-title">Consult Our Elite Advisors</h2>
+        <span className="section-subtitle">Our Team</span>
+        <h2 className="section-title">Meet Our Expert Real Estate Agents</h2>
         <p className="section-desc">
-          Bespoke advisory services backed by decades of high-stakes asset procurement and private wealth compliance.
+          Our friendly professional agents are here to help you buy, sell, or rent your ideal property.
         </p>
       </div>
 

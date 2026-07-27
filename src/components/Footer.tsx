@@ -33,7 +33,7 @@ export const Footer: React.FC = () => {
               </div>
             </a>
             <p style={{ fontSize: '0.9rem', margin: '10px 0 24px', lineHeight: '1.7', color: '#94A3B8' }}>
-              The global authority in architectural masterpieces and sovereign real estate placement.
+              Your trusted real estate agency for finding, buying, and renting top quality homes.
             </p>
 
             <h4 style={{ color: '#FFFFFF', fontSize: '0.95rem', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Private Intel Dispatch</h4>

@@ -12,10 +12,10 @@ export const Blog: React.FC<BlogProps> = ({ blogPosts }) => {
   return (
     <section id="blog" className="container">
       <div className="section-header">
-        <span className="section-subtitle">Intellectual Capital</span>
-        <h2 className="section-title">AURA Journals & Research</h2>
+        <span className="section-subtitle">Articles & News</span>
+        <h2 className="section-title">Latest Real Estate News & Advice</h2>
         <p className="section-desc">
-          Professional reviews of architecture shifts, private equity real estate placements, and luxury tax directives.
+          Read our simple guides on home design, property buying tips, and market news.
         </p>
       </div>
 

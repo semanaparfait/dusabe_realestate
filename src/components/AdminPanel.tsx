@@ -19,7 +19,8 @@ import {
   ShieldCheck, 
   Database, 
   Globe2, 
-  Layers
+  Layers,
+  CheckCircle2
 } from 'lucide-react';
 import { 
   type Property, 
@@ -575,7 +576,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 transition: 'all 0.2s'
               }}
             >
-              <Activity size={18} /> Telemetry Overview
+              <Activity size={18} /> Dashboard Overview
             </button>
 
             <button 
@@ -597,7 +598,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 transition: 'all 0.2s'
               }}
             >
-              <Building2 size={18} /> Asset Listings ({properties.length})
+              <Building2 size={18} /> Properties ({properties.length})
             </button>
 
             <button 
@@ -619,7 +620,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 transition: 'all 0.2s'
               }}
             >
-              <Users size={18} /> Advising Group ({agents.length})
+              <Users size={18} /> Agents ({agents.length})
             </button>
 
             <button 
@@ -641,7 +642,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 transition: 'all 0.2s'
               }}
             >
-              <Star size={18} /> Endorsements ({testimonials.length})
+              <Star size={18} /> Reviews ({testimonials.length})
             </button>
 
             <button 
@@ -663,7 +664,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 transition: 'all 0.2s'
               }}
             >
-              <FileText size={18} /> Research Journals ({blogPosts.length})
+              <FileText size={18} /> Blog Posts ({blogPosts.length})
             </button>
 
             <button 
@@ -685,7 +686,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 transition: 'all 0.2s'
               }}
             >
-              <Settings size={18} /> Platform Settings
+              <Settings size={18} /> System Settings
             </button>
           </div>
         </div>
@@ -733,13 +734,12 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
-                <h1 style={{ fontSize: '1.8rem', fontFamily: 'var(--font-heading)', fontWeight: 'bold' }}>Executive Control Telemetry</h1>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', marginTop: '4px' }}>Real-time database analytics, cluster node metrics, and listing performance indicators.</p>
+                <h1 style={{ fontSize: '1.8rem', fontFamily: 'var(--font-heading)', fontWeight: 'bold' }}>Admin Dashboard</h1>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', marginTop: '4px' }}>Real-time statistics and management overview for DUSABE Real Estate.</p>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.25)', padding: '8px 16px', borderRadius: '30px', color: '#10B981', fontSize: '0.8rem', fontWeight: 600 }}>
-                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10B981', boxShadow: '0 0 10px #10B981' }}></span>
-                System Status: All Systems Operational
+                <CheckCircle2 size={16} /> All Systems Online
               </div>
             </div>
 
@@ -747,14 +747,14 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
               <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px', border: '1px solid var(--border-light)', background: 'var(--bg-secondary)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text-tertiary)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  <span>Portfolio Valuation</span>
+                  <span>Total Property Value</span>
                   <DollarSign size={16} style={{ color: 'var(--accent-gold)' }} />
                 </div>
                 <div style={{ fontSize: '1.8rem', fontWeight: 'bold', margin: '12px 0 4px', color: 'var(--accent-gold)' }}>
                   ${(totalValuation / 1000000).toFixed(1)}M
                 </div>
                 <div style={{ fontSize: '0.75rem', color: '#10B981', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <TrendingUp size={12} /> +14.2% quarterly expansion
+                  <TrendingUp size={12} /> +14.2% growth this month
                 </div>
               </div>
 
@@ -773,7 +773,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
               <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px', border: '1px solid var(--border-light)', background: 'var(--bg-secondary)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text-tertiary)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  <span>Advisors & Consultants</span>
+                  <span>Real Estate Agents</span>
                   <Users size={16} style={{ color: 'var(--accent-gold)' }} />
                 </div>
                 <div style={{ fontSize: '1.8rem', fontWeight: 'bold', margin: '12px 0 4px', color: 'var(--text-primary)' }}>
