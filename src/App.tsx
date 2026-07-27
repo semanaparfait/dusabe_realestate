@@ -42,37 +42,23 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
     'nav.blog': 'Blog',
     'nav.contact': 'Contact',
     'nav.post': 'Post Property',
-    'hero.sub': 'AURA PRIVATE ESTATES',
-    'gallery.title': 'Featured Luxury Placements',
-    'gallery.subtitle': 'Curated Portfolios'
+    'hero.sub': 'DUSABE REAL ESTATE',
+    'gallery.title': 'Featured Luxury Properties',
+    'gallery.subtitle': 'Curated Portfolio'
   },
-  fr: {
-    'nav.home': 'Accueil',
-    'nav.buy': 'Acheter',
-    'nav.rent': 'Louer',
-    'nav.sell': 'Vendre',
-    'nav.commercial': 'Commercial',
-    'nav.agents': 'Advisors',
-    'nav.blog': 'Journaux',
-    'nav.contact': 'Contact',
-    'nav.post': 'Déposer',
-    'hero.sub': 'PROPRIÉTÉS PRIVÉES AURA',
-    'gallery.title': 'Placements de Prestige',
-    'gallery.subtitle': 'Portefeuille Sélectionné'
-  },
-  ar: {
-    'nav.home': 'الرئيسية',
-    'nav.buy': 'شراء',
-    'nav.rent': 'إيجار',
-    'nav.sell': 'بيع',
-    'nav.commercial': 'تجاري',
-    'nav.agents': 'الوكلاء',
-    'nav.blog': 'المدونة',
-    'nav.contact': 'اتصال',
-    'nav.post': 'أعلن عن عقار',
-    'hero.sub': 'أورا القابضة الخاصة',
-    'gallery.title': 'عقارات مميزة ونخبوية',
-    'gallery.subtitle': 'حقائب استثمارية منسقة'
+  rw: {
+    'nav.home': 'Ahabanza',
+    'nav.buy': 'Gura',
+    'nav.rent': 'Kodesha',
+    'nav.sell': 'Gurishe',
+    'nav.commercial': 'Ubucuruzi',
+    'nav.agents': 'Abahagarizi',
+    'nav.blog': 'Amakuru',
+    'nav.contact': 'Tubarize',
+    'nav.post': 'Shyiraho Inzu',
+    'hero.sub': 'DUSABE REAL ESTATE',
+    'gallery.title': 'Inzu n\'Ibibanza Byatoranyijwe',
+    'gallery.subtitle': 'Imitungo Yizewe'
   }
 };
 
