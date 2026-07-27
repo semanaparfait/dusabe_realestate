@@ -255,8 +255,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   }}
                 >
                   <option value="USD">USD ($)</option>
-                  <option value="EUR">EUR (€)</option>
-                  <option value="AED">AED (د.إ)</option>
+                  <option value="RWF">RWF (FRw)</option>
                 </select>
               </div>
 

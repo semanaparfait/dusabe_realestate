@@ -21,20 +21,17 @@ export const MapSection: React.FC<MapSectionProps> = ({
 
   // Convert Price for Display
   const formatPrice = (priceUSD: number) => {
-    let rate = 1.0;
-    let symbol = '$';
-    if (currency === 'EUR') {
-      rate = 0.92;
-      symbol = '€';
-    } else if (currency === 'AED') {
-      rate = 3.67;
-      symbol = 'AED ';
+    if (currency === 'RWF') {
+      const converted = Math.round(priceUSD * 1400);
+      if (converted >= 1000000000) {
+        return `RWF ${(converted / 1000000000).toFixed(1)}B`;
+      }
+      return `RWF ${(converted / 1000000).toFixed(0)}M`;
     }
-    const converted = Math.round(priceUSD * rate);
-    if (converted >= 1000000) {
-      return `${symbol}${(converted / 1000000).toFixed(1)}M`;
+    if (priceUSD >= 1000000) {
+      return `$${(priceUSD / 1000000).toFixed(1)}M`;
     }
-    return `${symbol}${converted.toLocaleString()}`;
+    return `$${priceUSD.toLocaleString()}`;
   };
 
   useEffect(() => {

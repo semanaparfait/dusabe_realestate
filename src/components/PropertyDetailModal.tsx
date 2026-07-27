@@ -63,17 +63,11 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
   };
 
   const formatPrice = (priceUSD: number) => {
-    let rate = 1.0;
-    let symbol = '$';
-    if (currency === 'EUR') {
-      rate = 0.92;
-      symbol = '€';
-    } else if (currency === 'AED') {
-      rate = 3.67;
-      symbol = 'AED ';
+    if (currency === 'RWF') {
+      const converted = Math.round(priceUSD * 1400);
+      return `RWF ${converted.toLocaleString()}`;
     }
-    const converted = Math.round(priceUSD * rate);
-    return `${symbol}${converted.toLocaleString()}`;
+    return `$${priceUSD.toLocaleString()}`;
   };
 
   return (

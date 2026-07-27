@@ -27,27 +27,23 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
   const agentList = agents && agents.length > 0 ? agents : AGENTS;
   const agent = agentList.find(a => a.id === property.agentId) || agentList[0];
 
-  // Helper for Currency Conversion
+  // Helper for Currency Conversion (USD and RWF)
   const formatPrice = (priceUSD: number) => {
-    let rate = 1.0;
-    let symbol = '$';
-    if (currency === 'EUR') {
-      rate = 0.92;
-      symbol = '€';
-    } else if (currency === 'AED') {
-      rate = 3.67;
-      symbol = 'AED ';
-    }
-
-    const converted = Math.round(priceUSD * rate);
-    
-    // For rent, price might be per month, let's format nice
     const suffix = property.status === 'For Rent' ? '/mo' : '';
-
-    if (converted >= 1000000) {
-      return `${symbol}${(converted / 1000000).toFixed(1)}M${suffix}`;
+    if (currency === 'RWF') {
+      const converted = Math.round(priceUSD * 1400);
+      if (converted >= 1000000000) {
+        return `RWF ${(converted / 1000000000).toFixed(2)}B${suffix}`;
+      } else if (converted >= 1000000) {
+        return `RWF ${(converted / 1000000).toFixed(1)}M${suffix}`;
+      }
+      return `RWF ${converted.toLocaleString()}${suffix}`;
     }
-    return `${symbol}${converted.toLocaleString()}${suffix}`;
+
+    if (priceUSD >= 1000000) {
+      return `$${(priceUSD / 1000000).toFixed(1)}M${suffix}`;
+    }
+    return `$${priceUSD.toLocaleString()}${suffix}`;
   };
 
   return (
