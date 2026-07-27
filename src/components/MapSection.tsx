@@ -233,7 +233,7 @@ export const MapSection: React.FC<MapSectionProps> = ({
   };
 
   return (
-    <div className="map-container">
+    <div className="map-container hidden">
       {/* Top Left Menu Panel */}
       <div className="glass-panel map-sidebar-overlay" style={{ background: 'rgba(15, 23, 42, 0.85)' }}>
         <h4 style={{ color: '#FFFFFF', marginBottom: '12px', fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
