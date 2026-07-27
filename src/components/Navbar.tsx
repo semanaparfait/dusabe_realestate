@@ -72,8 +72,16 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
       <div className="container navbar-container">
-        <a href="#" className="navbar-logo">
-          AURA<span>.</span>
+        <a href="#" className="navbar-logo" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
+          <img src="/dusabe_logo.png" alt="DUSABE Logo" style={{ width: '38px', height: '38px', borderRadius: '8px', objectFit: 'cover', border: '1px solid var(--accent-gold)' }} />
+          <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
+            <span style={{ fontSize: '1.2rem', fontFamily: 'var(--font-heading)', fontWeight: 800, letterSpacing: '0.08em', color: 'var(--text-primary)' }}>
+              DUSABE<span style={{ color: 'var(--accent-gold)' }}>.</span>
+            </span>
+            <span style={{ fontSize: '0.55rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--accent-gold)', fontWeight: 700, marginTop: '2px' }}>
+              REAL ESTATE
+            </span>
+          </div>
         </a>
 
         {/* Desktop Menu */}

@@ -542,12 +542,15 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       }}>
         <div>
           {/* Logo Header */}
-          <div style={{ marginBottom: '36px' }}>
-            <div style={{ fontSize: '1.5rem', fontFamily: 'var(--font-heading)', fontWeight: 'bold', letterSpacing: '0.15em', color: 'var(--text-primary)' }}>
-              AURA<span style={{ color: 'var(--accent-gold)' }}>.</span>
-            </div>
-            <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.2em', color: 'var(--accent-gold)', marginTop: '2px', fontWeight: 'bold' }}>
-              EXECUTIVE ADMIN CONSOLE
+          <div style={{ marginBottom: '36px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <img src="/dusabe_logo.png" alt="DUSABE Logo" style={{ width: '38px', height: '38px', borderRadius: '8px', objectFit: 'cover', border: '1px solid var(--accent-gold)' }} />
+            <div>
+              <div style={{ fontSize: '1.2rem', fontFamily: 'var(--font-heading)', fontWeight: 'bold', letterSpacing: '0.08em', color: 'var(--text-primary)' }}>
+                DUSABE<span style={{ color: 'var(--accent-gold)' }}>.</span>
+              </div>
+              <div style={{ fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.2em', color: 'var(--accent-gold)', marginTop: '2px', fontWeight: 'bold' }}>
+                REAL ESTATE ADMIN
+              </div>
             </div>
           </div>
 

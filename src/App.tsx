@@ -245,7 +245,17 @@ function App() {
       {/* Luxury Gold particles preloader */}
       {loading && (
         <div className="preloader">
-          <div className="preloader-logo">AURA<span>.</span></div>
+          <div className="preloader-logo" style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <img src="/dusabe_logo.png" alt="DUSABE Logo" style={{ width: '48px', height: '48px', borderRadius: '12px', objectFit: 'cover', border: '1px solid var(--accent-gold)' }} />
+            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1, textAlign: 'left' }}>
+              <span style={{ fontSize: '1.6rem', fontFamily: 'var(--font-heading)', fontWeight: 800, letterSpacing: '0.08em', color: '#FFFFFF' }}>
+                DUSABE<span style={{ color: 'var(--accent-gold)' }}>.</span>
+              </span>
+              <span style={{ fontSize: '0.65rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--accent-gold)', fontWeight: 700, marginTop: '4px' }}>
+                REAL ESTATE
+              </span>
+            </div>
+          </div>
           <div className="preloader-spinner"></div>
         </div>
       )}

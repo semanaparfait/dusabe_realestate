@@ -21,8 +21,16 @@ export const Footer: React.FC = () => {
         <div className="footer-grid">
           {/* Col 1: Branding & Newsletter */}
           <div>
-            <a href="#" className="footer-logo">
-              AURA<span>.</span>
+            <a href="#" className="footer-logo" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none', marginBottom: '16px' }}>
+              <img src="/dusabe_logo.png" alt="DUSABE Logo" style={{ width: '42px', height: '42px', borderRadius: '10px', objectFit: 'cover', border: '1px solid var(--accent-gold)' }} />
+              <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
+                <span style={{ fontSize: '1.4rem', fontFamily: 'var(--font-heading)', fontWeight: 800, letterSpacing: '0.08em', color: '#FFFFFF' }}>
+                  DUSABE<span style={{ color: 'var(--accent-gold)' }}>.</span>
+                </span>
+                <span style={{ fontSize: '0.6rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--accent-gold)', fontWeight: 700, marginTop: '3px' }}>
+                  REAL ESTATE
+                </span>
+              </div>
             </a>
             <p style={{ fontSize: '0.9rem', margin: '10px 0 24px', lineHeight: '1.7', color: '#94A3B8' }}>
               The global authority in architectural masterpieces and sovereign real estate placement.
