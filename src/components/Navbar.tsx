@@ -91,6 +91,13 @@ export const Navbar: React.FC<NavbarProps> = ({
             if (el) el.scrollIntoView({ behavior: 'smooth' });
           }}>Services</li>
           <li 
+            className="navbar-menu-item"
+            onClick={() => openDashboardModal('admin')}
+            style={{ color: 'var(--accent-gold)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}
+          >
+            <Shield size={14} /> Admin Panel
+          </li>
+          <li 
             className={`navbar-menu-item ${dropdownOpen ? 'active' : ''}`}
             onClick={() => setDropdownOpen(!dropdownOpen)}
             style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}
@@ -387,6 +394,15 @@ export const Navbar: React.FC<NavbarProps> = ({
             <li onClick={() => setMobileMenuOpen(false)} style={{ fontFamily: 'var(--font-heading)' }}>{t('nav.agents')}</li>
             <li onClick={() => setMobileMenuOpen(false)} style={{ fontFamily: 'var(--font-heading)' }}>{t('nav.blog')}</li>
             <li onClick={() => setMobileMenuOpen(false)} style={{ fontFamily: 'var(--font-heading)' }}>{t('nav.contact')}</li>
+            <li 
+              onClick={() => {
+                openDashboardModal('admin');
+                setMobileMenuOpen(false);
+              }} 
+              style={{ fontFamily: 'var(--font-heading)', color: 'var(--accent-gold)', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
+            >
+              <Shield size={16} /> Admin Panel
+            </li>
           </ul>
         </div>
       )}

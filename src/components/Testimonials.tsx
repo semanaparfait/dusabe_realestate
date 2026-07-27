@@ -1,26 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { Star, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
-import { TESTIMONIALS } from '../data';
+import { TESTIMONIALS, type Testimonial } from '../data';
 
-export const Testimonials: React.FC = () => {
+interface TestimonialsProps {
+  testimonials?: Testimonial[];
+}
+
+export const Testimonials: React.FC<TestimonialsProps> = ({ testimonials }) => {
+  const list = testimonials && testimonials.length > 0 ? testimonials : TESTIMONIALS;
   const [activeIdx, setActiveIdx] = useState(0);
 
   const handlePrev = () => {
-    setActiveIdx(prev => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
+    if (list.length === 0) return;
+    setActiveIdx(prev => (prev - 1 + list.length) % list.length);
   };
 
   const handleNext = () => {
-    setActiveIdx(prev => (prev + 1) % TESTIMONIALS.length);
+    if (list.length === 0) return;
+    setActiveIdx(prev => (prev + 1) % list.length);
   };
 
   useEffect(() => {
+    if (list.length <= 1) return;
     const timer = setInterval(() => {
       handleNext();
     }, 8000);
     return () => clearInterval(timer);
-  }, []);
+  }, [list.length]);
 
-  const active = TESTIMONIALS[activeIdx];
+  const active = list[activeIdx] || list[0];
 
   return (
     <section id="testimonials" className="container" style={{ borderBottom: '1px solid var(--border-light)' }}>

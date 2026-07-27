@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import { 
   X, 
   MapPin, 
@@ -14,18 +15,20 @@ import {
   TrendingUp, 
   FileText
 } from 'lucide-react';
-import { AGENTS, type Property } from '../data';
+import { AGENTS, type Property, type Agent } from '../data';
 import { MortgageCalculator } from './MortgageCalculator';
 
 interface PropertyDetailModalProps {
   property: Property;
   currency: string;
+  agents?: Agent[];
   onClose: () => void;
 }
 
 export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
   property,
   currency,
+  agents,
   onClose
 }) => {
   const [activeImageIdx, setActiveImageIdx] = useState(0);
@@ -35,8 +38,9 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
   const [bookingEmail, setBookingEmail] = useState('');
   const [bookingSuccess, setBookingSuccess] = useState(false);
 
-  // Find Agent
-  const agent = AGENTS.find(a => a.id === property.agentId) || AGENTS[0];
+  // Find Agent dynamically from passed prop or fallback
+  const agentList = agents && agents.length > 0 ? agents : AGENTS;
+  const agent = agentList.find(a => a.id === property.agentId) || agentList[0];
 
   const handlePrevImage = () => {
     setActiveImageIdx(prev => (prev - 1 + property.images.length) % property.images.length);

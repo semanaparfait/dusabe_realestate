@@ -1,12 +1,13 @@
 import React from 'react';
 import { Heart, GitCompare, Eye, Navigation } from 'lucide-react';
-import { AGENTS, type Property } from '../data';
+import { AGENTS, type Property, type Agent } from '../data';
 
 interface PropertyCardProps {
   property: Property;
   currency: string;
   isFavorited: boolean;
   isInCompareList: boolean;
+  agents?: Agent[];
   onToggleFavorite: (id: string) => void;
   onToggleCompare: (id: string) => void;
   onQuickView: (property: Property) => void;
@@ -17,12 +18,14 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
   currency,
   isFavorited,
   isInCompareList,
+  agents,
   onToggleFavorite,
   onToggleCompare,
   onQuickView
 }) => {
-  // Find Agent
-  const agent = AGENTS.find(a => a.id === property.agentId) || AGENTS[0];
+  // Find Agent dynamically
+  const agentList = agents && agents.length > 0 ? agents : AGENTS;
+  const agent = agentList.find(a => a.id === property.agentId) || agentList[0];
 
   // Helper for Currency Conversion
   const formatPrice = (priceUSD: number) => {

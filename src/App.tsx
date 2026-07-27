@@ -2,7 +2,16 @@ import { useState, useEffect } from 'react';
 import './App.css';
 
 // Data & Types
-import { type Property, PROPERTIES } from './data';
+import { 
+  type Property, 
+  type Agent, 
+  type Testimonial, 
+  type BlogPost, 
+  PROPERTIES, 
+  AGENTS, 
+  TESTIMONIALS, 
+  BLOG_POSTS 
+} from './data';
 
 // Components
 import { Navbar } from './components/Navbar';
@@ -19,6 +28,7 @@ import { Footer } from './components/Footer';
 import { DashboardModal } from './components/DashboardModal';
 import { Chatbot } from './components/Chatbot';
 import { CompareDrawer } from './components/CompareDrawer';
+import { AdminPanel } from './components/AdminPanel';
 
 // Translations Module
 const TRANSLATIONS: Record<string, Record<string, string>> = {
@@ -75,8 +85,11 @@ function App() {
   const [currency, setCurrency] = useState('USD');
   const [language, setLanguage] = useState('en');
 
-  // Properties list (dynamic to support adding/deleting from agent desk)
+  // Properties & Data lists (dynamic to support adding/editing/deleting)
   const [properties, setProperties] = useState<Property[]>(PROPERTIES);
+  const [agents, setAgents] = useState<Agent[]>(AGENTS);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>(TESTIMONIALS);
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>(BLOG_POSTS);
 
   // Active Filter state
   const [filters, setFilters] = useState({
@@ -304,6 +317,7 @@ function App() {
                         currency={currency}
                         isFavorited={wishlist.includes(prop.id)}
                         isInCompareList={compareList.includes(prop.id)}
+                        agents={agents}
                         onToggleFavorite={handleToggleWishlist}
                         onToggleCompare={handleToggleCompare}
                         onQuickView={(p) => setActivePropertyDetail(p)}
@@ -333,13 +347,13 @@ function App() {
         <WhyChooseUs />
 
         {/* Testimonials Slider */}
-        <Testimonials />
+        <Testimonials testimonials={testimonials} />
 
         {/* Advisors Group */}
-        <AgentProfiles />
+        <AgentProfiles agents={agents} />
 
         {/* Blog section */}
-        <Blog />
+        <Blog blogPosts={blogPosts} />
 
         {/* Footer */}
         <Footer />
@@ -349,12 +363,13 @@ function App() {
           <PropertyDetailModal 
             property={activePropertyDetail}
             currency={currency}
+            agents={agents}
             onClose={() => setActivePropertyDetail(null)}
           />
         )}
 
-        {/* OVERLAY: User Dashboard Modal */}
-        {activeDashboardRole && (
+        {/* OVERLAY: User / Agent Dashboard Modal */}
+        {activeDashboardRole && activeDashboardRole !== 'admin' && (
           <DashboardModal 
             initialRole={activeDashboardRole}
             wishlistIds={wishlist}
@@ -363,6 +378,21 @@ function App() {
             onAddProperty={handleAddProperty}
             onDeleteProperty={handleDeleteProperty}
             onQuickView={(p) => setActivePropertyDetail(p)}
+            onClose={() => setActiveDashboardRole(null)}
+          />
+        )}
+
+        {/* OVERLAY: Full Screen Executive Admin Panel */}
+        {activeDashboardRole === 'admin' && (
+          <AdminPanel 
+            properties={properties}
+            setProperties={setProperties}
+            agents={agents}
+            setAgents={setAgents}
+            testimonials={testimonials}
+            setTestimonials={setTestimonials}
+            blogPosts={blogPosts}
+            setBlogPosts={setBlogPosts}
             onClose={() => setActiveDashboardRole(null)}
           />
         )}

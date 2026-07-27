@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import { MessageSquare, Mail, Calendar, Star, Sparkles, Check, X } from 'lucide-react';
 import { AGENTS, type Agent } from '../data';
 
-export const AgentProfiles: React.FC = () => {
+interface AgentProfilesProps {
+  agents?: Agent[];
+}
+
+export const AgentProfiles: React.FC<AgentProfilesProps> = ({ agents }) => {
+  const agentList = agents && agents.length > 0 ? agents : AGENTS;
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
   const [appointmentDate, setAppointmentDate] = useState('');
   const [appointmentMsg, setAppointmentMsg] = useState('');
@@ -22,7 +27,7 @@ export const AgentProfiles: React.FC = () => {
   };
 
   return (
-    <section id="agents" className="container">
+    <section id="agents" className="container hidden">
       <div className="section-header">
         <span className="section-subtitle">AURA Advising Group</span>
         <h2 className="section-title">Consult Our Elite Advisors</h2>
@@ -32,7 +37,7 @@ export const AgentProfiles: React.FC = () => {
       </div>
 
       <div className="agent-grid">
-        {AGENTS.map((agent) => (
+        {agentList.map((agent) => (
           <div key={agent.id} className="agent-card glass-panel" style={{ border: '1px solid var(--border-light)', background: 'var(--bg-secondary)' }}>
             <img src={agent.image} alt={agent.name} className="agent-photo" />
             <div className="agent-info">

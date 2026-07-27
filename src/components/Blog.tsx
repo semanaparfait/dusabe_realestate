@@ -1,8 +1,14 @@
 import React from 'react';
 import { BookOpen, Calendar, Clock, User } from 'lucide-react';
-import { BLOG_POSTS } from '../data';
+import { BLOG_POSTS, type BlogPost } from '../data';
 
-export const Blog: React.FC = () => {
+interface BlogProps {
+  blogPosts?: BlogPost[];
+}
+
+export const Blog: React.FC<BlogProps> = ({ blogPosts }) => {
+  const posts = blogPosts && blogPosts.length > 0 ? blogPosts : BLOG_POSTS;
+
   return (
     <section id="blog" className="container">
       <div className="section-header">
@@ -14,7 +20,7 @@ export const Blog: React.FC = () => {
       </div>
 
       <div className="blog-grid">
-        {BLOG_POSTS.map((post) => (
+        {posts.map((post) => (
           <div key={post.id} className="blog-card glass-panel" style={{ border: '1px solid var(--border-light)', background: 'var(--bg-secondary)', overflow: 'hidden' }}>
             <div style={{ height: '200px', overflow: 'hidden', position: 'relative' }}>
               <img src={post.image} alt={post.title} className="blog-img" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }} />
