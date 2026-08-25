@@ -379,7 +379,7 @@ function Home() {
         )}
 
         {/* OVERLAY: Full Screen Executive Admin Panel */}
-        {activeDashboardRole === 'admin' && (
+        {/* {activeDashboardRole === 'admin' && (
           <AdminPanel 
             properties={properties}
             setProperties={setProperties}
@@ -391,7 +391,7 @@ function Home() {
             setBlogPosts={setBlogPosts}
             onClose={() => setActiveDashboardRole(null)}
           />
-        )}
+        )} */}
 
         {/* WIDGET: Compare Drawer */}
         <CompareDrawer 
