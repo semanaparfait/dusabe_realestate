@@ -22,17 +22,17 @@ interface FilterSectionProps {
   onReset: () => void;
 }
 
-const AMENITIES_LIST = [
-  'Infinity Pool',
-  'Private Cinema',
-  'Wine Cellar',
-  'Smart Home System',
-  'Helipad',
-  'Private Gym',
-  'Private Beach Access',
-  'Sauna',
-  'Tesla Battery System'
-];
+// const AMENITIES_LIST = [
+//   'Infinity Pool',
+//   'Private Cinema',
+//   'Wine Cellar',
+//   'Smart Home System',
+//   'Helipad',
+//   'Private Gym',
+//   'Private Beach Access',
+//   'Sauna',
+//   'Tesla Battery System'
+// ];
 
 const glassInputClass = "w-full p-2.5 bg-white/[0.08] border border-white/15 [[data-theme=dark]_&]:bg-[rgba(15,23,42,0.4)] [[data-theme=dark]_&]:border-white/8 rounded-lg text-text-primary outline-none font-sans [transition:all_var(--transition-fast)] focus:border-accent-gold focus:bg-white/15 focus:shadow-[0_0_10px_rgba(245,158,11,0.15)]";
 
@@ -48,13 +48,13 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
     });
   };
 
-  const handleAmenityChange = (amenity: string) => {
-    const isSelected = filters.amenities.includes(amenity);
-    const updated = isSelected
-      ? filters.amenities.filter(item => item !== amenity)
-      : [...filters.amenities, amenity];
-    updateFilter('amenities', updated);
-  };
+  // const handleAmenityChange = (amenity: string) => {
+  //   const isSelected = filters.amenities.includes(amenity);
+  //   const updated = isSelected
+  //     ? filters.amenities.filter(item => item !== amenity)
+  //     : [...filters.amenities, amenity];
+  //   updateFilter('amenities', updated);
+  // };
 
   return (
     <aside className="bg-[var(--glass-bg)] [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)] border border-[var(--glass-border)] shadow-[var(--glass-shadow)] py-[30px] px-6 rounded-2xl sticky top-[100px]">

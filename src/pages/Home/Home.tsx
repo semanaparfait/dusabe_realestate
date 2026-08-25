@@ -18,7 +18,6 @@ import { Navbar } from '@/components/Navbar';
 import { Hero } from '@/components/Hero';
 import { FilterSection } from '@/components/FilterSection';
 import { PropertyCard } from '@/components/PropertyCard';
-import { MapSection } from '@/components/MapSection';
 import { PropertyDetailModal } from '@/components/PropertyDetailModal';
 import { AgentProfiles } from '@/components/AgentProfiles';
 import { WhyChooseUs } from '@/components/WhyChooseUs';
@@ -73,9 +72,9 @@ function Home() {
 
   // Properties & Data lists (dynamic to support adding/editing/deleting)
   const [properties, setProperties] = useState<Property[]>(PROPERTIES);
-  const [agents, setAgents] = useState<Agent[]>(AGENTS);
-  const [testimonials, setTestimonials] = useState<Testimonial[]>(TESTIMONIALS);
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>(BLOG_POSTS);
+  const [agents] = useState<Agent[]>(AGENTS);
+  const [testimonials] = useState<Testimonial[]>(TESTIMONIALS);
+  const [blogPosts] = useState<BlogPost[]>(BLOG_POSTS);
 
   // Active Filter state
   const [filters, setFilters] = useState({
