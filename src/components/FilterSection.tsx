@@ -144,28 +144,7 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
         </div>
       </div>
 
-      {/* Group: Area Range */}
-      <div className="mb-6">
-        <div className="font-heading text-[0.85rem] font-bold uppercase tracking-[0.05em] text-text-primary mb-3 flex justify-between items-center">
-          <span>Max Area</span>
-          <span className="font-serif italic text-accent-gold text-[0.9rem]">
-            {filters.maxArea.toLocaleString()} sq ft
-          </span>
-        </div>
-        <input
-          type="range"
-          min={1000}
-          max={50000}
-          step={1000}
-          value={filters.maxArea}
-          onChange={(e) => updateFilter('maxArea', parseInt(e.target.value))}
-          className="w-full accent-accent-gold cursor-pointer"
-        />
-        <div className="flex justify-between text-[0.8rem] text-text-secondary mt-1.5">
-          <span>1k sqft</span>
-          <span>50k sqft</span>
-        </div>
-      </div>
+
     </aside>
   );
 };
