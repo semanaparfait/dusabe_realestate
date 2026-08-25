@@ -10,6 +10,8 @@ interface PropertiesTabProps {
   onToggleFeaturedProperty: (id: string) => void;
 }
 
+const newListingBtnClass = "relative overflow-hidden bg-[linear-gradient(135deg,var(--accent-gold)_0%,var(--accent-gold-dark)_100%)] text-black font-heading font-semibold border-none rounded-lg cursor-pointer shadow-[var(--glow-shadow)] [transition:transform_var(--transition-fast),box-shadow_var(--transition-fast),filter_var(--transition-fast)] hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0 after:content-[''] after:absolute after:top-0 after:-left-3/4 after:w-1/2 after:h-full after:[background:linear-gradient(to_right,rgba(255,255,255,0)_0%,rgba(255,255,255,0.3)_100%)] after:[transform:skewX(-25deg)] after:[transition:0.75s] hover:after:[animation:shine_0.85s] flex items-center gap-2 px-6 py-3 text-[0.85rem]";
+
 export const PropertiesTab: React.FC<PropertiesTabProps> = ({
   properties,
   onOpenNewProperty,
@@ -20,124 +22,98 @@ export const PropertiesTab: React.FC<PropertiesTabProps> = ({
   const [searchProperty, setSearchProperty] = useState('');
 
   const filteredProps = properties.filter(
-    p => p.title.toLowerCase().includes(searchProperty.toLowerCase()) || 
+    p => p.title.toLowerCase().includes(searchProperty.toLowerCase()) ||
          p.location.city.toLowerCase().includes(searchProperty.toLowerCase())
   );
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <div className="flex flex-col gap-6">
+      <div className="flex justify-between items-center">
         <div>
-          <h1 style={{ fontSize: '1.8rem', fontFamily: 'var(--font-heading)', fontWeight: 'bold' }}>Properties & Asset Listings</h1>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', marginTop: '4px' }}>Add, update pricing, change status, or toggle featured placements for all properties.</p>
+          <h1 className="text-[1.8rem] font-heading font-bold">Properties & Asset Listings</h1>
+          <p className="text-[0.85rem] text-text-tertiary mt-1">Add, update pricing, change status, or toggle featured placements for all properties.</p>
         </div>
 
-        <button 
+        <button
           onClick={onOpenNewProperty}
-          className="luxury-gold-button shine-hover"
-          style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 24px', fontSize: '0.85rem' }}
+          className={newListingBtnClass}
         >
           <Plus size={16} /> Post New Luxury Estate
         </button>
       </div>
 
-      <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-        <div style={{ position: 'relative', flex: 1 }}>
-          <Search size={16} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-tertiary)' }} />
-          <input 
-            type="text" 
+      <div className="flex gap-4 items-center">
+        <div className="relative flex-1">
+          <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-text-tertiary" />
+          <input
+            type="text"
             placeholder="Search listings by title, city, or address..."
             value={searchProperty}
             onChange={(e) => setSearchProperty(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '12px 16px 12px 48px',
-              borderRadius: '10px',
-              border: '1px solid var(--border-light)',
-              background: 'var(--bg-secondary)',
-              color: 'var(--text-primary)',
-              outline: 'none',
-              fontSize: '0.9rem'
-            }}
+            className="w-full py-3 pr-4 pl-12 rounded-[10px] border border-border-light bg-bg-secondary text-text-primary outline-none text-[0.9rem]"
           />
         </div>
       </div>
 
-      <div className="glass-panel" style={{ borderRadius: '16px', border: '1px solid var(--border-light)', background: 'var(--bg-secondary)', overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem', textAlign: 'left' }}>
+      <div className="rounded-2xl border border-border-light bg-bg-secondary overflow-hidden [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)] shadow-[var(--glass-shadow)]">
+        <table className="w-full border-collapse text-[0.85rem] text-left">
           <thead>
-            <tr style={{ background: 'var(--bg-tertiary)', borderBottom: '1px solid var(--border-light)', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              <th style={{ padding: '16px 20px' }}>Listing Asset</th>
-              <th style={{ padding: '16px 12px' }}>Type</th>
-              <th style={{ padding: '16px 12px' }}>Location</th>
-              <th style={{ padding: '16px 12px' }}>Price</th>
-              <th style={{ padding: '16px 12px' }}>Status</th>
-              <th style={{ padding: '16px 12px' }}>Featured</th>
-              <th style={{ padding: '16px 20px', textAlign: 'right' }}>Actions</th>
+            <tr className="bg-bg-tertiary border-b border-border-light text-text-tertiary uppercase tracking-[0.05em]">
+              <th className="py-4 px-5">Listing Asset</th>
+              <th className="py-4 px-3">Type</th>
+              <th className="py-4 px-3">Location</th>
+              <th className="py-4 px-3">Price</th>
+              <th className="py-4 px-3">Status</th>
+              <th className="py-4 px-3">Featured</th>
+              <th className="py-4 px-5 text-right">Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredProps.map(item => (
-              <tr key={item.id} style={{ borderBottom: '1px solid var(--border-light)', transition: 'background 0.2s' }}>
-                <td style={{ padding: '16px 20px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                    <img src={item.images[0]} alt={item.title} style={{ width: '56px', height: '40px', objectFit: 'cover', borderRadius: '6px' }} />
+              <tr key={item.id} className="border-b border-border-light [transition:background_0.2s]">
+                <td className="py-4 px-5">
+                  <div className="flex items-center gap-3.5">
+                    <img src={item.images[0]} alt={item.title} className="w-14 h-10 object-cover rounded-[6px]" />
                     <div>
-                      <div style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.95rem' }}>{item.title}</div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>{item.beds} Beds • {item.baths} Baths • {item.area.toLocaleString()} sqft</div>
+                      <div className="font-semibold text-text-primary text-[0.95rem]">{item.title}</div>
+                      <div className="text-[0.75rem] text-text-tertiary">{item.beds} Beds • {item.baths} Baths • {item.area.toLocaleString()} sqft</div>
                     </div>
                   </div>
                 </td>
-                <td style={{ padding: '16px 12px' }}>
-                  <span style={{ background: 'var(--bg-tertiary)', color: 'var(--text-secondary)', padding: '4px 10px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>{item.type}</span>
+                <td className="py-4 px-3">
+                  <span className="bg-bg-tertiary text-text-secondary py-1 px-2.5 rounded text-[0.75rem] font-semibold">{item.type}</span>
                 </td>
-                <td style={{ padding: '16px 12px', color: 'var(--text-secondary)' }}>
+                <td className="py-4 px-3 text-text-secondary">
                   {item.location.city}, {item.location.district}
                 </td>
-                <td style={{ padding: '16px 12px', fontWeight: 'bold', color: 'var(--accent-gold)' }}>
+                <td className="py-4 px-3 font-bold text-accent-gold">
                   ${(item.price / 1000000).toFixed(2)}M
                 </td>
-                <td style={{ padding: '16px 12px' }}>
-                  <span style={{
-                    background: item.status === 'For Sale' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(59, 130, 246, 0.15)',
-                    color: item.status === 'For Sale' ? '#10B981' : '#60A5FA',
-                    padding: '4px 10px',
-                    borderRadius: '4px',
-                    fontSize: '0.75rem',
-                    fontWeight: 'bold'
-                  }}>
+                <td className="py-4 px-3">
+                  <span className={`${item.status === 'For Sale' ? 'bg-emerald-500/15 text-emerald-500' : 'bg-blue-400/15 text-blue-400'} py-1 px-2.5 rounded text-[0.75rem] font-bold`}>
                     {item.status}
                   </span>
                 </td>
-                <td style={{ padding: '16px 12px' }}>
-                  <button 
+                <td className="py-4 px-3">
+                  <button
                     onClick={() => onToggleFeaturedProperty(item.id)}
-                    style={{
-                      background: item.isFeatured ? 'rgba(200, 122, 83, 0.2)' : 'var(--bg-tertiary)',
-                      color: item.isFeatured ? 'var(--accent-gold)' : 'var(--text-tertiary)',
-                      border: '1px solid ' + (item.isFeatured ? 'var(--accent-gold)' : 'transparent'),
-                      padding: '4px 10px',
-                      borderRadius: '4px',
-                      cursor: 'pointer',
-                      fontSize: '0.75rem',
-                      fontWeight: 'bold'
-                    }}
+                    className={`${item.isFeatured ? 'bg-[rgba(200,122,83,0.2)] text-accent-gold border border-accent-gold' : 'bg-bg-tertiary text-text-tertiary border border-transparent'} py-1 px-2.5 rounded cursor-pointer text-[0.75rem] font-bold`}
                   >
                     {item.isFeatured ? '★ Featured' : 'Standard'}
                   </button>
                 </td>
-                <td style={{ padding: '16px 20px', textAlign: 'right' }}>
-                  <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
-                    <button 
+                <td className="py-4 px-5 text-right">
+                  <div className="flex gap-2 justify-end">
+                    <button
                       onClick={() => onOpenEditProperty(item)}
-                      style={{ background: 'var(--bg-tertiary)', border: '1px solid var(--border-light)', color: 'var(--text-primary)', padding: '6px 10px', borderRadius: '6px', cursor: 'pointer' }}
+                      className="bg-bg-tertiary border border-border-light text-text-primary py-1.5 px-2.5 rounded-md cursor-pointer"
                       title="Edit Listing"
                     >
                       <Edit3 size={15} />
                     </button>
-                    <button 
+                    <button
                       onClick={() => onDeleteProperty(item.id, item.title)}
-                      style={{ background: 'rgba(239, 68, 68, 0.15)', border: 'none', color: '#EF4444', padding: '6px 10px', borderRadius: '6px', cursor: 'pointer' }}
+                      className="bg-red-500/15 border-none text-red-500 py-1.5 px-2.5 rounded-md cursor-pointer"
                       title="Delete Listing"
                     >
                       <Trash2 size={15} />

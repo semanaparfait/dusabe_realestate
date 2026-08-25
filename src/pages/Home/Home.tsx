@@ -2,15 +2,15 @@ import { useState, useEffect } from 'react';
 import '@/App.css';
 
 // Data & Types
-import { 
-  type Property, 
-  type Agent, 
-  type Testimonial, 
-  type BlogPost, 
-  PROPERTIES, 
-  AGENTS, 
-  TESTIMONIALS, 
-  BLOG_POSTS 
+import {
+  type Property,
+  type Agent,
+  type Testimonial,
+  type BlogPost,
+  PROPERTIES,
+  AGENTS,
+  TESTIMONIALS,
+  BLOG_POSTS
 } from '@/data';
 
 // Components
@@ -126,7 +126,7 @@ function Home() {
 
   // Wishlist Handling
   const handleToggleWishlist = (id: string) => {
-    setWishlist(prev => 
+    setWishlist(prev =>
       prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
     );
   };
@@ -204,7 +204,7 @@ function Home() {
     if (filters.status && prop.status !== filters.status) return false;
     if (filters.city && prop.location.city !== filters.city) return false;
     if (filters.type && prop.type !== filters.type) return false;
-    
+
     // Price
     const priceToCheck = prop.discountPrice || prop.price;
     if (priceToCheck < filters.minPrice || priceToCheck > filters.maxPrice) return false;
@@ -230,27 +230,27 @@ function Home() {
     <>
       {/* Luxury Gold particles preloader */}
       {loading && (
-        <div className="preloader">
-          <div className="preloader-logo" style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <img src="/dusabe_logo.png" alt="DUSABE Logo" style={{ width: '48px', height: '48px', borderRadius: '12px', objectFit: 'cover', border: '1px solid var(--accent-gold)' }} />
-            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1, textAlign: 'left' }}>
-              <span style={{ fontSize: '1.6rem', fontFamily: 'var(--font-heading)', fontWeight: 800, letterSpacing: '0.08em', color: '#FFFFFF' }}>
-                DUSABE<span style={{ color: 'var(--accent-gold)' }}>.</span>
+        <div className="fixed inset-0 z-[9999] bg-[#090D16] flex flex-col items-center justify-center [transition:opacity_0.8s_cubic-bezier(0.16,1,0.3,1),visibility_0.8s]">
+          <div className="flex items-center gap-3.5 mb-5">
+            <img src="/dusabe_logo.png" alt="DUSABE Logo" className="w-12 h-12 rounded-xl object-cover border border-accent-gold" />
+            <div className="flex flex-col leading-none text-left">
+              <span className="text-[1.6rem] font-heading font-extrabold tracking-[0.08em] text-white">
+                DUSABE<span className="text-accent-gold">.</span>
               </span>
-              <span style={{ fontSize: '0.65rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--accent-gold)', fontWeight: 700, marginTop: '4px' }}>
+              <span className="text-[0.65rem] tracking-[0.22em] uppercase text-accent-gold font-bold mt-1">
                 REAL ESTATE
               </span>
             </div>
           </div>
-          <div className="preloader-spinner"></div>
+          <div className="w-[50px] h-[50px] rounded-full border-2 border-accent-gold/15 border-t-accent-gold animate-spin"></div>
         </div>
       )}
 
       {/* Main Page Layout */}
       <div style={{ direction: language === 'ar' ? 'rtl' : 'ltr' }}>
-        
+
         {/* Navbar */}
-        <Navbar 
+        <Navbar
           theme={theme}
           toggleTheme={toggleTheme}
           currency={currency}
@@ -262,7 +262,7 @@ function Home() {
           openCompareModal={() => {
             if (compareList.length >= 2) {
               // Trigger Comparison Matrix popup directly
-              const drawerBtn = document.querySelector('.compare-drawer .luxury-gold-button') as HTMLButtonElement;
+              const drawerBtn = document.querySelector('[data-compare-open-btn]') as HTMLButtonElement;
               if (drawerBtn) drawerBtn.click();
             } else {
               alert('Select at least 2 properties to inspect comparative matrix.');
@@ -273,41 +273,41 @@ function Home() {
         />
 
         {/* Cinematic Hero */}
-        <Hero 
+        <Hero
           onSearch={(heroFilters) => setFilters(prev => ({ ...prev, ...heroFilters }))}
           t={t}
         />
 
         {/* Featured Properties Grid Layout */}
-        <section id="featured-properties" style={{ background: 'var(--bg-primary)' }}>
-          <div className="container">
-            <div className="section-header">
-              <span className="section-subtitle">{t('gallery.subtitle')}</span>
-              <h2 className="section-title">{t('gallery.title')}</h2>
-              <p className="section-desc">
+        <section id="featured-properties" className="relative py-[100px] bg-bg-primary">
+          <div className="max-w-[1400px] w-full mx-auto px-6">
+            <div className="text-center mb-[60px]">
+              <span className="font-heading uppercase tracking-[0.25em] text-[0.85rem] text-accent-gold font-semibold">{t('gallery.subtitle')}</span>
+              <h2 className="text-[2.5rem] mb-4">{t('gallery.title')}</h2>
+              <p className="max-w-[600px] mx-auto text-base">
                 Browse our elite residential blueprints, private beachfront complexes, and smart towering suites.
               </p>
             </div>
 
-            <div className="filter-layout">
+            <div className="grid grid-cols-[300px_1fr] max-lg:grid-cols-1 gap-10 items-start">
               {/* Sidebar filter controls */}
-              <FilterSection 
+              <FilterSection
                 filters={filters}
                 onChangeFilters={(updated) => setFilters(updated)}
                 onReset={handleResetFilters}
               />
 
               {/* Main properties results grid */}
-              <div className="properties-layout">
+              <div className="flex flex-col gap-[30px]">
                 {filteredProperties.length === 0 ? (
-                  <div style={{ textAlign: 'center', padding: '80px 0', border: '1px dashed var(--border-light)', borderRadius: '16px' }}>
-                    <h3 style={{ fontSize: '1.25rem', marginBottom: '8px', color: 'var(--text-secondary)' }}>No Asset Telemetry Matched</h3>
-                    <p style={{ fontSize: '0.9rem', color: 'var(--text-tertiary)' }}>Adjust sliders or pick alternative cities to locate listing blueprints.</p>
+                  <div className="text-center py-20 border border-dashed border-border-light rounded-2xl">
+                    <h3 className="text-[1.25rem] mb-2 text-text-secondary">No Asset Telemetry Matched</h3>
+                    <p className="text-[0.9rem] text-text-tertiary">Adjust sliders or pick alternative cities to locate listing blueprints.</p>
                   </div>
                 ) : (
-                  <div className="properties-grid">
+                  <div className="grid grid-cols-2 max-lg:grid-cols-1 gap-[30px]">
                     {filteredProperties.map((prop) => (
-                      <PropertyCard 
+                      <PropertyCard
                         key={prop.id}
                         property={prop}
                         currency={currency}
@@ -345,7 +345,7 @@ function Home() {
 
         {/* OVERLAY: Detail Modal */}
         {activePropertyDetail && (
-          <PropertyDetailModal 
+          <PropertyDetailModal
             property={activePropertyDetail}
             currency={currency}
             agents={agents}
@@ -355,7 +355,7 @@ function Home() {
 
         {/* OVERLAY: User / Agent Dashboard Modal */}
         {activeDashboardRole && activeDashboardRole !== 'admin' && (
-          <DashboardModal 
+          <DashboardModal
             initialRole={activeDashboardRole}
             wishlistIds={wishlist}
             properties={properties}
@@ -369,7 +369,7 @@ function Home() {
 
         {/* OVERLAY: Full Screen Executive Admin Panel */}
         {/* {activeDashboardRole === 'admin' && (
-          <AdminPanel 
+          <AdminPanel
             properties={properties}
             setProperties={setProperties}
             agents={agents}
@@ -383,7 +383,7 @@ function Home() {
         )} */}
 
         {/* WIDGET: Compare Drawer */}
-        <CompareDrawer 
+        <CompareDrawer
           compareIds={compareList}
           properties={properties}
           onRemoveCompare={handleRemoveCompare}
@@ -393,7 +393,7 @@ function Home() {
         />
 
         {/* WIDGET: Floating chatbot dialogue */}
-        <Chatbot 
+        <Chatbot
           onTriggerFilter={handleTriggerBotFilter}
           properties={properties}
           t={t}

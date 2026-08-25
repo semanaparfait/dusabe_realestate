@@ -13,7 +13,7 @@ const HERO_IMAGES = [
 
 export const Hero: React.FC<HeroProps> = ({ onSearch: _onSearch, t: _t }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  
+
   // Stats Counters
   const [countHouse, setCountHouse] = useState(0);
   const [countAgent, setCountAgent] = useState(0);
@@ -66,136 +66,46 @@ export const Hero: React.FC<HeroProps> = ({ onSearch: _onSearch, t: _t }) => {
   };
 
   return (
-    <section 
-      style={{
-        background: 'var(--bg-primary)',
-        padding: '110px 24px 40px 24px',
-        boxSizing: 'border-box',
-        position: 'relative'
-      }}
-    >
+    <section className="relative box-border bg-bg-primary px-6 pt-[110px] pb-10 max-lg:pt-[100px] max-lg:pb-5 max-lg:px-4">
       {/* Outer Floating Rounded Card Container */}
-      <div 
-        style={{
-          width: '100%',
-          maxWidth: '1400px',
-          margin: '0 auto',
-          height: '650px',
-          borderRadius: '32px',
-          position: 'relative',
-          overflow: 'hidden',
-          boxShadow: 'var(--card-shadow)',
-          border: '1px solid var(--border-light)'
-        }}
-      >
+      <div className="relative w-full max-w-[1400px] mx-auto h-[650px] max-lg:h-auto rounded-[32px] overflow-hidden shadow-card border border-border-light">
         {/* Slideshow of Homes */}
         {HERO_IMAGES.map((img, idx) => (
-          <div 
+          <div
             key={idx}
+            className="absolute inset-0 bg-cover bg-center z-0 [transition:opacity_1.5s_ease-in-out,transform_1.5s_ease-in-out]"
             style={{
-              position: 'absolute',
-              inset: 0,
               backgroundImage: `url(${img})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
               opacity: idx === currentSlide ? 1 : 0,
-              transform: idx === currentSlide ? 'scale(1)' : 'scale(1.05)',
-              transition: 'opacity 1.5s ease-in-out, transform 1.5s ease-in-out',
-              zIndex: 0
+              transform: idx === currentSlide ? 'scale(1)' : 'scale(1.05)'
             }}
           />
         ))}
 
         {/* Ambient Dark Overlay matching reference design */}
-        <div 
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background: 'linear-gradient(90deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.2) 100%)',
-            zIndex: 1,
-            pointerEvents: 'none'
-          }} 
-        />
+        <div className="absolute inset-0 z-[1] pointer-events-none bg-[linear-gradient(90deg,rgba(0,0,0,0.6)_0%,rgba(0,0,0,0.2)_100%)]" />
 
         {/* Hero Overlay Content (Centered-left text matching picture) */}
-        <div 
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            zIndex: 2,
-            display: 'flex',
-            alignItems: 'center',
-            padding: '0 80px',
-            boxSizing: 'border-box',
-            textAlign: 'left'
-          }}
-          className="hero-content-overlay"
-        >
-          <div style={{ maxWidth: '620px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            <h1 
-              style={{
-                fontFamily: 'var(--font-heading)',
-                fontWeight: 800,
-                fontSize: '4rem',
-                color: '#FFFFFF',
-                lineHeight: '1.1',
-                margin: 0,
-                letterSpacing: '-0.02em'
-              }}
-              className="hero-reference-title"
-            >
+        <div className="absolute top-0 left-0 w-full h-full z-[2] flex items-center max-lg:items-start box-border text-left px-20 py-0 max-lg:px-6 max-lg:py-10">
+          <div className="max-w-[620px] flex flex-col gap-5">
+            <h1 className="font-heading font-extrabold text-[4rem] max-lg:text-[2.5rem] text-white leading-[1.1] m-0 tracking-[-0.02em]">
               Find Your Dream Home Today
             </h1>
-            <p 
-              style={{
-                fontFamily: 'var(--font-sans)',
-                fontSize: '1.05rem',
-                color: 'rgba(255, 255, 255, 0.9)',
-                lineHeight: '1.6',
-                margin: 0
-              }}
-            >
+            <p className="font-sans text-[1.05rem] text-white/90 leading-relaxed m-0">
               Welcome to our real estate agency, where your dream home awaits. Browse our listings and find the perfect property for you.
             </p>
 
             {/* Pill-Shaped Buttons */}
-            <div style={{ display: 'flex', gap: '16px', marginTop: '10px' }}>
-              <button 
+            <div className="flex gap-4 mt-2.5">
+              <button
                 onClick={handleBrowseProperties}
-                className="shine-hover"
-                style={{
-                  background: '#FFFFFF',
-                  color: '#000000',
-                  fontFamily: 'var(--font-heading)',
-                  fontWeight: 600,
-                  fontSize: '0.95rem',
-                  border: 'none',
-                  borderRadius: '30px',
-                  padding: '14px 36px',
-                  cursor: 'pointer',
-                  transition: 'transform var(--transition-fast)'
-                }}
+                className="relative overflow-hidden bg-white text-black font-heading font-semibold text-[0.95rem] border-none rounded-[30px] py-3.5 px-9 cursor-pointer [transition:transform_var(--transition-fast)] after:content-[''] after:absolute after:top-0 after:-left-3/4 after:w-1/2 after:h-full after:[background:linear-gradient(to_right,rgba(255,255,255,0)_0%,rgba(255,255,255,0.3)_100%)] after:[transform:skewX(-25deg)] after:[transition:0.75s] hover:after:[animation:shine_0.85s]"
               >
                 View
               </button>
-              <button 
+              <button
                 onClick={handleLearnMore}
-                style={{
-                  background: 'transparent',
-                  color: '#FFFFFF',
-                  fontFamily: 'var(--font-heading)',
-                  fontWeight: 500,
-                  fontSize: '0.95rem',
-                  border: '1.5px solid #FFFFFF',
-                  borderRadius: '30px',
-                  padding: '14px 36px',
-                  cursor: 'pointer',
-                  transition: 'background var(--transition-fast), color var(--transition-fast)'
-                }}
-                className="hero-outline-btn-hover"
+                className="bg-transparent text-white font-heading font-medium text-[0.95rem] border-[1.5px] border-white rounded-[30px] py-3.5 px-9 cursor-pointer [transition:background_var(--transition-fast),color_var(--transition-fast)] hover:bg-white/15 hover:text-white"
               >
                 Learn More
               </button>
@@ -204,91 +114,37 @@ export const Hero: React.FC<HeroProps> = ({ onSearch: _onSearch, t: _t }) => {
         </div>
 
         {/* Asymmetric Bottom Right "Who We Are?" Card */}
-        <div 
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            right: 0,
-            width: '420px',
-            background: 'var(--bg-primary)',
-            borderTopLeftRadius: '32px',
-            padding: '36px 40px 30px 40px',
-            zIndex: 10,
-            boxSizing: 'border-box',
-            textAlign: 'left'
-          }}
-          className="hero-cutout-card"
-        >
-          <h3 
-            style={{
-              fontFamily: 'var(--font-heading)',
-              fontWeight: 800,
-              fontSize: '1.6rem',
-              color: 'var(--text-primary)',
-              marginBottom: '10px'
-            }}
-          >
+        <div className="absolute max-lg:relative bottom-0 right-0 w-[420px] max-lg:w-full bg-bg-primary max-lg:bg-bg-secondary rounded-tl-[32px] max-lg:rounded-tl-none pt-9 px-10 pb-[30px] max-lg:pt-[30px] max-lg:px-6 max-lg:pb-[30px] z-10 box-border text-left">
+          <h3 className="font-heading font-extrabold text-[1.6rem] text-text-primary mb-2.5">
             Who We Are?
           </h3>
-          <p 
-            style={{
-              fontFamily: 'var(--font-sans)',
-              fontSize: '0.88rem',
-              color: 'var(--text-secondary)',
-              lineHeight: '1.6',
-              marginBottom: '28px'
-            }}
-          >
+          <p className="font-sans text-[0.88rem] text-text-secondary leading-relaxed mb-7">
             We offer a range of services including buying, selling, and property management.
           </p>
 
           {/* Stats Segment */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className="flex justify-between items-center">
             <div>
-              <h4 
-                style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: '1.8rem',
-                  fontWeight: 700,
-                  color: 'var(--accent-gold)', /* Sustainability Green */
-                  margin: '0 0 4px 0'
-                }}
-              >
+              <h4 className="font-serif text-[1.8rem] font-bold text-accent-gold mb-1">
                 {countHouse}+
               </h4>
-              <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', margin: 0, textTransform: 'uppercase', fontWeight: 600 }}>
+              <p className="text-[0.75rem] text-text-tertiary m-0 uppercase font-semibold">
                 Premium House
               </p>
             </div>
             <div>
-              <h4 
-                style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: '1.8rem',
-                  fontWeight: 700,
-                  color: 'var(--accent-gold)',
-                  margin: '0 0 4px 0'
-                }}
-              >
+              <h4 className="font-serif text-[1.8rem] font-bold text-accent-gold mb-1">
                 {countAgent}+
               </h4>
-              <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', margin: 0, textTransform: 'uppercase', fontWeight: 600 }}>
+              <p className="text-[0.75rem] text-text-tertiary m-0 uppercase font-semibold">
                 Agent House
               </p>
             </div>
             <div>
-              <h4 
-                style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: '1.8rem',
-                  fontWeight: 700,
-                  color: 'var(--accent-gold)',
-                  margin: '0 0 4px 0'
-                }}
-              >
+              <h4 className="font-serif text-[1.8rem] font-bold text-accent-gold mb-1">
                 {countClients >= 1000 ? `${(countClients/1000).toFixed(0)}K` : countClients}+
               </h4>
-              <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', margin: 0, textTransform: 'uppercase', fontWeight: 600 }}>
+              <p className="text-[0.75rem] text-text-tertiary m-0 uppercase font-semibold">
                 Happy Clients
               </p>
             </div>

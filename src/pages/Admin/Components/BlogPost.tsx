@@ -9,6 +9,8 @@ interface BlogPostTabProps {
   onDeleteBlog: (id: string, title: string) => void;
 }
 
+const publishArticleBtnClass = "relative overflow-hidden bg-[linear-gradient(135deg,var(--accent-gold)_0%,var(--accent-gold-dark)_100%)] text-black font-heading font-semibold border-none rounded-lg cursor-pointer shadow-[var(--glow-shadow)] [transition:transform_var(--transition-fast),box-shadow_var(--transition-fast),filter_var(--transition-fast)] hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0 after:content-[''] after:absolute after:top-0 after:-left-3/4 after:w-1/2 after:h-full after:[background:linear-gradient(to_right,rgba(255,255,255,0)_0%,rgba(255,255,255,0.3)_100%)] after:[transform:skewX(-25deg)] after:[transition:0.75s] hover:after:[animation:shine_0.85s] flex items-center gap-2 px-6 py-3 text-[0.85rem]";
+
 export const BlogPostTab: React.FC<BlogPostTabProps> = ({
   blogPosts,
   onOpenNewBlog,
@@ -16,47 +18,46 @@ export const BlogPostTab: React.FC<BlogPostTabProps> = ({
   onDeleteBlog
 }) => {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <div className="flex flex-col gap-6">
+      <div className="flex justify-between items-center">
         <div>
-          <h1 style={{ fontSize: '1.8rem', fontFamily: 'var(--font-heading)', fontWeight: 'bold' }}>AURA Research Journals</h1>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', marginTop: '4px' }}>Publish research articles on luxury real estate, taxation, and architecture.</p>
+          <h1 className="text-[1.8rem] font-heading font-bold">AURA Research Journals</h1>
+          <p className="text-[0.85rem] text-text-tertiary mt-1">Publish research articles on luxury real estate, taxation, and architecture.</p>
         </div>
 
-        <button 
+        <button
           onClick={onOpenNewBlog}
-          className="luxury-gold-button shine-hover"
-          style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 24px', fontSize: '0.85rem' }}
+          className={publishArticleBtnClass}
         >
           <Plus size={16} /> Publish Article
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
+      <div className="grid grid-cols-3 gap-6">
         {blogPosts.map(post => (
-          <div key={post.id} className="glass-panel" style={{ borderRadius: '16px', border: '1px solid var(--border-light)', background: 'var(--bg-secondary)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-            <img src={post.image} alt={post.title} style={{ width: '100%', height: '160px', objectFit: 'cover' }} />
-            <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '12px', flex: 1 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'var(--accent-gold)', fontWeight: 600 }}>
+          <div key={post.id} className="rounded-2xl border border-border-light bg-bg-secondary overflow-hidden flex flex-col [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)] shadow-[var(--glass-shadow)]">
+            <img src={post.image} alt={post.title} className="w-full h-[160px] object-cover" />
+            <div className="p-5 flex flex-col gap-3 flex-1">
+              <div className="flex justify-between text-[0.7rem] text-accent-gold font-semibold">
                 <span>{post.category}</span>
                 <span>{post.readTime}</span>
               </div>
 
-              <h3 style={{ fontSize: '1rem', fontWeight: 'bold', lineHeight: '1.4' }}>{post.title}</h3>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>{post.summary}</p>
+              <h3 className="text-[1rem] font-bold leading-[1.4]">{post.title}</h3>
+              <p className="text-[0.8rem] text-text-secondary leading-[1.4]">{post.summary}</p>
 
-              <div style={{ marginTop: 'auto', borderTop: '1px solid var(--border-light)', paddingTop: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>By {post.author}</span>
-                <div style={{ display: 'flex', gap: '6px' }}>
-                  <button 
+              <div className="mt-auto border-t border-border-light pt-3 flex justify-between items-center">
+                <span className="text-[0.75rem] text-text-tertiary">By {post.author}</span>
+                <div className="flex gap-1.5">
+                  <button
                     onClick={() => onOpenEditBlog(post)}
-                    style={{ background: 'var(--bg-tertiary)', border: '1px solid var(--border-light)', color: 'var(--text-primary)', padding: '6px 8px', borderRadius: '4px', cursor: 'pointer' }}
+                    className="bg-bg-tertiary border border-border-light text-text-primary py-1.5 px-2 rounded cursor-pointer"
                   >
                     <Edit3 size={13} />
                   </button>
-                  <button 
+                  <button
                     onClick={() => onDeleteBlog(post.id, post.title)}
-                    style={{ background: 'rgba(239, 68, 68, 0.15)', border: 'none', color: '#EF4444', padding: '6px 8px', borderRadius: '4px', cursor: 'pointer' }}
+                    className="bg-red-500/15 border-none text-red-500 py-1.5 px-2 rounded cursor-pointer"
                   >
                     <Trash2 size={13} />
                   </button>

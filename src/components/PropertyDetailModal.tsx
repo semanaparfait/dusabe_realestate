@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 
-import { 
-  X, 
-  MapPin, 
-  Calendar, 
-  MessageSquare, 
-  Mail, 
-  School, 
-  Activity, 
-  Train, 
-  Check, 
-  ChevronLeft, 
-  ChevronRight, 
-  TrendingUp, 
+import {
+  X,
+  MapPin,
+  Calendar,
+  MessageSquare,
+  Mail,
+  School,
+  Activity,
+  Train,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  TrendingUp,
   FileText
 } from 'lucide-react';
 import { AGENTS, type Property, type Agent } from '../data';
@@ -24,6 +24,11 @@ interface PropertyDetailModalProps {
   agents?: Agent[];
   onClose: () => void;
 }
+
+const glassInputClass = "bg-white/[0.08] border border-white/15 [[data-theme=dark]_&]:bg-[rgba(15,23,42,0.4)] [[data-theme=dark]_&]:border-white/8 rounded-lg text-text-primary py-3 px-4 outline-none font-sans [transition:all_var(--transition-fast)] focus:border-accent-gold focus:bg-white/15 focus:shadow-[0_0_10px_rgba(245,158,11,0.15)]";
+const luxuryGoldBtnClass = "relative overflow-hidden bg-[linear-gradient(135deg,var(--accent-gold)_0%,var(--accent-gold-dark)_100%)] text-black font-heading font-semibold border-none rounded-lg px-7 py-3 cursor-pointer shadow-[var(--glow-shadow)] [transition:transform_var(--transition-fast),box-shadow_var(--transition-fast),filter_var(--transition-fast)] hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0";
+const shineHoverClass = "after:content-[''] after:absolute after:top-0 after:-left-3/4 after:w-1/2 after:h-full after:[background:linear-gradient(to_right,rgba(255,255,255,0)_0%,rgba(255,255,255,0.3)_100%)] after:[transform:skewX(-25deg)] after:[transition:0.75s] hover:after:[animation:shine_0.85s]";
+const outlineLuxuryBtnClass = "bg-transparent text-text-primary font-heading font-medium border-[1.5px] border-text-primary rounded-lg px-7 py-3 cursor-pointer [transition:background_var(--transition-fast),color_var(--transition-fast)] hover:bg-text-primary hover:text-bg-primary";
 
 export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
   property,
@@ -71,108 +76,100 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
   };
 
   return (
-    <div className="detail-modal-backdrop" onClick={onClose}>
-      <div 
-        className="detail-modal-window glass-panel" 
+    <div className="fixed inset-0 bg-[rgba(9,13,22,0.85)] backdrop-blur-[10px] z-[2000] flex justify-center items-center p-10 overflow-y-auto" onClick={onClose}>
+      <div
+        className="w-full max-w-[1100px] rounded-[20px] overflow-hidden max-h-[90vh] flex flex-col relative bg-bg-primary border border-border-light"
         onClick={(e) => e.stopPropagation()}
-        style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-light)' }}
       >
         {/* Close Button */}
-        <button className="detail-modal-close-btn" onClick={onClose}>
+        <button className="absolute top-5 right-5 bg-[rgba(15,23,42,0.6)] border border-white/15 text-white p-2.5 rounded-full cursor-pointer z-10 flex [transition:all_var(--transition-fast)] hover:bg-white hover:text-black" onClick={onClose}>
           <X size={20} />
         </button>
 
-        <div className="detail-modal-scroll">
+        <div className="overflow-y-auto grow">
           {/* Top Gallery Slider */}
-          <div className="detail-gallery-slider">
-            <img 
-              src={property.images[activeImageIdx]} 
-              alt={property.title} 
-              className="detail-gallery-img"
+          <div className="h-[450px] relative">
+            <img
+              src={property.images[activeImageIdx]}
+              alt={property.title}
+              className="w-full h-full object-cover"
             />
             {property.images.length > 1 && (
               <>
-                <button className="detail-slider-btn prev" onClick={handlePrevImage}>
+                <button className="absolute top-1/2 -translate-y-1/2 left-5 bg-[rgba(15,23,42,0.6)] text-white border-none p-3 rounded-full cursor-pointer [transition:background_var(--transition-fast)] flex z-10 hover:bg-accent-gold hover:text-black" onClick={handlePrevImage}>
                   <ChevronLeft size={24} />
                 </button>
-                <button className="detail-slider-btn next" onClick={handleNextImage}>
+                <button className="absolute top-1/2 -translate-y-1/2 right-5 bg-[rgba(15,23,42,0.6)] text-white border-none p-3 rounded-full cursor-pointer [transition:background_var(--transition-fast)] flex z-10 hover:bg-accent-gold hover:text-black" onClick={handleNextImage}>
                   <ChevronRight size={24} />
                 </button>
               </>
             )}
 
             {/* Slider Dots */}
-            <div style={{ position: 'absolute', bottom: '20px', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '8px', zIndex: 10 }}>
+            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2 z-10">
               {property.images.map((_, idx) => (
-                <button 
+                <button
                   key={idx}
                   onClick={() => setActiveImageIdx(idx)}
-                  style={{
-                    width: '10px',
-                    height: '10px',
-                    borderRadius: '50%',
-                    border: 'none',
-                    background: activeImageIdx === idx ? 'var(--accent-gold)' : 'rgba(255,255,255,0.4)',
-                    cursor: 'pointer'
-                  }}
+                  className={`w-2.5 h-2.5 rounded-full border-none cursor-pointer ${activeImageIdx === idx ? 'bg-accent-gold' : 'bg-white/40'}`}
                 />
               ))}
             </div>
           </div>
 
           {/* Body Content */}
-          <div className="detail-body">
+          <div className="p-10 grid grid-cols-[2fr_1fr] max-lg:grid-cols-1 gap-10">
             {/* Left Main details */}
             <div>
-              <div className="detail-meta-row">
-                <span className="card-badge" style={{ position: 'static' }}>{property.status}</span>
-                <span className="card-type" style={{ fontSize: '0.9rem' }}>{property.type}</span>
-                <span className="energy-rating-badge">EU Energy {property.energyRating}</span>
+              <div className="flex gap-4 items-center mb-6">
+                <span className="bg-primary text-white py-1.5 px-3.5 rounded-md font-heading text-[0.75rem] font-semibold uppercase tracking-[0.05em]">{property.status}</span>
+                <span className="font-heading text-[0.9rem] font-semibold uppercase tracking-[0.1em] text-accent-gold-dark">{property.type}</span>
+                <span className="bg-emerald-500 text-white py-1 px-2.5 rounded font-heading font-bold text-[0.8rem]">EU Energy {property.energyRating}</span>
               </div>
 
-              <h2 style={{ fontSize: '2.5rem', marginBottom: '8px' }}>{property.title}</h2>
-              
-              <div className="card-location" style={{ fontSize: '1rem', marginBottom: '24px' }}>
-                <MapPin size={16} style={{ color: 'var(--accent-gold)' }} />
+              <h2 className="text-[2.5rem] mb-2">{property.title}</h2>
+
+              <div className="flex items-center gap-1.5 text-text-secondary text-base mb-6">
+                <MapPin size={16} className="text-accent-gold" />
                 <span>{property.location.address}, {property.location.district}, {property.location.city}</span>
               </div>
 
-              <div className="card-features" style={{ display: 'flex', gap: '40px', background: 'var(--bg-secondary)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-light)' }}>
+              <div className="flex gap-10 bg-bg-secondary p-5 rounded-xl border border-border-light mb-5">
                 <div>
-                  <p style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: 'var(--text-tertiary)' }}>Price Evaluation</p>
-                  <h4 className="luxury-number" style={{ fontSize: '1.8rem', fontStyle: 'italic' }}>
+                  <p className="text-[0.8rem] uppercase text-text-tertiary">Price Evaluation</p>
+                  <h4 className="font-serif italic text-accent-gold text-[1.8rem]">
                     {formatPrice(property.discountPrice || property.price)}
                   </h4>
                 </div>
-                <div style={{ borderLeft: '1px solid var(--border-light)', paddingLeft: '20px' }}>
-                  <p style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: 'var(--text-tertiary)' }}>Beds</p>
-                  <h4 style={{ fontSize: '1.4rem' }}>{property.beds}</h4>
+                <div className="border-l border-border-light pl-5">
+                  <p className="text-[0.8rem] uppercase text-text-tertiary">Beds</p>
+                  <h4 className="text-[1.4rem]">{property.beds}</h4>
                 </div>
-                <div style={{ borderLeft: '1px solid var(--border-light)', paddingLeft: '20px' }}>
-                  <p style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: 'var(--text-tertiary)' }}>Baths</p>
-                  <h4 style={{ fontSize: '1.4rem' }}>{property.baths}</h4>
+                <div className="border-l border-border-light pl-5">
+                  <p className="text-[0.8rem] uppercase text-text-tertiary">Baths</p>
+                  <h4 className="text-[1.4rem]">{property.baths}</h4>
                 </div>
-                <div style={{ borderLeft: '1px solid var(--border-light)', paddingLeft: '20px' }}>
-                  <p style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: 'var(--text-tertiary)' }}>Space</p>
-                  <h4 style={{ fontSize: '1.4rem' }}>{property.area.toLocaleString()} <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>sq ft</span></h4>
+                <div className="border-l border-border-light pl-5">
+                  <p className="text-[0.8rem] uppercase text-text-tertiary">Space</p>
+                  <h4 className="text-[1.4rem]">{property.area.toLocaleString()} <span className="text-[0.8rem] text-text-secondary">sq ft</span></h4>
                 </div>
               </div>
 
               {/* Description */}
-              <div style={{ marginTop: '30px' }}>
-                <h3 style={{ fontSize: '1.25rem', marginBottom: '12px', borderBottom: '1px solid var(--border-light)', paddingBottom: '8px' }}>Architectural Overview</h3>
-                <p style={{ fontSize: '1rem', color: 'var(--text-secondary)', lineHeight: '1.7' }}>
+              <div className="mt-[30px]">
+                <h3 className="text-[1.25rem] mb-3 border-b border-border-light pb-2">Architectural Overview</h3>
+                <p className="text-base text-text-secondary leading-[1.7]">
                   {property.description}
                 </p>
               </div>
 
               {/* Amenities */}
-              <div style={{ marginTop: '30px' }}>
-                <h3 style={{ fontSize: '1.25rem', marginBottom: '12px', borderBottom: '1px solid var(--border-light)', paddingBottom: '8px' }}>Estate Amenities</h3>
-                <div className="detail-amenities-grid">
+              <div className="mt-[30px]">
+                <h3 className="text-[1.25rem] mb-3 border-b border-border-light pb-2">Estate Amenities</h3>
+                <div className="grid grid-cols-2 gap-4 mt-5 mb-[30px]">
                   {property.amenities.map((amenity, idx) => (
-                    <div key={idx} className="detail-amenity-item">
-                      <div style={{ background: 'rgba(200, 122, 83, 0.15)', color: 'var(--accent-gold-dark)', borderRadius: '50%', padding: '4px', display: 'flex' }}>
+                    <div key={idx} className="flex items-center gap-2.5 text-[0.95rem] text-text-secondary">
+                      <div className="bg-accent-gold/15 text-accent-gold-dark rounded-full p-1 flex">
                         <Check size={14} />
                       </div>
                       <span>{amenity}</span>
@@ -182,44 +179,44 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
               </div>
 
               {/* Walkability & Transit */}
-              <div style={{ marginTop: '30px' }}>
-                <h3 style={{ fontSize: '1.25rem', marginBottom: '12px', borderBottom: '1px solid var(--border-light)', paddingBottom: '8px' }}>Environmental Telemetry</h3>
-                <div className="walk-score-circle">
-                  <div className="score-gauge-ring glass-panel" style={{ borderRadius: '50%' }}>
-                    <svg width="80" height="80" style={{ transform: 'rotate(-90deg)' }}>
+              <div className="mt-[30px]">
+                <h3 className="text-[1.25rem] mb-3 border-b border-border-light pb-2">Environmental Telemetry</h3>
+                <div className="flex gap-5 items-center my-6">
+                  <div className="w-20 h-20 relative flex items-center justify-center rounded-full bg-[var(--glass-bg)] [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)] border border-[var(--glass-border)] shadow-[var(--glass-shadow)]">
+                    <svg width="80" height="80" className="-rotate-90">
                       <circle cx="40" cy="40" r="32" stroke="var(--border-light)" strokeWidth="4" fill="none" />
                       <circle cx="40" cy="40" r="32" stroke="var(--accent-gold)" strokeWidth="5" fill="none" strokeDasharray="200" strokeDashoffset={200 - (200 * property.walkScore) / 100} />
                     </svg>
-                    <span className="score-number" style={{ position: 'absolute' }}>{property.walkScore}</span>
+                    <span className="absolute font-heading text-[1.4rem] font-extrabold text-text-primary">{property.walkScore}</span>
                   </div>
                   <div>
-                    <h4 style={{ fontSize: '1rem' }}>Walkability Rating</h4>
-                    <p style={{ fontSize: '0.85rem' }}>Most tasks can be accomplished by walking to nearby high-end retail hubs.</p>
+                    <h4 className="text-base">Walkability Rating</h4>
+                    <p className="text-[0.85rem]">Most tasks can be accomplished by walking to nearby high-end retail hubs.</p>
                   </div>
                 </div>
 
-                <div className="walk-score-circle" style={{ marginTop: '16px' }}>
-                  <div className="score-gauge-ring glass-panel" style={{ borderRadius: '50%' }}>
-                    <svg width="80" height="80" style={{ transform: 'rotate(-90deg)' }}>
+                <div className="flex gap-5 items-center my-6 mt-4">
+                  <div className="w-20 h-20 relative flex items-center justify-center rounded-full bg-[var(--glass-bg)] [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)] border border-[var(--glass-border)] shadow-[var(--glass-shadow)]">
+                    <svg width="80" height="80" className="-rotate-90">
                       <circle cx="40" cy="40" r="32" stroke="var(--border-light)" strokeWidth="4" fill="none" />
                       <circle cx="40" cy="40" r="32" stroke="var(--secondary)" strokeWidth="5" fill="none" strokeDasharray="200" strokeDashoffset={200 - (200 * property.transitScore) / 100} />
                     </svg>
-                    <span className="score-number" style={{ position: 'absolute' }}>{property.transitScore}</span>
+                    <span className="absolute font-heading text-[1.4rem] font-extrabold text-text-primary">{property.transitScore}</span>
                   </div>
                   <div>
-                    <h4 style={{ fontSize: '1rem' }}>Transit Access Rating</h4>
-                    <p style={{ fontSize: '0.85rem' }}>Elite private limousine pads and proximity to arterial transport hubs.</p>
+                    <h4 className="text-base">Transit Access Rating</h4>
+                    <p className="text-[0.85rem]">Elite private limousine pads and proximity to arterial transport hubs.</p>
                   </div>
                 </div>
               </div>
 
               {/* Mock Floor Plan Simulator */}
-              <div className="floor-plan-box">
-                <h3 style={{ fontSize: '1.15rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div className="bg-bg-tertiary rounded-xl p-5 mt-[30px]">
+                <h3 className="text-[1.15rem] flex items-center gap-2">
                   <FileText size={18} />
                   Floor Plans & Blueprint
                 </h3>
-                <div className="floor-plan-drawing">
+                <div className="w-full h-[200px] border border-dashed border-text-tertiary rounded-lg mt-4 flex items-center justify-center bg-bg-primary">
                   <svg width="200" height="150" viewBox="0 0 200 150">
                     <rect x="10" y="10" width="180" height="130" stroke="var(--text-secondary)" strokeWidth="1" fill="none" />
                     <line x1="90" y1="10" x2="90" y2="140" stroke="var(--text-secondary)" strokeWidth="1" strokeDasharray="2,2" />
@@ -233,37 +230,37 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
               </div>
 
               {/* Mortgage Calculator Integration */}
-              <div style={{ marginTop: '40px' }}>
-                <h3 style={{ fontSize: '1.25rem', marginBottom: '20px', borderBottom: '1px solid var(--border-light)', paddingBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <TrendingUp size={18} style={{ color: 'var(--accent-gold-dark)' }} />
+              <div className="mt-10">
+                <h3 className="text-[1.25rem] mb-5 border-b border-border-light pb-2 flex items-center gap-2">
+                  <TrendingUp size={18} className="text-accent-gold-dark" />
                   Dynamic Mortgage Calculator
                 </h3>
                 <MortgageCalculator initialPrice={property.discountPrice || property.price} />
               </div>
 
               {/* Neighborhood POI Accordion */}
-              <div style={{ marginTop: '40px' }}>
-                <h3 style={{ fontSize: '1.25rem', marginBottom: '16px', borderBottom: '1px solid var(--border-light)', paddingBottom: '8px' }}>Surroundings</h3>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
-                    <School style={{ color: 'var(--accent-gold-dark)' }} />
+              <div className="mt-10">
+                <h3 className="text-[1.25rem] mb-4 border-b border-border-light pb-2">Surroundings</h3>
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center gap-4 p-3 bg-bg-secondary rounded-lg">
+                    <School className="text-accent-gold-dark" />
                     <div>
-                      <h4 style={{ fontSize: '0.95rem' }}>Sterling Academy of Fine Arts (Private)</h4>
-                      <p style={{ fontSize: '0.8rem' }}>0.8 miles away • Rating 10/10</p>
+                      <h4 className="text-[0.95rem]">Sterling Academy of Fine Arts (Private)</h4>
+                      <p className="text-[0.8rem]">0.8 miles away • Rating 10/10</p>
                     </div>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
-                    <Activity style={{ color: '#EF4444' }} />
+                  <div className="flex items-center gap-4 p-3 bg-bg-secondary rounded-lg">
+                    <Activity className="text-red-500" />
                     <div>
-                      <h4 style={{ fontSize: '0.95rem' }}>Lumina Medical Wellness Center</h4>
-                      <p style={{ fontSize: '0.8rem' }}>1.2 miles away • 24/7 Concierge Health</p>
+                      <h4 className="text-[0.95rem]">Lumina Medical Wellness Center</h4>
+                      <p className="text-[0.8rem]">1.2 miles away • 24/7 Concierge Health</p>
                     </div>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
-                    <Train style={{ color: 'var(--secondary)' }} />
+                  <div className="flex items-center gap-4 p-3 bg-bg-secondary rounded-lg">
+                    <Train className="text-[var(--secondary)]" />
                     <div>
-                      <h4 style={{ fontSize: '0.95rem' }}>Minato Skyrail Line</h4>
-                      <p style={{ fontSize: '0.8rem' }}>0.4 miles away • High-Speed Monorail</p>
+                      <h4 className="text-[0.95rem]">Minato Skyrail Line</h4>
+                      <p className="text-[0.8rem]">0.4 miles away • High-Speed Monorail</p>
                     </div>
                   </div>
                 </div>
@@ -273,26 +270,24 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
             {/* Right Booking Sidebar */}
             <div>
               {/* Agent Card */}
-              <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px', border: '1px solid var(--border-light)', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '24px' }}>
-                <img src={agent.image} alt={agent.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--accent-gold)', marginBottom: '16px' }} />
-                <h4 style={{ fontSize: '1.15rem' }}>{agent.name}</h4>
-                <p style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>{agent.role}</p>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>{agent.bio}</p>
+              <div className="p-6 rounded-2xl border border-border-light flex flex-col items-center text-center mb-6 bg-[var(--glass-bg)] [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)]">
+                <img src={agent.image} alt={agent.name} className="w-20 h-20 rounded-full object-cover border-2 border-accent-gold mb-4" />
+                <h4 className="text-[1.15rem]">{agent.name}</h4>
+                <p className="text-[0.8rem] text-text-tertiary uppercase tracking-[0.05em] mb-3">{agent.role}</p>
+                <p className="text-[0.85rem] text-text-secondary mb-5">{agent.bio}</p>
 
-                <div style={{ display: 'flex', width: '100%', gap: '10px' }}>
-                  <a 
-                    href={`https://wa.me/${agent.whatsapp}`} 
-                    target="_blank" 
+                <div className="flex w-full gap-2.5">
+                  <a
+                    href={`https://wa.me/${agent.whatsapp}`}
+                    target="_blank"
                     rel="noreferrer"
-                    className="luxury-gold-button"
-                    style={{ flex: 1, padding: '10px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', background: '#25D366', color: '#FFF', boxShadow: 'none' }}
+                    className="flex-1 py-2.5 text-[0.8rem] flex items-center justify-center gap-1.5 bg-[#25D366] text-white shadow-none font-heading font-semibold rounded-lg cursor-pointer [transition:transform_var(--transition-fast),filter_var(--transition-fast)] hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0"
                   >
                     <MessageSquare size={14} /> WhatsApp
                   </a>
-                  <a 
+                  <a
                     href={`mailto:${agent.email}`}
-                    className="outline-luxury-button"
-                    style={{ flex: 1, padding: '10px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+                    className={`${outlineLuxuryBtnClass} flex-1 py-2.5 px-4 text-[0.8rem] flex items-center justify-center gap-1.5`}
                   >
                     <Mail size={14} /> Email
                   </a>
@@ -300,52 +295,52 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
               </div>
 
               {/* Booking Scheduler form */}
-              <div className="glass-panel booking-card" style={{ border: '1px solid var(--border-light)' }}>
-                <h4 style={{ fontSize: '1.2rem', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div className="p-[30px] rounded-2xl sticky top-5 bg-[var(--glass-bg)] [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)] border border-border-light">
+                <h4 className="text-[1.2rem] mb-4 flex items-center gap-2">
                   <Calendar size={18} /> Schedule Viewing
                 </h4>
                 {bookingSuccess ? (
-                  <div style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10B981', border: '1px solid rgba(16, 185, 129, 0.3)', padding: '16px', borderRadius: '8px', fontSize: '0.85rem', textAlign: 'center' }}>
+                  <div className="bg-emerald-500/10 text-emerald-500 border border-emerald-500/30 p-4 rounded-lg text-[0.85rem] text-center">
                     ✔ Appointment Request Logged. Agent Sophia Sterling will contact you within 30 minutes via private dispatch.
                   </div>
                 ) : (
-                  <form onSubmit={handleBookingSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                      <label style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', color: 'var(--text-secondary)' }}>Full Name</label>
-                      <input 
-                        type="text" 
-                        required 
-                        className="glass-input" 
+                  <form onSubmit={handleBookingSubmit} className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[0.75rem] font-semibold uppercase text-text-secondary">Full Name</label>
+                      <input
+                        type="text"
+                        required
+                        className={glassInputClass}
                         placeholder="Sir John Doe"
                         value={bookingName}
                         onChange={(e) => setBookingName(e.target.value)}
                       />
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                      <label style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', color: 'var(--text-secondary)' }}>Private Email</label>
-                      <input 
-                        type="email" 
-                        required 
-                        className="glass-input" 
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[0.75rem] font-semibold uppercase text-text-secondary">Private Email</label>
+                      <input
+                        type="email"
+                        required
+                        className={glassInputClass}
                         placeholder="john@noble.com"
                         value={bookingEmail}
                         onChange={(e) => setBookingEmail(e.target.value)}
                       />
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                      <label style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', color: 'var(--text-secondary)' }}>Requested Date</label>
-                      <input 
-                        type="date" 
-                        required 
-                        className="glass-input" 
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[0.75rem] font-semibold uppercase text-text-secondary">Requested Date</label>
+                      <input
+                        type="date"
+                        required
+                        className={glassInputClass}
                         value={bookingDate}
                         onChange={(e) => setBookingDate(e.target.value)}
                       />
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                      <label style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', color: 'var(--text-secondary)' }}>Preferred Hour</label>
-                      <select 
-                        className="glass-input"
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[0.75rem] font-semibold uppercase text-text-secondary">Preferred Hour</label>
+                      <select
+                        className={glassInputClass}
                         value={bookingTime}
                         onChange={(e) => setBookingTime(e.target.value)}
                       >
@@ -355,7 +350,7 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
                       </select>
                     </div>
 
-                    <button type="submit" className="luxury-gold-button shine-hover" style={{ width: '100%' }}>
+                    <button type="submit" className={`${luxuryGoldBtnClass} ${shineHoverClass} w-full`}>
                       Secure VIP Booking
                     </button>
                   </form>

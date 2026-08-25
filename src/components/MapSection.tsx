@@ -54,7 +54,7 @@ export const MapSection: React.FC<MapSectionProps> = ({
 
     // Style properties based on theme
     const isBlueprint = mapStyle === 'blueprint';
-    
+
     // Draw Map Background
     ctx.fillStyle = isBlueprint ? '#0F172A' : '#1E293B';
     ctx.fillRect(0, 0, width, height);
@@ -230,39 +230,27 @@ export const MapSection: React.FC<MapSectionProps> = ({
   };
 
   return (
-    <div className="map-container hidden">
+    <div className="hidden relative rounded-2xl overflow-hidden h-[500px] shadow-card border border-border-light bg-[#111827]">
       {/* Top Left Menu Panel */}
-      <div className="glass-panel map-sidebar-overlay" style={{ background: 'rgba(15, 23, 42, 0.85)' }}>
-        <h4 style={{ color: '#FFFFFF', marginBottom: '12px', fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Compass className="animate-spin" size={16} style={{ animationDuration: '6s', color: 'var(--accent-gold)' }} />
+      <div className="absolute top-5 left-5 w-[280px] rounded-xl p-5 z-10 [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)] border border-[var(--glass-border)] shadow-[0_10px_25px_rgba(0,0,0,0.3)] bg-[rgba(15,23,42,0.85)]">
+        <h4 className="text-white mb-3 text-[0.95rem] flex items-center gap-2">
+          <Compass className="animate-spin [animation-duration:6s] text-accent-gold" size={16} />
           AURA Satellite Tracker
         </h4>
-        <p style={{ fontSize: '0.75rem', color: '#94A3B8', marginBottom: '16px' }}>
+        <p className="text-[0.75rem] text-slate-400 mb-4">
           Real-time plotting of ultra-exclusive properties. Click nodes to focus telemetry.
         </p>
 
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <button 
-            onClick={() => setMapStyle('blueprint')} 
-            className={`luxury-gold-button`}
-            style={{ 
-              padding: '6px 12px', 
-              fontSize: '0.75rem',
-              background: mapStyle === 'blueprint' ? 'var(--accent-gold)' : 'rgba(255,255,255,0.1)',
-              color: mapStyle === 'blueprint' ? '#000' : '#FFF'
-            }}
+        <div className="flex gap-2">
+          <button
+            onClick={() => setMapStyle('blueprint')}
+            className={`relative overflow-hidden font-heading font-semibold border-none cursor-pointer [transition:transform_var(--transition-fast),box-shadow_var(--transition-fast),filter_var(--transition-fast)] hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0 shadow-[var(--glow-shadow)] rounded-lg py-1.5 px-3 text-[0.75rem] ${mapStyle === 'blueprint' ? 'bg-accent-gold text-black' : 'bg-white/10 text-white'}`}
           >
             Blueprint
           </button>
-          <button 
-            onClick={() => setMapStyle('satellite')} 
-            className={`luxury-gold-button`}
-            style={{ 
-              padding: '6px 12px', 
-              fontSize: '0.75rem',
-              background: mapStyle === 'satellite' ? 'var(--accent-gold)' : 'rgba(255,255,255,0.1)',
-              color: mapStyle === 'satellite' ? '#000' : '#FFF'
-            }}
+          <button
+            onClick={() => setMapStyle('satellite')}
+            className={`relative overflow-hidden font-heading font-semibold border-none cursor-pointer [transition:transform_var(--transition-fast),box-shadow_var(--transition-fast),filter_var(--transition-fast)] hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0 shadow-[var(--glow-shadow)] rounded-lg py-1.5 px-3 text-[0.75rem] ${mapStyle === 'satellite' ? 'bg-accent-gold text-black' : 'bg-white/10 text-white'}`}
           >
             Satellite
           </button>
@@ -270,55 +258,53 @@ export const MapSection: React.FC<MapSectionProps> = ({
       </div>
 
       {/* Top Right Zoom Controls */}
-      <div style={{ position: 'absolute', top: '20px', right: '20px', display: 'flex', flexDirection: 'column', gap: '8px', zIndex: 10 }}>
-        <button 
-          onClick={() => setZoom(prev => Math.min(prev + 0.1, 1.8))} 
-          style={{ background: 'rgba(15, 23, 42, 0.8)', border: '1px solid rgba(255,255,255,0.15)', color: '#FFF', padding: '10px', borderRadius: '8px', cursor: 'pointer', display: 'flex' }}
+      <div className="absolute top-5 right-5 flex flex-col gap-2 z-10">
+        <button
+          onClick={() => setZoom(prev => Math.min(prev + 0.1, 1.8))}
+          className="bg-[rgba(15,23,42,0.8)] border border-white/15 text-white p-2.5 rounded-lg cursor-pointer flex"
         >
           <ZoomIn size={16} />
         </button>
-        <button 
-          onClick={() => setZoom(prev => Math.max(prev - 0.1, 0.8))} 
-          style={{ background: 'rgba(15, 23, 42, 0.8)', border: '1px solid rgba(255,255,255,0.15)', color: '#FFF', padding: '10px', borderRadius: '8px', cursor: 'pointer', display: 'flex' }}
+        <button
+          onClick={() => setZoom(prev => Math.max(prev - 0.1, 0.8))}
+          className="bg-[rgba(15,23,42,0.8)] border border-white/15 text-white p-2.5 rounded-lg cursor-pointer flex"
         >
           <ZoomOut size={16} />
         </button>
       </div>
 
       {/* Canvas Element */}
-      <canvas 
+      <canvas
         ref={canvasRef}
-        className="map-canvas-element"
+        className={`w-full h-full block ${hoveredProperty ? 'cursor-pointer' : 'cursor-default'}`}
         onClick={handleCanvasClick}
         onMouseMove={handleCanvasMouseMove}
-        style={{ cursor: hoveredProperty ? 'pointer' : 'default' }}
       />
 
       {/* Detail Overlay Card Popup */}
       {activeProperty && (
-        <div className="map-card-popup glass-panel" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-light)' }}>
-          <button 
+        <div className="absolute bottom-5 right-5 w-[320px] rounded-xl overflow-hidden z-10 [animation:slide-up_var(--transition-normal)] shadow-[0_10px_30px_rgba(0,0,0,0.4)] [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)] border border-border-light bg-bg-secondary">
+          <button
             onClick={() => setActiveProperty(null)}
-            className="map-popup-close"
+            className="absolute top-2 right-2 bg-black/50 text-white border-none w-6 h-6 rounded-full cursor-pointer flex items-center justify-center z-20"
           >
             <X size={12} />
           </button>
-          
-          <img src={activeProperty.images[0]} alt={activeProperty.title} className="map-popup-img" />
-          
-          <div className="map-popup-body">
-            <span style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--accent-gold-dark)', fontWeight: 'bold' }}>
+
+          <img src={activeProperty.images[0]} alt={activeProperty.title} className="h-[120px] w-full object-cover" />
+
+          <div className="p-4">
+            <span className="text-[0.65rem] uppercase tracking-[0.1em] text-accent-gold-dark font-bold">
               {activeProperty.type} • {activeProperty.location.city}
             </span>
-            <h4 style={{ fontSize: '1rem', margin: '4px 0 8px' }}>{activeProperty.title}</h4>
-            <div style={{ display: 'flex', justifyItems: 'center', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-primary)', fontWeight: 'bold' }}>
+            <h4 className="text-base my-1 mb-2">{activeProperty.title}</h4>
+            <div className="flex justify-items-center justify-between items-center">
+              <span className="font-serif italic text-text-primary font-bold">
                 {formatPrice(activeProperty.price)}
               </span>
-              <button 
+              <button
                 onClick={() => onSelectProperty(activeProperty)}
-                className="luxury-gold-button shine-hover" 
-                style={{ padding: '6px 12px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+                className="relative overflow-hidden bg-[linear-gradient(135deg,var(--accent-gold)_0%,var(--accent-gold-dark)_100%)] text-black font-heading font-semibold border-none cursor-pointer [transition:transform_var(--transition-fast),box-shadow_var(--transition-fast),filter_var(--transition-fast)] hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0 shadow-[var(--glow-shadow)] rounded-lg py-1.5 px-3 text-[0.75rem] flex items-center gap-1 after:content-[''] after:absolute after:top-0 after:-left-3/4 after:w-1/2 after:h-full after:[background:linear-gradient(to_right,rgba(255,255,255,0)_0%,rgba(255,255,255,0.3)_100%)] after:[transform:skewX(-25deg)] after:[transition:0.75s] hover:after:[animation:shine_0.85s]"
               >
                 <Eye size={12} /> View Telemetry
               </button>

@@ -6,55 +6,45 @@ interface SystemSettingsTabProps {
   onResetDatabase: () => void;
 }
 
+const downloadBackupBtnClass = "relative overflow-hidden bg-[linear-gradient(135deg,var(--accent-gold)_0%,var(--accent-gold-dark)_100%)] text-black font-heading font-semibold border-none rounded-lg cursor-pointer shadow-[var(--glow-shadow)] [transition:transform_var(--transition-fast),box-shadow_var(--transition-fast),filter_var(--transition-fast)] hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0 after:content-[''] after:absolute after:top-0 after:-left-3/4 after:w-1/2 after:h-full after:[background:linear-gradient(to_right,rgba(255,255,255,0)_0%,rgba(255,255,255,0.3)_100%)] after:[transform:skewX(-25deg)] after:[transition:0.75s] hover:after:[animation:shine_0.85s] mt-auto px-5 py-3 text-[0.85rem] w-fit";
+
 export const SystemSettingsTab: React.FC<SystemSettingsTabProps> = ({
   onExportJSON,
   onResetDatabase
 }) => {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+    <div className="flex flex-col gap-8">
       <div>
-        <h1 style={{ fontSize: '1.8rem', fontFamily: 'var(--font-heading)', fontWeight: 'bold' }}>Platform Operations & Maintenance</h1>
-        <p style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', marginTop: '4px' }}>Export data backups, reset mock database, or adjust system operating parameters.</p>
+        <h1 className="text-[1.8rem] font-heading font-bold">Platform Operations & Maintenance</h1>
+        <p className="text-[0.85rem] text-text-tertiary mt-1">Export data backups, reset mock database, or adjust system operating parameters.</p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '24px' }}>
-        <div className="glass-panel" style={{ padding: '28px', borderRadius: '16px', border: '1px solid var(--border-light)', background: 'var(--bg-secondary)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <Download size={18} style={{ color: 'var(--accent-gold)' }} /> Export System Snapshot
+      <div className="grid grid-cols-2 gap-6">
+        <div className="rounded-2xl border border-border-light bg-bg-secondary p-7 flex flex-col gap-4 [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)] shadow-[var(--glass-shadow)]">
+          <h3 className="text-[1.1rem] font-bold flex items-center gap-2.5">
+            <Download size={18} className="text-accent-gold" /> Export System Snapshot
           </h3>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
+          <p className="text-[0.85rem] text-text-secondary leading-[1.5]">
             Download a complete JSON file containing all active properties, advising consultants, testimonials, and blog articles state.
           </p>
-          <button 
+          <button
             onClick={onExportJSON}
-            className="luxury-gold-button shine-hover"
-            style={{ marginTop: 'auto', padding: '12px 20px', fontSize: '0.85rem', width: 'fit-content' }}
+            className={downloadBackupBtnClass}
           >
             Download JSON Backup (.json)
           </button>
         </div>
 
-        <div className="glass-panel" style={{ padding: '28px', borderRadius: '16px', border: '1px solid var(--border-light)', background: 'var(--bg-secondary)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '10px', color: '#EF4444' }}>
+        <div className="rounded-2xl border border-border-light bg-bg-secondary p-7 flex flex-col gap-4 [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)] shadow-[var(--glass-shadow)]">
+          <h3 className="text-[1.1rem] font-bold flex items-center gap-2.5 text-red-500">
             <RotateCcw size={18} /> Reset Database State
           </h3>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
+          <p className="text-[0.85rem] text-text-secondary leading-[1.5]">
             Reset all property listings, agents, testimonials, and journals back to their original default seed data.
           </p>
-          <button 
+          <button
             onClick={onResetDatabase}
-            style={{
-              marginTop: 'auto',
-              padding: '12px 20px',
-              fontSize: '0.85rem',
-              borderRadius: '8px',
-              border: '1px solid rgba(239, 68, 68, 0.4)',
-              background: 'rgba(239, 68, 68, 0.15)',
-              color: '#EF4444',
-              fontWeight: 600,
-              cursor: 'pointer',
-              width: 'fit-content'
-            }}
+            className="mt-auto px-5 py-3 text-[0.85rem] rounded-lg border border-red-500/40 bg-red-500/15 text-red-500 font-semibold cursor-pointer w-fit"
           >
             Restore Default Seed Data
           </button>

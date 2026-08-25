@@ -25,7 +25,7 @@
   --text-tertiary: #6D8681;
   --border-light: rgba(28, 42, 39, 0.12);
   --border-glass: rgba(200, 122, 83, 0.15);
-  
+
   /* Glassmorphism Tokens - Light */
   --glass-bg: rgba(255, 255, 255, 0.8);
   --glass-border: rgba(200, 122, 83, 0.15);
@@ -54,7 +54,7 @@
   --text-tertiary: #7C9591;
   --border-light: rgba(228, 236, 235, 0.12);
   --border-glass: rgba(200, 122, 83, 0.12);
-  
+
   /* Glassmorphism Tokens - Dark */
   --glass-bg: rgba(28, 42, 39, 0.8);
   --glass-border: rgba(228, 236, 235, 0.08);
@@ -68,199 +68,128 @@
   --neu-inset: inset 4px 4px 8px #05070c, inset -4px -4px 8px #111726;
 }
 
-/* Global Reset & Base */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* Bridge the design tokens above into Tailwind's utility generator so
+   classes like bg-primary, text-accent-gold, font-heading, shadow-card
+   etc. are available and stay theme-reactive (they resolve through the
+   CSS custom properties above, so dark mode / [data-theme] switching
+   keeps working exactly as before). */
+@theme inline {
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-secondary: var(--secondary);
+  --color-accent-gold: var(--accent-gold);
+  --color-accent-gold-dark: var(--accent-gold-dark);
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-tertiary: var(--bg-tertiary);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-border-light: var(--border-light);
+  --color-border-glass: var(--border-glass);
+  --color-glass-bg: var(--glass-bg);
+  --color-glass-border: var(--glass-border);
+
+  --font-sans: var(--font-sans);
+  --font-heading: var(--font-heading);
+  --font-serif: var(--font-serif);
+
+  --shadow-glass: var(--glass-shadow);
+  --shadow-card: var(--card-shadow);
+  --shadow-glow: var(--glow-shadow);
+  --shadow-neu-flat: var(--neu-flat);
+  --shadow-neu-inset: var(--neu-inset);
 }
 
-html {
-  scroll-behavior: smooth;
-  font-family: var(--font-sans);
-  color: var(--text-primary);
-  background-color: var(--bg-primary);
-  transition: background-color var(--transition-slow), color var(--transition-slow);
+/* Custom Keyframe Animations (kept as CSS since Tailwind utilities are
+   generated from these via arbitrary values, e.g. animate-[float_6s...] ) */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
 }
 
-body {
-  overflow-x: hidden;
-  line-height: 1.6;
+@keyframes pulse-green {
+  0%, 100% { box-shadow: 0 0 15px rgba(200, 122, 83, 0.2); }
+  50% { box-shadow: 0 0 30px rgba(200, 122, 83, 0.5); }
 }
 
-/* Hide Default Scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--text-tertiary);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-gold);
+@keyframes shine {
+  100% { left: 125%; }
 }
 
-/* Typography rules */
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--text-primary);
-  line-height: 1.25;
+@keyframes slide-up {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
-p {
-  color: var(--text-secondary);
-  font-weight: 400;
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+@layer base {
+  /* Global Reset & Base */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
-/* Premium utility glass components */
-.glass-panel {
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-}
+  html {
+    scroll-behavior: smooth;
+    font-family: var(--font-sans);
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
+    transition: background-color var(--transition-slow), color var(--transition-slow);
+  }
 
-.luxury-gradient-text {
-  background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent-gold) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
+  body {
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
 
-.gold-gradient-text {
-  background: linear-gradient(135deg, #E09B75 0%, #C87A53 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
+  /* Hide Default Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--text-tertiary);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-gold);
+  }
 
-.luxury-gold-button {
-  background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-dark) 100%);
-  color: #000000;
-  font-family: var(--font-heading);
-  font-weight: 600;
-  border: none;
-  border-radius: 8px;
-  padding: 12px 28px;
-  cursor: pointer;
-  box-shadow: var(--glow-shadow);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
-}
+  /* Typography rules */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    line-height: 1.25;
+  }
 
-.luxury-gold-button:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.1);
-  box-shadow: 0 0 25px rgba(200, 122, 83, 0.4);
-}
+  p {
+    color: var(--text-secondary);
+    font-weight: 400;
+  }
 
-.luxury-gold-button:active {
-  transform: translateY(0);
-}
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 
-.outline-luxury-button {
-  background: transparent;
-  color: var(--text-primary);
-  font-family: var(--font-heading);
-  font-weight: 500;
-  border: 1.5px solid var(--text-primary);
-  border-radius: 8px;
-  padding: 12px 28px;
-  cursor: pointer;
-  transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
-}
-
-.outline-luxury-button:hover {
-  background: var(--text-primary);
-  color: var(--bg-primary);
-}
-
-/* Number style for playfair */
-.luxury-number {
-  font-family: var(--font-serif);
-  font-style: italic;
-  color: var(--accent-gold);
-}
-
-/* Page Containers */
-.container {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-section {
-  padding: 100px 0;
-  position: relative;
-}
-
-.dark-section {
-  background-color: var(--bg-secondary);
-}
-
-/* Loader Styling */
-.preloader {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background-color: #090D16;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
-}
-
-.preloader.hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-.preloader-logo {
-  font-family: var(--font-heading);
-  font-size: 3rem;
-  letter-spacing: 0.25em;
-  font-weight: 800;
-  color: #FFFFFF;
-  margin-bottom: 20px;
-  position: relative;
-}
-
-.preloader-logo span {
-  color: var(--accent-gold);
-}
-
-.preloader-spinner {
-  width: 50px;
-  height: 50px;
-  border: 2px solid rgba(200, 122, 83, 0.15);
-  border-top-color: var(--accent-gold);
-  border-radius: 50%;
-  animation: spin 1s infinite linear;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-#root {
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-  text-align: left;
-  border-inline: none;
-  min-height: 100vh;
+  #root {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    text-align: left;
+    border-inline: none;
+    min-height: 100vh;
+  }
 }

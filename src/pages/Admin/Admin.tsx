@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import { 
-  Activity, 
-  Building2, 
-  Users, 
-  Star, 
-  FileText, 
-  Settings, 
-  LogOut, 
-  ShieldCheck 
+import {
+  Activity,
+  Building2,
+  Users,
+  Star,
+  FileText,
+  Settings,
+  LogOut,
+  ShieldCheck
 } from 'lucide-react';
-import { 
-  type Property, 
-  type Agent, 
-  type Testimonial, 
+import {
+  type Property,
+  type Agent,
+  type Testimonial,
   type BlogPost,
   PROPERTIES,
   AGENTS,
@@ -404,64 +404,31 @@ export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
   };
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      width: '100vw',
-      background: 'var(--bg-primary)',
-      color: 'var(--text-primary)',
-      display: 'grid',
-      gridTemplateColumns: '260px 1fr',
-      fontFamily: 'var(--font-sans)',
-      overflow: 'hidden'
-    }}>
+    <div className="min-h-screen w-screen bg-bg-primary text-text-primary grid grid-cols-[260px_1fr] font-sans overflow-hidden">
       {/* Toast Notification */}
       {toastMessage && (
-        <div style={{
-          position: 'fixed',
-          top: '24px',
-          right: '24px',
-          zIndex: 4000,
-          background: 'rgba(16, 185, 129, 0.95)',
-          color: '#FFFFFF',
-          padding: '12px 24px',
-          borderRadius: '8px',
-          boxShadow: 'var(--card-shadow)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-          fontSize: '0.9rem',
-          fontWeight: 600,
-          animation: 'slide-up 0.3s ease'
-        }}>
+        <div className="fixed top-6 right-6 z-[4000] bg-emerald-500/95 text-white py-3 px-6 rounded-lg shadow-card flex items-center gap-2.5 text-[0.9rem] font-semibold [animation:slide-up_0.3s_ease]">
           <ShieldCheck size={18} />
           {toastMessage}
         </div>
       )}
 
       {/* Sidebar */}
-      <aside style={{
-        background: 'var(--bg-secondary)',
-        borderRight: '1px solid var(--border-light)',
-        padding: '30px 20px',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        height: '100vh'
-      }}>
+      <aside className="bg-bg-secondary border-r border-border-light py-[30px] px-5 flex flex-col justify-between h-screen">
         <div>
-          <div style={{ marginBottom: '36px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <img src="/dusabe_logo.png" alt="DUSABE Logo" style={{ width: '38px', height: '38px', borderRadius: '8px', objectFit: 'cover', border: '1px solid var(--accent-gold)' }} />
+          <div className="mb-9 flex items-center gap-3">
+            <img src="/dusabe_logo.png" alt="DUSABE Logo" className="w-[38px] h-[38px] rounded-lg object-cover border border-accent-gold" />
             <div>
-              <div style={{ fontSize: '1.2rem', fontFamily: 'var(--font-heading)', fontWeight: 'bold', letterSpacing: '0.08em', color: 'var(--text-primary)' }}>
-                DUSABE<span style={{ color: 'var(--accent-gold)' }}>.</span>
+              <div className="text-[1.2rem] font-heading font-bold tracking-[0.08em] text-text-primary">
+                DUSABE<span className="text-accent-gold">.</span>
               </div>
-              <div style={{ fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.2em', color: 'var(--accent-gold)', marginTop: '2px', fontWeight: 'bold' }}>
+              <div className="text-[0.55rem] uppercase tracking-[0.2em] text-accent-gold mt-0.5 font-bold">
                 REAL ESTATE ADMIN
               </div>
             </div>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <div className="flex flex-col gap-1.5">
             {[
               { id: 'overview', label: 'Dashboard Overview', icon: Activity },
               { id: 'properties', label: `Properties (${properties.length})`, icon: Building2 },
@@ -473,25 +440,10 @@ export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
               const Icon = tab.icon;
               const isSelected = activeTab === tab.id;
               return (
-                <button 
+                <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    padding: '12px 16px',
-                    borderRadius: '8px',
-                    border: 'none',
-                    background: isSelected ? 'rgba(200, 122, 83, 0.15)' : 'transparent',
-                    color: isSelected ? 'var(--accent-gold)' : 'var(--text-secondary)',
-                    fontWeight: isSelected ? 600 : 400,
-                    fontSize: '0.9rem',
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    borderLeft: isSelected ? '3px solid var(--accent-gold)' : '3px solid transparent',
-                    transition: 'all 0.2s'
-                  }}
+                  className={`flex items-center gap-3 py-3 px-4 rounded-lg border-none text-[0.9rem] cursor-pointer text-left [transition:all_0.2s] border-l-[3px] ${isSelected ? 'bg-accent-gold/15 text-accent-gold font-semibold border-accent-gold' : 'bg-transparent text-text-secondary font-normal border-transparent'}`}
                 >
                   <Icon size={18} /> {tab.label}
                 </button>
@@ -502,24 +454,9 @@ export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
 
         {onClose && (
           <div>
-            <button 
+            <button
               onClick={onClose}
-              style={{
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '10px',
-                padding: '12px',
-                borderRadius: '10px',
-                border: '1px solid var(--border-light)',
-                background: 'var(--bg-tertiary)',
-                color: 'var(--text-primary)',
-                fontSize: '0.85rem',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all 0.2s'
-              }}
+              className="w-full flex items-center justify-center gap-2.5 p-3 rounded-[10px] border border-border-light bg-bg-tertiary text-text-primary text-[0.85rem] font-semibold cursor-pointer [transition:all_0.2s]"
             >
               <LogOut size={16} /> Return to Public Site
             </button>
@@ -528,50 +465,45 @@ export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
       </aside>
 
       {/* Main Container */}
-      <main style={{
-        padding: '40px 50px',
-        height: '100vh',
-        overflowY: 'auto',
-        background: 'var(--bg-primary)'
-      }}>
+      <main className="py-10 px-[50px] h-screen overflow-y-auto bg-bg-primary">
         {activeTab === 'overview' && <DashboardOverview properties={properties} agents={agents} />}
         {activeTab === 'properties' && (
-          <PropertiesTab 
-            properties={properties} 
-            onOpenNewProperty={handleOpenNewProperty} 
-            onOpenEditProperty={handleOpenEditProperty} 
-            onDeleteProperty={handleDeleteProperty} 
-            onToggleFeaturedProperty={handleToggleFeaturedProperty} 
+          <PropertiesTab
+            properties={properties}
+            onOpenNewProperty={handleOpenNewProperty}
+            onOpenEditProperty={handleOpenEditProperty}
+            onDeleteProperty={handleDeleteProperty}
+            onToggleFeaturedProperty={handleToggleFeaturedProperty}
           />
         )}
         {activeTab === 'agents' && (
-          <AgentsTab 
-            agents={agents} 
-            onOpenNewAgent={handleOpenNewAgent} 
-            onOpenEditAgent={handleOpenEditAgent} 
-            onDeleteAgent={handleDeleteAgent} 
+          <AgentsTab
+            agents={agents}
+            onOpenNewAgent={handleOpenNewAgent}
+            onOpenEditAgent={handleOpenEditAgent}
+            onDeleteAgent={handleDeleteAgent}
           />
         )}
         {activeTab === 'testimonials' && (
-          <ReviewsTab 
-            testimonials={testimonials} 
-            onOpenNewTestimonial={handleOpenNewTestimonial} 
-            onOpenEditTestimonial={handleOpenEditTestimonial} 
-            onDeleteTestimonial={handleDeleteTestimonial} 
+          <ReviewsTab
+            testimonials={testimonials}
+            onOpenNewTestimonial={handleOpenNewTestimonial}
+            onOpenEditTestimonial={handleOpenEditTestimonial}
+            onDeleteTestimonial={handleDeleteTestimonial}
           />
         )}
         {activeTab === 'blogs' && (
-          <BlogPostTab 
-            blogPosts={blogPosts} 
-            onOpenNewBlog={handleOpenNewBlog} 
-            onOpenEditBlog={handleOpenEditBlog} 
-            onDeleteBlog={handleDeleteBlog} 
+          <BlogPostTab
+            blogPosts={blogPosts}
+            onOpenNewBlog={handleOpenNewBlog}
+            onOpenEditBlog={handleOpenEditBlog}
+            onDeleteBlog={handleDeleteBlog}
           />
         )}
         {activeTab === 'settings' && (
-          <SystemSettingsTab 
-            onExportJSON={handleExportJSON} 
-            onResetDatabase={handleResetDatabase} 
+          <SystemSettingsTab
+            onExportJSON={handleExportJSON}
+            onResetDatabase={handleResetDatabase}
           />
         )}
       </main>

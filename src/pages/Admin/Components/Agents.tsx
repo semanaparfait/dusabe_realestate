@@ -9,6 +9,8 @@ interface AgentsTabProps {
   onDeleteAgent: (id: string, name: string) => void;
 }
 
+const newAdvisorBtnClass = "relative overflow-hidden bg-[linear-gradient(135deg,var(--accent-gold)_0%,var(--accent-gold-dark)_100%)] text-black font-heading font-semibold border-none rounded-lg cursor-pointer shadow-[var(--glow-shadow)] [transition:transform_var(--transition-fast),box-shadow_var(--transition-fast),filter_var(--transition-fast)] hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0 after:content-[''] after:absolute after:top-0 after:-left-3/4 after:w-1/2 after:h-full after:[background:linear-gradient(to_right,rgba(255,255,255,0)_0%,rgba(255,255,255,0.3)_100%)] after:[transform:skewX(-25deg)] after:[transition:0.75s] hover:after:[animation:shine_0.85s] flex items-center gap-2 px-6 py-3 text-[0.85rem]";
+
 export const AgentsTab: React.FC<AgentsTabProps> = ({
   agents,
   onOpenNewAgent,
@@ -16,53 +18,52 @@ export const AgentsTab: React.FC<AgentsTabProps> = ({
   onDeleteAgent
 }) => {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <div className="flex flex-col gap-6">
+      <div className="flex justify-between items-center">
         <div>
-          <h1 style={{ fontSize: '1.8rem', fontFamily: 'var(--font-heading)', fontWeight: 'bold' }}>Advising Group & Consultants</h1>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', marginTop: '4px' }}>Manage private wealth consultants, experience tags, and contact protocols.</p>
+          <h1 className="text-[1.8rem] font-heading font-bold">Advising Group & Consultants</h1>
+          <p className="text-[0.85rem] text-text-tertiary mt-1">Manage private wealth consultants, experience tags, and contact protocols.</p>
         </div>
 
-        <button 
+        <button
           onClick={onOpenNewAgent}
-          className="luxury-gold-button shine-hover"
-          style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 24px', fontSize: '0.85rem' }}
+          className={newAdvisorBtnClass}
         >
           <Plus size={16} /> Register New Advisor
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
+      <div className="grid grid-cols-3 gap-6">
         {agents.map(agent => (
-          <div key={agent.id} className="glass-panel" style={{ padding: '24px', borderRadius: '16px', border: '1px solid var(--border-light)', background: 'var(--bg-secondary)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-              <img src={agent.image} alt={agent.name} style={{ width: '64px', height: '64px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--accent-gold)' }} />
+          <div key={agent.id} className="rounded-2xl border border-border-light bg-bg-secondary p-6 flex flex-col gap-4 [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)] shadow-[var(--glass-shadow)]">
+            <div className="flex gap-4 items-center">
+              <img src={agent.image} alt={agent.name} className="w-16 h-16 rounded-full object-cover border-2 border-accent-gold" />
               <div>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold' }}>{agent.name}</h3>
-                <div style={{ fontSize: '0.75rem', color: 'var(--accent-gold)', fontWeight: 600 }}>{agent.role}</div>
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: '2px' }}>{agent.experience} Experience • Rating {agent.rating.toFixed(1)} ★</div>
+                <h3 className="text-[1.1rem] font-bold">{agent.name}</h3>
+                <div className="text-[0.75rem] text-accent-gold font-semibold">{agent.role}</div>
+                <div className="text-[0.75rem] text-text-tertiary mt-0.5">{agent.experience} Experience • Rating {agent.rating.toFixed(1)} ★</div>
               </div>
             </div>
 
-            <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
+            <p className="text-[0.8rem] text-text-secondary leading-[1.4]">
               {agent.bio}
             </p>
 
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', borderTop: '1px solid var(--border-light)', paddingTop: '12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <div className="text-[0.75rem] text-text-tertiary border-t border-border-light pt-3 flex flex-col gap-1">
               <div>Email: {agent.email}</div>
               <div>WhatsApp: {agent.whatsapp}</div>
             </div>
 
-            <div style={{ display: 'flex', gap: '8px', marginTop: 'auto' }}>
-              <button 
+            <div className="flex gap-2 mt-auto">
+              <button
                 onClick={() => onOpenEditAgent(agent)}
-                style={{ flex: 1, padding: '8px', borderRadius: '8px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-light)', color: 'var(--text-primary)', fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+                className="flex-1 p-2 rounded-lg bg-bg-tertiary border border-border-light text-text-primary text-[0.8rem] cursor-pointer flex items-center justify-center gap-1.5"
               >
                 <Edit3 size={14} /> Edit Details
               </button>
-              <button 
+              <button
                 onClick={() => onDeleteAgent(agent.id, agent.name)}
-                style={{ padding: '8px 12px', borderRadius: '8px', background: 'rgba(239, 68, 68, 0.15)', border: 'none', color: '#EF4444', cursor: 'pointer' }}
+                className="py-2 px-3 rounded-lg bg-red-500/15 border-none text-red-500 cursor-pointer"
               >
                 <Trash2 size={14} />
               </button>

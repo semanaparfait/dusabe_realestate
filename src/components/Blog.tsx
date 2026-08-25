@@ -10,47 +10,47 @@ export const Blog: React.FC<BlogProps> = ({ blogPosts }) => {
   const posts = blogPosts && blogPosts.length > 0 ? blogPosts : BLOG_POSTS;
 
   return (
-    <section id="blog" className="container">
-      <div className="section-header">
-        <span className="section-subtitle">Articles & News</span>
-        <h2 className="section-title">Latest Real Estate News & Advice</h2>
-        <p className="section-desc">
+    <section id="blog" className="relative w-full max-w-[1400px] mx-auto px-6">
+      <div className="text-center mb-[60px]">
+        <span className="font-heading uppercase tracking-[0.25em] text-[0.85rem] text-accent-gold font-semibold">Articles & News</span>
+        <h2 className="text-[2.5rem] mb-4">Latest Real Estate News & Advice</h2>
+        <p className="max-w-[600px] mx-auto text-base">
           Read our simple guides on home design, property buying tips, and market news.
         </p>
       </div>
 
-      <div className="blog-grid">
+      <div className="grid grid-cols-3 max-lg:grid-cols-1 gap-[30px]">
         {posts.map((post) => (
-          <div key={post.id} className="blog-card glass-panel" style={{ border: '1px solid var(--border-light)', background: 'var(--bg-secondary)', overflow: 'hidden' }}>
-            <div style={{ height: '200px', overflow: 'hidden', position: 'relative' }}>
-              <img src={post.image} alt={post.title} className="blog-img" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }} />
-              <span className="card-badge" style={{ position: 'absolute', top: '16px', left: '16px' }}>{post.category}</span>
+          <div key={post.id} className="rounded-2xl overflow-hidden shadow-card border border-border-light bg-bg-secondary">
+            <div className="h-[200px] overflow-hidden relative">
+              <img src={post.image} alt={post.title} className="w-full h-full object-cover [transition:transform_0.5s]" />
+              <span className="absolute top-4 left-4 z-10 bg-primary text-white py-1.5 px-3.5 rounded-md font-heading text-[0.75rem] font-semibold uppercase tracking-[0.05em]">{post.category}</span>
             </div>
-            
-            <div className="blog-info">
-              <div style={{ display: 'flex', gap: '16px', fontSize: '0.75rem', color: 'var(--text-tertiary)', marginBottom: '12px' }}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+
+            <div className="p-6">
+              <div className="flex gap-4 text-[0.75rem] text-text-tertiary mb-3">
+                <span className="flex items-center gap-1">
                   <Calendar size={12} /> {post.date}
                 </span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <span className="flex items-center gap-1">
                   <Clock size={12} /> {post.readTime}
                 </span>
               </div>
 
-              <h3 style={{ fontSize: '1.25rem', marginBottom: '12px', lineHeight: '1.4' }}>{post.title}</h3>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>
+              <h3 className="text-[1.25rem] mb-3 leading-[1.4]">{post.title}</h3>
+              <p className="text-[0.85rem] text-text-secondary mb-5">
                 {post.summary}
               </p>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border-light)', paddingTop: '16px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: 'var(--text-primary)', fontWeight: 600 }}>
-                  <div style={{ background: 'var(--bg-tertiary)', borderRadius: '50%', padding: '6px', display: 'flex' }}>
+              <div className="flex justify-between items-center border-t border-border-light pt-4">
+                <div className="flex items-center gap-2 text-[0.8rem] text-text-primary font-semibold">
+                  <div className="bg-bg-tertiary rounded-full p-1.5 flex">
                     <User size={12} />
                   </div>
                   <span>{post.author}</span>
                 </div>
-                
-                <a href="#blog" style={{ fontSize: '0.8rem', fontWeight: 'bold', color: 'var(--accent-gold-dark)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+
+                <a href="#blog" className="text-[0.8rem] font-bold text-accent-gold-dark flex items-center gap-1">
                   <BookOpen size={12} /> Read Article
                 </a>
               </div>

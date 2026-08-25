@@ -11,6 +11,10 @@ interface CompareDrawerProps {
   onQuickView: (property: Property) => void;
 }
 
+const luxuryGoldBtnClass = "relative overflow-hidden bg-[linear-gradient(135deg,var(--accent-gold)_0%,var(--accent-gold-dark)_100%)] text-black font-heading font-semibold border-none rounded-lg cursor-pointer shadow-[var(--glow-shadow)] [transition:transform_var(--transition-fast),box-shadow_var(--transition-fast),filter_var(--transition-fast)] hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0";
+const shineHoverClass = "after:content-[''] after:absolute after:top-0 after:-left-3/4 after:w-1/2 after:h-full after:[background:linear-gradient(to_right,rgba(255,255,255,0)_0%,rgba(255,255,255,0.3)_100%)] after:[transform:skewX(-25deg)] after:[transition:0.75s] hover:after:[animation:shine_0.85s]";
+const outlineLuxuryBtnClass = "bg-transparent text-text-primary font-heading font-medium border-[1.5px] border-text-primary rounded-lg cursor-pointer [transition:background_var(--transition-fast),color_var(--transition-fast)] hover:bg-text-primary hover:text-bg-primary";
+
 export const CompareDrawer: React.FC<CompareDrawerProps> = ({
   compareIds,
   properties,
@@ -42,22 +46,22 @@ export const CompareDrawer: React.FC<CompareDrawerProps> = ({
   return (
     <>
       {/* Floating Bottom Drawer Tray */}
-      <div className="compare-drawer open">
-        <div className="container compare-container">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
-              <GitCompare size={20} className="text-secondary" />
-              <h4 style={{ fontSize: '0.95rem', fontWeight: 'bold' }}>Compare Estates ({items.length}/3)</h4>
+      <div className="fixed bottom-0 left-0 w-full translate-y-0 py-5 z-[1500] bg-[var(--glass-bg)] [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)] border-t border-[var(--glass-border)] shadow-[0_-10px_30px_rgba(0,0,0,0.15)] [transition:transform_var(--transition-normal)]">
+        <div className="max-w-[1400px] w-full mx-auto px-6 flex justify-between items-center">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 text-text-primary">
+              <GitCompare size={20} />
+              <h4 className="text-[0.95rem] font-bold">Compare Estates ({items.length}/3)</h4>
             </div>
-            
-            <div className="compare-list">
+
+            <div className="flex gap-5">
               {items.map(item => (
-                <div key={item.id} className="compare-item-card">
-                  <img src={item.images[0]} alt={item.title} className="compare-thumb" />
-                  <span className="compare-title">{item.title.substring(0, 15)}...</span>
-                  <button 
+                <div key={item.id} className="flex items-center gap-3 bg-black/5 [[data-theme=dark]_&]:bg-white/5 py-2 pr-4 pl-2 rounded-lg relative">
+                  <img src={item.images[0]} alt={item.title} className="w-12 h-12 rounded-md object-cover" />
+                  <span className="font-heading text-[0.85rem] font-semibold">{item.title.substring(0, 15)}...</span>
+                  <button
                     onClick={() => onRemoveCompare(item.id)}
-                    style={{ background: 'transparent', border: 'none', color: 'var(--text-tertiary)', cursor: 'pointer', display: 'flex', padding: '2px' }}
+                    className="bg-transparent border-none text-text-tertiary cursor-pointer flex p-0.5"
                   >
                     <X size={12} />
                   </button>
@@ -66,20 +70,19 @@ export const CompareDrawer: React.FC<CompareDrawerProps> = ({
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <button 
-              onClick={() => setShowMatrix(true)} 
-              className="luxury-gold-button shine-hover"
-              style={{ padding: '8px 20px', fontSize: '0.85rem' }}
+          <div className="flex gap-3">
+            <button
+              onClick={() => setShowMatrix(true)}
+              data-compare-open-btn
+              className={`${luxuryGoldBtnClass} ${shineHoverClass} py-2 px-5 text-[0.85rem]`}
               disabled={items.length < 2}
               title={items.length < 2 ? 'Select at least 2 properties' : ''}
             >
               Compare Matrix
             </button>
-            <button 
-              onClick={onClearAll} 
-              className="outline-luxury-button"
-              style={{ padding: '8px 20px', fontSize: '0.85rem' }}
+            <button
+              onClick={onClearAll}
+              className={`${outlineLuxuryBtnClass} py-2 px-5 text-[0.85rem]`}
             >
               Clear
             </button>
@@ -89,34 +92,33 @@ export const CompareDrawer: React.FC<CompareDrawerProps> = ({
 
       {/* Fullscreen Compare Matrix Modal */}
       {showMatrix && (
-        <div className="compare-modal-backdrop" onClick={() => setShowMatrix(false)}>
-          <div 
-            className="compare-modal-window glass-panel" 
+        <div className="fixed inset-0 bg-[rgba(9,13,22,0.9)] backdrop-blur-[8px] z-[2200] flex justify-center items-center p-10" onClick={() => setShowMatrix(false)}>
+          <div
+            className="w-full max-w-[900px] rounded-2xl p-10 max-h-[80vh] overflow-y-auto bg-bg-primary border border-border-light"
             onClick={(e) => e.stopPropagation()}
-            style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-light)' }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-light)', paddingBottom: '16px', marginBottom: '20px' }}>
-              <h3 style={{ fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <GitCompare size={24} style={{ color: 'var(--accent-gold)' }} />
+            <div className="flex justify-between items-center border-b border-border-light pb-4 mb-5">
+              <h3 className="text-[1.5rem] flex items-center gap-2">
+                <GitCompare size={24} className="text-accent-gold" />
                 Detailed Comparison Matrix
               </h3>
-              <button 
+              <button
                 onClick={() => setShowMatrix(false)}
-                style={{ background: 'transparent', border: 'none', color: 'var(--text-primary)', cursor: 'pointer', display: 'flex' }}
+                className="bg-transparent border-none text-text-primary cursor-pointer flex"
               >
                 <X size={24} />
               </button>
             </div>
 
-            <div style={{ overflowX: 'auto' }}>
-              <table className="compare-table">
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse mt-6">
                 <thead>
                   <tr>
-                    <th>Attributes</th>
+                    <th className="border-b border-border-light p-4 text-left font-heading font-bold">Attributes</th>
                     {items.map(item => (
-                      <th key={item.id}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                          <img src={item.images[0]} alt={item.title} style={{ width: '100%', height: '100px', objectFit: 'cover', borderRadius: '8px' }} />
+                      <th key={item.id} className="border-b border-border-light p-4 text-left font-heading font-bold">
+                        <div className="flex flex-col gap-2">
+                          <img src={item.images[0]} alt={item.title} className="w-full h-[100px] object-cover rounded-lg" />
                           <span>{item.title}</span>
                         </div>
                       </th>
@@ -125,96 +127,95 @@ export const CompareDrawer: React.FC<CompareDrawerProps> = ({
                 </thead>
                 <tbody>
                   <tr>
-                    <td><strong>Valuation</strong></td>
+                    <td className="border-b border-border-light p-4 text-left"><strong>Valuation</strong></td>
                     {items.map(item => (
-                      <td key={item.id} className="luxury-number" style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--accent-gold-dark)' }}>
+                      <td key={item.id} className="border-b border-border-light p-4 text-left font-serif italic text-[1.25rem] font-bold text-accent-gold-dark">
                         {formatPrice(item.discountPrice || item.price)}
                       </td>
                     ))}
                   </tr>
                   <tr>
-                    <td><strong>Estate Type</strong></td>
+                    <td className="border-b border-border-light p-4 text-left"><strong>Estate Type</strong></td>
                     {items.map(item => (
-                      <td key={item.id}>{item.type}</td>
+                      <td key={item.id} className="border-b border-border-light p-4 text-left">{item.type}</td>
                     ))}
                   </tr>
                   <tr>
-                    <td><strong>City</strong></td>
+                    <td className="border-b border-border-light p-4 text-left"><strong>City</strong></td>
                     {items.map(item => (
-                      <td key={item.id}>{item.location.city}</td>
+                      <td key={item.id} className="border-b border-border-light p-4 text-left">{item.location.city}</td>
                     ))}
                   </tr>
                   <tr>
-                    <td><strong>Amortization Specs</strong></td>
+                    <td className="border-b border-border-light p-4 text-left"><strong>Amortization Specs</strong></td>
                     {items.map(item => (
-                      <td key={item.id}>
+                      <td key={item.id} className="border-b border-border-light p-4 text-left">
                         {item.beds} beds • {item.baths} baths
                       </td>
                     ))}
                   </tr>
                   <tr>
-                    <td><strong>Area Space</strong></td>
+                    <td className="border-b border-border-light p-4 text-left"><strong>Area Space</strong></td>
                     {items.map(item => (
-                      <td key={item.id}>{item.area.toLocaleString()} sq ft</td>
+                      <td key={item.id} className="border-b border-border-light p-4 text-left">{item.area.toLocaleString()} sq ft</td>
                     ))}
                   </tr>
                   <tr>
-                    <td><strong>Year Built</strong></td>
+                    <td className="border-b border-border-light p-4 text-left"><strong>Year Built</strong></td>
                     {items.map(item => (
-                      <td key={item.id}>{item.yearBuilt}</td>
+                      <td key={item.id} className="border-b border-border-light p-4 text-left">{item.yearBuilt}</td>
                     ))}
                   </tr>
                   <tr>
-                    <td><strong>Energy Class</strong></td>
+                    <td className="border-b border-border-light p-4 text-left"><strong>Energy Class</strong></td>
                     {items.map(item => (
-                      <td key={item.id}>
-                        <span style={{ background: '#10B981', color: '#FFF', padding: '2px 6px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold' }}>
+                      <td key={item.id} className="border-b border-border-light p-4 text-left">
+                        <span className="bg-emerald-500 text-white py-0.5 px-1.5 rounded text-[0.75rem] font-bold">
                           {item.energyRating}
                         </span>
                       </td>
                     ))}
                   </tr>
                   <tr>
-                    <td><strong>Walkability Index</strong></td>
+                    <td className="border-b border-border-light p-4 text-left"><strong>Walkability Index</strong></td>
                     {items.map(item => (
-                      <td key={item.id} className="luxury-number">{item.walkScore}/100</td>
+                      <td key={item.id} className="border-b border-border-light p-4 text-left font-serif italic text-accent-gold">{item.walkScore}/100</td>
                     ))}
                   </tr>
                   <tr>
-                    <td><strong>Infinity Pool</strong></td>
+                    <td className="border-b border-border-light p-4 text-left"><strong>Infinity Pool</strong></td>
                     {items.map(item => (
-                      <td key={item.id}>
-                        {item.amenities.includes('Infinity Pool') ? <Check style={{ color: '#10B981' }} /> : <Minus style={{ color: 'var(--text-tertiary)' }} />}
+                      <td key={item.id} className="border-b border-border-light p-4 text-left">
+                        {item.amenities.includes('Infinity Pool') ? <Check className="text-emerald-500" /> : <Minus className="text-text-tertiary" />}
                       </td>
                     ))}
                   </tr>
                   <tr>
-                    <td><strong>Private Cinema</strong></td>
+                    <td className="border-b border-border-light p-4 text-left"><strong>Private Cinema</strong></td>
                     {items.map(item => (
-                      <td key={item.id}>
-                        {item.amenities.includes('Private Cinema') ? <Check style={{ color: '#10B981' }} /> : <Minus style={{ color: 'var(--text-tertiary)' }} />}
+                      <td key={item.id} className="border-b border-border-light p-4 text-left">
+                        {item.amenities.includes('Private Cinema') ? <Check className="text-emerald-500" /> : <Minus className="text-text-tertiary" />}
                       </td>
                     ))}
                   </tr>
                   <tr>
-                    <td><strong>Wine Cellar</strong></td>
+                    <td className="border-b border-border-light p-4 text-left"><strong>Wine Cellar</strong></td>
                     {items.map(item => (
-                      <td key={item.id}>
-                        {item.amenities.includes('Wine Cellar') ? <Check style={{ color: '#10B981' }} /> : <Minus style={{ color: 'var(--text-tertiary)' }} />}
+                      <td key={item.id} className="border-b border-border-light p-4 text-left">
+                        {item.amenities.includes('Wine Cellar') ? <Check className="text-emerald-500" /> : <Minus className="text-text-tertiary" />}
                       </td>
                     ))}
                   </tr>
                   <tr>
-                    <td><strong>Actions</strong></td>
+                    <td className="border-b border-border-light p-4 text-left"><strong>Actions</strong></td>
                     {items.map(item => (
-                      <td key={item.id}>
-                        <button 
+                      <td key={item.id} className="border-b border-border-light p-4 text-left">
+                        <button
                           onClick={() => {
                             setShowMatrix(false);
                             onQuickView(item);
                           }}
-                          className="luxury-gold-button shine-hover"
-                          style={{ padding: '6px 12px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+                          className={`${luxuryGoldBtnClass} ${shineHoverClass} py-1.5 px-3 text-[0.75rem] flex items-center gap-1`}
                         >
                           <Eye size={12} /> Inspect Listing
                         </button>

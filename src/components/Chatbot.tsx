@@ -13,6 +13,8 @@ interface Message {
   text: string;
 }
 
+const suggestionChipClass = "bg-bg-primary border border-border-light text-text-secondary py-1 px-2.5 rounded-[20px] text-[0.75rem] whitespace-nowrap cursor-pointer";
+
 export const Chatbot: React.FC<ChatbotProps> = ({ onTriggerFilter }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [inputText, setInputText] = useState('');
@@ -64,40 +66,37 @@ export const Chatbot: React.FC<ChatbotProps> = ({ onTriggerFilter }) => {
   return (
     <>
       {/* Trigger Bubble */}
-      <div className="chatbot-bubble animate-float" onClick={() => setIsOpen(!isOpen)}>
+      <div
+        className="fixed bottom-[30px] right-[30px] bg-[linear-gradient(135deg,var(--accent-gold)_0%,var(--accent-gold-dark)_100%)] text-black w-[60px] h-[60px] rounded-full flex items-center justify-center cursor-pointer shadow-[0_10px_30px_rgba(245,158,11,0.4)] z-[1000] [transition:transform_var(--transition-fast)] hover:scale-110 [animation:float_6s_ease-in-out_infinite]"
+        onClick={() => setIsOpen(!isOpen)}
+      >
         {isOpen ? <X size={24} /> : <MessageSquare size={24} />}
       </div>
 
       {/* Dialog Window */}
       {isOpen && (
-        <div className="chatbot-window glass-panel" style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-light)' }}>
-          <div className="chat-header">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Bot size={20} style={{ color: 'var(--accent-gold)' }} />
+        <div className="fixed bottom-[100px] right-[30px] w-[380px] h-[500px] rounded-2xl overflow-hidden z-[1001] flex flex-col shadow-[0_15px_40px_rgba(0,0,0,0.2)] [animation:slide-up_var(--transition-normal)] bg-bg-primary border border-border-light">
+          <div className="bg-primary text-white py-4 px-5 flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              <Bot size={20} className="text-accent-gold" />
               <div>
-                <h4 style={{ fontSize: '0.9rem', fontWeight: 'bold' }}>AURA Concierge</h4>
-                <p style={{ fontSize: '0.65rem', color: 'var(--accent-gold)' }}>AI Digital Butler</p>
+                <h4 className="text-[0.9rem] font-bold">AURA Concierge</h4>
+                <p className="text-[0.65rem] text-accent-gold">AI Digital Butler</p>
               </div>
             </div>
-            <button 
+            <button
               onClick={() => setIsOpen(false)}
-              style={{ background: 'transparent', border: 'none', color: '#FFF', cursor: 'pointer', display: 'flex' }}
+              className="bg-transparent border-none text-white cursor-pointer flex"
             >
               <X size={18} />
             </button>
           </div>
 
           {/* Messages Area */}
-          <div className="chat-messages">
+          <div className="grow p-5 overflow-y-auto flex flex-col gap-3 bg-bg-primary">
             {messages.map((msg, idx) => (
-              <div key={idx} style={{ display: 'flex', gap: '8px', alignSelf: msg.sender === 'bot' ? 'flex-start' : 'flex-end', flexDirection: msg.sender === 'bot' ? 'row' : 'row-reverse', maxWidth: '85%' }}>
-                <div style={{
-                  background: msg.sender === 'bot' ? 'var(--bg-tertiary)' : 'var(--accent-gold)',
-                  color: msg.sender === 'bot' ? 'var(--text-primary)' : '#000000',
-                  padding: '10px 14px',
-                  borderRadius: '12px',
-                  fontSize: '0.85rem'
-                }}>
+              <div key={idx} className={`flex gap-2 max-w-[85%] ${msg.sender === 'bot' ? 'self-start flex-row' : 'self-end flex-row-reverse'}`}>
+                <div className={`py-2.5 px-3.5 rounded-xl text-[0.85rem] ${msg.sender === 'bot' ? 'bg-bg-tertiary text-text-primary' : 'bg-accent-gold text-black'}`}>
                   {msg.text}
                 </div>
               </div>
@@ -106,33 +105,32 @@ export const Chatbot: React.FC<ChatbotProps> = ({ onTriggerFilter }) => {
           </div>
 
           {/* Quick Suggestions Chips */}
-          <div style={{ display: 'flex', gap: '6px', padding: '10px 16px', background: 'var(--bg-secondary)', overflowX: 'auto', borderTop: '1px solid var(--border-light)' }}>
-            <button 
+          <div className="flex gap-1.5 py-2.5 px-4 bg-bg-secondary overflow-x-auto border-t border-border-light">
+            <button
               onClick={() => handleSendMessage('Show Malibu properties')}
-              style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-light)', color: 'var(--text-secondary)', padding: '4px 10px', borderRadius: '20px', fontSize: '0.75rem', whiteSpace: 'nowrap', cursor: 'pointer' }}
+              className={suggestionChipClass}
             >
               Malibu Villas
             </button>
-            <button 
+            <button
               onClick={() => handleSendMessage('Contact Sophia Sterling')}
-              style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-light)', color: 'var(--text-secondary)', padding: '4px 10px', borderRadius: '20px', fontSize: '0.75rem', whiteSpace: 'nowrap', cursor: 'pointer' }}
+              className={suggestionChipClass}
             >
               Sophia Sterling
             </button>
-            <button 
+            <button
               onClick={() => handleSendMessage('Mortgage help')}
-              style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-light)', color: 'var(--text-secondary)', padding: '4px 10px', borderRadius: '20px', fontSize: '0.75rem', whiteSpace: 'nowrap', cursor: 'pointer' }}
+              className={suggestionChipClass}
             >
               Mortgage Info
             </button>
           </div>
 
           {/* Input Panel */}
-          <div className="chat-input-row">
-            <input 
-              type="text" 
-              className="glass-input" 
-              style={{ flexGrow: 1, padding: '8px 12px', fontSize: '0.85rem' }}
+          <div className="py-3 px-4 border-t border-border-light flex gap-2.5 bg-bg-secondary">
+            <input
+              type="text"
+              className="grow bg-white/[0.08] border border-white/15 [[data-theme=dark]_&]:bg-[rgba(15,23,42,0.4)] [[data-theme=dark]_&]:border-white/8 rounded-lg text-text-primary py-2 px-3 outline-none font-sans text-[0.85rem] [transition:all_var(--transition-fast)] focus:border-accent-gold focus:bg-white/15 focus:shadow-[0_0_10px_rgba(245,158,11,0.15)]"
               placeholder="Ask AURA concierge..."
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
@@ -140,10 +138,9 @@ export const Chatbot: React.FC<ChatbotProps> = ({ onTriggerFilter }) => {
                 if (e.key === 'Enter') handleSendMessage(inputText);
               }}
             />
-            <button 
+            <button
               onClick={() => handleSendMessage(inputText)}
-              className="luxury-gold-button"
-              style={{ padding: '8px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'none' }}
+              className="relative overflow-hidden bg-[linear-gradient(135deg,var(--accent-gold)_0%,var(--accent-gold-dark)_100%)] text-black font-heading font-semibold border-none cursor-pointer [transition:transform_var(--transition-fast),filter_var(--transition-fast)] hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0 p-2 rounded-lg flex items-center justify-center shadow-none"
             >
               <Send size={14} />
             </button>
