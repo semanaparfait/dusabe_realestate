@@ -347,6 +347,26 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <Shield size={14} /> Administrator Desk
                 </button>
 
+             <button 
+                  onClick={() => {
+
+                  }}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: 'var(--text-primary)',
+                    fontSize: '0.85rem',
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    padding: '6px 0'
+                  }}
+                >
+                  <Shield size={14} /> Account
+                </button>
+
                 <button 
                   onClick={() => {
                     openDashboardModal('admin');
