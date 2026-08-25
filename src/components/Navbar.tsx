@@ -148,15 +148,15 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
 
           {/* Contact Us button matching visual design */}
-<button
-  onClick={() => {
-    const el = document.getElementById('contact');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  }}
-  className="relative overflow-hidden bg-[linear-gradient(135deg,var(--accent-gold)_0%,var(--accent-gold-dark)_100%)] text-black font-heading font-semibold border-none cursor-pointer [transition:transform_var(--transition-fast),box-shadow_var(--transition-fast),filter_var(--transition-fast)] hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0 rounded-full px-3.5 py-1.5 text-[0.75rem] sm:px-6 sm:text-[10px] sm:py-2  shadow-none after:content-[''] after:absolute after:top-0 after:-left-3/4 after:w-1/2 after:h-full after:[background:linear-gradient(to_right,rgba(255,255,255,0)_0%,rgba(255,255,255,0.3)_100%)] after:[transform:skewX(-25deg)] after:[transition:0.75s] hover:after:[animation:shine_0.85s]"
->
-  Contact Us
-</button>
+        <button
+          onClick={() => {
+            const el = document.getElementById('contact');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }}
+          className="relative overflow-hidden bg-[linear-gradient(135deg,var(--accent-gold)_0%,var(--accent-gold-dark)_100%)] text-black font-heading font-semibold border-none cursor-pointer [transition:transform_var(--transition-fast),box-shadow_var(--transition-fast),filter_var(--transition-fast)] hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0 rounded-full px-3.5 py-1.5 text-[0.75rem] sm:px-6 sm:text-[10px] sm:py-2  shadow-none after:content-[''] after:absolute after:top-0 after:-left-3/4 after:w-1/2 after:h-full after:[background:linear-gradient(to_right,rgba(255,255,255,0)_0%,rgba(255,255,255,0.3)_100%)] after:[transform:skewX(-25deg)] after:[transition:0.75s] hover:after:[animation:shine_0.85s]"
+        >
+          Contact Us
+        </button>
 
           {/* Dropdown Menu Box */}
           {dropdownOpen && (
@@ -284,12 +284,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             <li onClick={() => setMobileMenuOpen(false)} className="font-heading cursor-pointer">{t('nav.contact')}</li>
             <li
               onClick={() => {
-                openDashboardModal('admin');
+                navigate("/account")
                 setMobileMenuOpen(false);
               }}
               className="font-heading text-accent-gold font-bold flex items-center gap-2 cursor-pointer"
             >
-              <Shield size={16} /> Admin Panel
+              <User size={16} /> Account
             </li>
           </ul>
         </div>
