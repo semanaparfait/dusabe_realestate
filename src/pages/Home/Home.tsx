@@ -28,7 +28,7 @@ import { Footer } from '@/components/Footer';
 import { DashboardModal } from '@/components/DashboardModal';
 import { Chatbot } from '@/components/Chatbot';
 import { CompareDrawer } from '@/components/CompareDrawer';
-import { AdminPanel } from '@/components/AdminPanel';
+// import { AdminPanel } from '@/components/AdminPanel';
 
 // Translations Module
 const TRANSLATIONS: Record<string, Record<string, string>> = {

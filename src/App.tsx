@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "@/pages/Home/Home";
 import Account from "@/pages/Account/Account";
+import Admin from "@/pages/Admin/Admin";
 import { ToastContainer } from "react-toastify";
 export default function App() {
   return (
@@ -9,6 +10,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/admin" element={<Admin />} />
+
       </Routes>
       <ToastContainer position="top-right" />
     </BrowserRouter>
