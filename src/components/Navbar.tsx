@@ -122,7 +122,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Compare Button */}
           <button
             onClick={openCompareModal}
-            className="relative bg-transparent border-none text-text-secondary cursor-pointer p-2 rounded-full [transition:all_var(--transition-fast)] flex items-center justify-center hover:text-text-primary hover:bg-bg-tertiary"
+            className="relative hidden bg-transparent border-none text-text-secondary cursor-pointer p-2 rounded-full [transition:all_var(--transition-fast)] flex items-center justify-center hover:text-text-primary hover:bg-bg-tertiary"
             title="Compare Listings"
           >
             <GitCompare size={18} />
@@ -136,7 +136,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Wishlist Button */}
           <button
             onClick={() => openDashboardModal('user')}
-            className="relative bg-transparent border-none text-text-secondary cursor-pointer p-2 rounded-full [transition:all_var(--transition-fast)] flex items-center justify-center hover:text-text-primary hover:bg-bg-tertiary"
+            className="relative hidden bg-transparent border-none text-text-secondary cursor-pointer p-2 rounded-full [transition:all_var(--transition-fast)] flex items-center justify-center hover:text-text-primary hover:bg-bg-tertiary"
             title="Wishlist"
           >
             <Heart size={18} />
@@ -148,15 +148,15 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
 
           {/* Contact Us button matching visual design */}
-          <button
-            onClick={() => {
-              const el = document.getElementById('contact');
-              if (el) el.scrollIntoView({ behavior: 'smooth' });
-            }}
-            className="relative overflow-hidden bg-[linear-gradient(135deg,var(--accent-gold)_0%,var(--accent-gold-dark)_100%)] text-black font-heading font-semibold border-none cursor-pointer [transition:transform_var(--transition-fast),box-shadow_var(--transition-fast),filter_var(--transition-fast)] hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0 rounded-[30px] px-6 py-2.5 text-[0.85rem] shadow-none after:content-[''] after:absolute after:top-0 after:-left-3/4 after:w-1/2 after:h-full after:[background:linear-gradient(to_right,rgba(255,255,255,0)_0%,rgba(255,255,255,0.3)_100%)] after:[transform:skewX(-25deg)] after:[transition:0.75s] hover:after:[animation:shine_0.85s]"
-          >
-            Contact Us
-          </button>
+<button
+  onClick={() => {
+    const el = document.getElementById('contact');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }}
+  className="relative overflow-hidden bg-[linear-gradient(135deg,var(--accent-gold)_0%,var(--accent-gold-dark)_100%)] text-black font-heading font-semibold border-none cursor-pointer [transition:transform_var(--transition-fast),box-shadow_var(--transition-fast),filter_var(--transition-fast)] hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0 rounded-full px-3.5 py-1.5 text-[0.75rem] sm:px-6 sm:text-[10px] sm:py-2  shadow-none after:content-[''] after:absolute after:top-0 after:-left-3/4 after:w-1/2 after:h-full after:[background:linear-gradient(to_right,rgba(255,255,255,0)_0%,rgba(255,255,255,0.3)_100%)] after:[transform:skewX(-25deg)] after:[transition:0.75s] hover:after:[animation:shine_0.85s]"
+>
+  Contact Us
+</button>
 
           {/* Dropdown Menu Box */}
           {dropdownOpen && (

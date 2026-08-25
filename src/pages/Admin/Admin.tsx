@@ -26,7 +26,10 @@ import { AgentsTab } from '@/pages/Admin/Components/Agents';
 import { ReviewsTab } from '@/pages/Admin/Components/Reviews';
 import { BlogPostTab } from '@/pages/Admin/Components/BlogPost';
 import { SystemSettingsTab } from '@/pages/Admin/Components/SystemSettings';
-import { AdminModals } from '@/pages/Admin/Components/AdminModals';
+import { AgentModal } from '@/pages/Admin/Modals/AgentModal';
+import { PropertyModal } from '@/pages/Admin/Modals/PropertyModal';
+import { ReviewModal } from '@/pages/Admin/Modals/ReviewModal';
+import { BlogPostModal } from '@/pages/Admin/Modals/BlogPostModal';
 
 export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
   const [properties, setProperties] = useState<Property[]>(PROPERTIES);
@@ -508,32 +511,37 @@ export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
         )}
       </main>
 
-      {/* Modals Container */}
-      <AdminModals
-        propertyModalOpen={propertyModalOpen}
-        editingPropertyId={editingPropertyId}
-        propForm={propForm}
-        setPropForm={setPropForm}
-        onSaveProperty={handleSaveProperty}
-        onClosePropertyModal={() => setPropertyModalOpen(false)}
-        agentModalOpen={agentModalOpen}
-        editingAgentId={editingAgentId}
-        agentForm={agentForm}
-        setAgentForm={setAgentForm}
-        onSaveAgent={handleSaveAgent}
-        onCloseAgentModal={() => setAgentModalOpen(false)}
-        testModalOpen={testModalOpen}
-        editingTestId={editingTestId}
-        testForm={testForm}
-        setTestForm={setTestForm}
-        onSaveTestimonial={handleSaveTestimonial}
-        onCloseTestModal={() => setTestModalOpen(false)}
-        blogModalOpen={blogModalOpen}
-        editingBlogId={editingBlogId}
-        blogForm={blogForm}
-        setBlogForm={setBlogForm}
-        onSaveBlog={handleSaveBlog}
-        onCloseBlogModal={() => setBlogModalOpen(false)}
+      <PropertyModal
+        isOpen={propertyModalOpen}
+        editingId={editingPropertyId}
+        form={propForm}
+        setForm={setPropForm}
+        onSave={handleSaveProperty}
+        onClose={() => setPropertyModalOpen(false)}
+      />
+      <AgentModal
+        isOpen={agentModalOpen}
+        editingId={editingAgentId}
+        form={agentForm}
+        setForm={setAgentForm}
+        onSave={handleSaveAgent}
+        onClose={() => setAgentModalOpen(false)}
+      />
+      <ReviewModal
+        isOpen={testModalOpen}
+        editingId={editingTestId}
+        form={testForm}
+        setForm={setTestForm}
+        onSave={handleSaveTestimonial}
+        onClose={() => setTestModalOpen(false)}
+      />
+      <BlogPostModal
+        isOpen={blogModalOpen}
+        editingId={editingBlogId}
+        form={blogForm}
+        setForm={setBlogForm}
+        onSave={handleSaveBlog}
+        onClose={() => setBlogModalOpen(false)}
       />
     </div>
   );
