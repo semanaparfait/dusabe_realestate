@@ -7,18 +7,11 @@ import {
   House,
   LockKeyhole,
   Mail,
-  Phone,
   ShieldCheck,
-  UserRound,
 } from "lucide-react";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  updateProfile,
-} from "firebase/auth";
-import { auth, db } from "@/firebaseConfig";
-import { setDoc, doc } from "firebase/firestore";
-import { toast } from "react-toastify/unstyled";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/firebaseConfig";
+import { toast } from "react-toastify";
 
 const trustPoints = [
   "Verified listings and agents",
@@ -33,11 +26,8 @@ const highlights = [
 ];
 
 export default function Account() {
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [showPassword, setShowPassword] = useState(false);
 
-  const [fullName, setFullName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -52,39 +42,10 @@ export default function Account() {
     }
 
     try {
-      if (mode === "signup") {
-        if (!fullName.trim()) {
-          toast.error("Full name is required to create an account.", {
-            position: "top-right",
-          });
-          return;
-        }
-
-        const userCredential = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password,
-        );
-        const user = userCredential.user;
-
-        await updateProfile(user, { displayName: fullName.trim() });
-
-        await setDoc(doc(db, "Users", user.uid), {
-          uid: user.uid,
-          displayName: fullName.trim(),
-          email: email.trim(),
-          phoneNumber: phoneNumber.trim(),
-        });
-
-        toast.success("Account created successfully!", {
-          position: "top-right",
-        });
-      } else {
-        await signInWithEmailAndPassword(auth, email, password);
-        toast.success("Signed in successfully!", {
-          position: "top-right",
-        });
-      }
+      await signInWithEmailAndPassword(auth, email.trim(), password);
+      toast.success("Signed in successfully!", {
+        position: "top-right",
+      });
     } catch (error: any) {
       console.error(error.message);
       toast.error(error.message, {
@@ -105,7 +66,7 @@ export default function Account() {
           </div>
 
           <div className="auth-visual-content">
-            <span className="auth-kicker">Private client portal</span>
+            <span className="auth-kicker text-6xl"  >Private client portal</span>
             <h1>Find the home that fits your future.</h1>
             <p>
               Sign in to manage appointments, save favourite homes, and receive
@@ -140,57 +101,15 @@ export default function Account() {
               </div>
               <span>DUSABE</span>
             </div>
-
-            <div
-              className="auth-mode-toggle"
-              role="tablist"
-              aria-label="Authentication mode"
-            >
-              <button
-                type="button"
-                className={mode === "signin" ? "active" : ""}
-                onClick={() => setMode("signin")}
-              >
-                Sign in
-              </button>
-              <button
-                type="button"
-                className={mode === "signup" ? "active" : ""}
-                onClick={() => setMode("signup")}
-              >
-                Sign up
-              </button>
-            </div>
           </div>
 
           <div className="auth-form-wrap">
             <div className="auth-headline">
-              <h2>
-                {mode === "signin" ? "Welcome back" : "Create your account"}
-              </h2>
-              <p>
-                {mode === "signin"
-                  ? "Access your saved homes, documents and agent conversations."
-                  : "Start your real-estate journey with a personalised property dashboard."}
-              </p>
+              <h2>Welcome back</h2>
+              <p>Access your saved homes, documents and agent conversations.</p>
             </div>
 
             <form className="auth-form" onSubmit={handleSubmit}>
-              {mode === "signup" && (
-                <label className="auth-field">
-                  <span>Full name</span>
-                  <div className="auth-input-wrap">
-                    <UserRound size={16} />
-                    <input
-                      type="text"
-                      placeholder="Aline Rukundo"
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                    />
-                  </div>
-                </label>
-              )}
-
               <label className="auth-field">
                 <span>Email address</span>
                 <div className="auth-input-wrap">
@@ -227,39 +146,22 @@ export default function Account() {
                 </div>
               </label>
 
-              {mode === "signup" && (
-                <label className="auth-field">
-                  <span>Phone number</span>
-                  <div className="auth-input-wrap">
-                    <Phone size={16} />
-                    <input
-                      type="text"
-                      placeholder="+250 788 123 456"
-                      value={phoneNumber}
-                      onChange={(e) => setPhoneNumber(e.target.value)}
-                    />
-                  </div>
-                </label>
-              )}
-
               <div className="auth-row">
                 <label className="auth-checkbox">
                   <input type="checkbox" defaultChecked />
                   <span>Keep me signed in</span>
                 </label>
 
-                {mode === "signin" && (
-                  <button type="button" className="auth-link-button">
-                    Forgot password?
-                  </button>
-                )}
+                <button type="button" className="auth-link-button">
+                  Forgot password?
+                </button>
               </div>
 
               <button
                 type="submit"
                 className="luxury-gold-button auth-submit-button"
               >
-                {mode === "signin" ? "Sign in" : "Create account"}
+                Sign in
                 <ArrowRight size={18} />
               </button>
             </form>
@@ -281,11 +183,7 @@ export default function Account() {
 
             <div className="auth-footer-note">
               <ShieldCheck size={16} />
-              <span>
-                {mode === "signin"
-                  ? "Secure access with bank-grade encryption."
-                  : "Your privacy is protected and your data stays private."}
-              </span>
+              <span>Secure access with bank-grade encryption.</span>
             </div>
           </div>
         </div>

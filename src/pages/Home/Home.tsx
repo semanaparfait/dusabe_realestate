@@ -322,18 +322,7 @@ function Home() {
                   </div>
                 )}
 
-                {/* Styled Vector Canvas Map Section */}
-                <div style={{ marginTop: '50px' }}>
-                  <h3 style={{ fontSize: '1.25rem', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: 'var(--accent-gold)' }}></span>
-                    AURA Coordinates Satellite Map
-                  </h3>
-                  <MapSection 
-                    properties={filteredProperties}
-                    currency={currency}
-                    onSelectProperty={(p) => setActivePropertyDetail(p)}
-                  />
-                </div>
+
               </div>
             </div>
           </div>

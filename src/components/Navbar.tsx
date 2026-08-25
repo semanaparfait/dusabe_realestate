@@ -98,13 +98,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             const el = document.getElementById('why-choose-us');
             if (el) el.scrollIntoView({ behavior: 'smooth' });
           }}>Services</li>
-          <li 
-            className="navbar-menu-item"
-            onClick={() => openDashboardModal('admin')}
-            style={{ color: 'var(--accent-gold)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}
-          >
-            <Shield size={14} /> Admin Panel
-          </li>
+
           <li 
             className={`navbar-menu-item ${dropdownOpen ? 'active' : ''}`}
             onClick={() => setDropdownOpen(!dropdownOpen)}

@@ -145,37 +145,7 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
         </div>
       </div>
 
-      {/* Group: Beds & Baths */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-        <div className="filter-group">
-          <label className="filter-group-title">Beds</label>
-          <select 
-            className="glass-input" 
-            style={{ width: '100%', padding: '10px' }}
-            value={filters.beds}
-            onChange={(e) => updateFilter('beds', e.target.value ? parseInt(e.target.value) : '')}
-          >
-            <option value="">Any</option>
-            <option value="3">3+ Beds</option>
-            <option value="5">5+ Beds</option>
-            <option value="7">7+ Beds</option>
-          </select>
-        </div>
-        <div className="filter-group">
-          <label className="filter-group-title">Baths</label>
-          <select 
-            className="glass-input" 
-            style={{ width: '100%', padding: '10px' }}
-            value={filters.baths}
-            onChange={(e) => updateFilter('baths', e.target.value ? parseInt(e.target.value) : '')}
-          >
-            <option value="">Any</option>
-            <option value="4">4+ Baths</option>
-            <option value="6">6+ Baths</option>
-            <option value="8">8+ Baths</option>
-          </select>
-        </div>
-      </div>
+
 
       {/* Group: Area Range */}
       <div className="filter-group">
@@ -200,38 +170,9 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
         </div>
       </div>
 
-      {/* Group: Parking */}
-      <div className="filter-group">
-        <label className="filter-group-title">Parking Garage</label>
-        <select 
-          className="glass-input" 
-          style={{ width: '100%', padding: '10px' }}
-          value={filters.parking}
-          onChange={(e) => updateFilter('parking', e.target.value ? parseInt(e.target.value) : '')}
-        >
-          <option value="">Any Size</option>
-          <option value="2">2+ Spots</option>
-          <option value="4">4+ Spots</option>
-          <option value="6">6+ Spots</option>
-        </select>
-      </div>
 
-      {/* Group: Amenities (Luxury Checkboxes) */}
-      <div className="filter-group" style={{ marginBottom: 0 }}>
-        <label className="filter-group-title">Premium Amenities</label>
-        <div className="checkbox-grid">
-          {AMENITIES_LIST.map((amenity) => (
-            <label key={amenity} className="checkbox-label">
-              <input 
-                type="checkbox" 
-                checked={filters.amenities.includes(amenity)}
-                onChange={() => handleAmenityChange(amenity)}
-              />
-              {amenity}
-            </label>
-          ))}
-        </div>
-      </div>
+
+
     </aside>
   );
 };
