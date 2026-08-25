@@ -7,6 +7,7 @@ import {
   House,
   LockKeyhole,
   Mail,
+  MoveLeft,
   ShieldCheck,
 } from "lucide-react";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -61,7 +62,7 @@ export default function Account() {
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,24,22,0.12),rgba(15,24,22,0.7))]" />
 
           <div className="relative z-[1] flex items-center justify-between gap-3">
-            <span className="text-[1.15rem] font-extrabold tracking-[0.35em] text-white">DUSABE</span>
+            <span className="text-[1.15rem] font-extrabold tracking-[0.35em] text-white flex items-center gap-2"><MoveLeft/> DUSABE</span>
             <span className="rounded-full border border-white/20 bg-white/12 px-3.5 py-2 text-[0.72rem] uppercase tracking-[0.08em] text-white">Luxury Property Access</span>
           </div>
 
@@ -175,7 +176,7 @@ export default function Account() {
 
             <div className="mt-[22px] inline-flex items-center gap-2.5 rounded-xl border border-[rgba(200,122,83,0.18)] bg-[rgba(200,122,83,0.08)] px-3.5 py-3 text-[0.82rem] text-white/78">
               <ShieldCheck size={16} className="text-[var(--accent-gold)]" />
-              <span>Secure access with bank-grade encryption.</span>
+              <span>Your property documents and client details are protected.</span>
             </div>
           </div>
         </div>

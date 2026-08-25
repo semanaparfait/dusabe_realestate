@@ -14,6 +14,8 @@ import {
   Briefcase
 } from 'lucide-react';
 
+import {useNavigate} from 'react-router-dom';
+
 interface NavbarProps {
   theme: string;
   toggleTheme: () => void;
@@ -48,6 +50,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -239,11 +242,12 @@ export const Navbar: React.FC<NavbarProps> = ({
 
              <button
                   onClick={() => {
-
+                    navigate('/account');
+                    
                   }}
                   className={navGhostBtnClass}
                 >
-                  <Shield size={14} /> Account
+                  <User size={14} /> Account
                 </button>
 
                 <button
