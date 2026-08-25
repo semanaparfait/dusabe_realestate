@@ -19,21 +19,21 @@ export const ReviewsTab: React.FC<ReviewsTabProps> = ({
 }) => {
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
         <div>
-          <h1 className="text-[1.8rem] font-heading font-bold">Client Endorsements & Reviews</h1>
+          <h1 className="text-[1.5rem] sm:text-[1.8rem] font-heading font-bold">Client Endorsements & Reviews</h1>
           <p className="text-[0.85rem] text-text-tertiary mt-1">Manage testimonials from global investors and high-net-worth patrons.</p>
         </div>
 
         <button
           onClick={onOpenNewTestimonial}
-          className={addEndorsementBtnClass}
+          className={`${addEndorsementBtnClass} w-fit`}
         >
           <Plus size={16} /> Add Endorsement
         </button>
       </div>
 
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {testimonials.map(item => (
           <div key={item.id} className="rounded-2xl border border-border-light bg-bg-secondary p-6 flex flex-col gap-4 [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)] shadow-[var(--glass-shadow)]">
             <div className="flex justify-between items-start">

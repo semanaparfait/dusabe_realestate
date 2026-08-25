@@ -23,7 +23,7 @@ export const AgentModal: React.FC<AgentModalProps> = ({
 
   return (
     <div className={overlayClass}>
-      <div className="w-full max-w-[600px] bg-bg-secondary border border-border-light rounded-[20px] p-9 [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)] shadow-[var(--glass-shadow)]">
+      <div className="w-full max-w-[600px] bg-bg-secondary border border-border-light rounded-[20px] p-6 sm:p-9 max-h-[90vh] overflow-y-auto [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)] shadow-[var(--glass-shadow)]">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-[1.4rem] font-bold">
             {editingId ? 'Edit Advisor Profile' : 'Register New Advisor'}
@@ -65,7 +65,7 @@ export const AgentModal: React.FC<AgentModalProps> = ({
             value={form.bio} 
             onChange={e => setForm({ ...form, bio: e.target.value })} 
           />
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <input 
               type="email" 
               placeholder="Email" 

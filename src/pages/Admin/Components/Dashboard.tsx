@@ -47,19 +47,19 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ properties
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
         <div>
-          <h1 className="text-[1.8rem] font-heading font-bold">Admin Dashboard</h1>
+          <h1 className="text-[1.5rem] sm:text-[1.8rem] font-heading font-bold">Admin Dashboard</h1>
           <p className="text-[0.85rem] text-text-tertiary mt-1">Real-time statistics and management overview for DUSABE Real Estate.</p>
         </div>
 
-        <div className="flex items-center gap-3 bg-emerald-500/10 border border-emerald-500/25 py-2 px-4 rounded-[30px] text-emerald-500 text-[0.8rem] font-semibold">
+        <div className="flex items-center gap-3 bg-emerald-500/10 border border-emerald-500/25 py-2 px-4 rounded-[30px] text-emerald-500 text-[0.8rem] font-semibold w-fit">
           <CheckCircle2 size={16} /> All Systems Online
         </div>
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-4 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
         <div className={kpiCardClass}>
           <div className="flex justify-between items-center text-text-tertiary text-[0.75rem] uppercase tracking-[0.05em]">
             <span>Total Property Value</span>
@@ -114,7 +114,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ properties
       </div>
 
       {/* Analytics Graph & Breakdown */}
-      <div className="grid grid-cols-[2fr_1fr] gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-[2fr_1fr] gap-6">
         <div className={`${kpiCardClass} p-7`}>
           <div className="flex justify-between items-center mb-5">
             <h3 className="text-[1.1rem] font-bold flex items-center gap-2.5">
@@ -174,7 +174,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ properties
 
       {/* Real-Time Telemetry Stream */}
       <div className={kpiCardClass}>
-        <div className="flex justify-between items-center mb-3.5 border-b border-border-light pb-3">
+        <div className="flex flex-wrap gap-2 justify-between items-center mb-3.5 border-b border-border-light pb-3">
           <span className="text-[0.85rem] font-semibold text-text-primary flex items-center gap-2">
             <Database size={15} className="text-emerald-500" /> Real-Time Telemetry Stream
           </span>

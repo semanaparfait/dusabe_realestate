@@ -1,6 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Search, Edit3, Trash2 } from 'lucide-react';
-import { type Property } from '@/data';
+import { db } from "@/firebaseConfig";
+import { collection, onSnapshot } from 'firebase/firestore';
+
+interface Property {
+  uid: string;
+  title: string;
+  price: number;
+  discountPrice?: number;
+  type: string;
+  status: string;
+  city: string;
+  address: string;
+  beds: number;
+  baths: number;
+  area: number;
+  images: string[];
+  videoUrl?: string;
+  description: string;
+  createdAt?: any;
+  updatedAt?: any;
+}
 
 interface PropertiesTabProps {
   properties: Property[];
@@ -20,23 +40,36 @@ export const PropertiesTab: React.FC<PropertiesTabProps> = ({
   onToggleFeaturedProperty
 }) => {
   const [searchProperty, setSearchProperty] = useState('');
+  const [items, setItems] = useState<Property[]>([]);
 
-  const filteredProps = properties.filter(
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, 'properties'), (snapshot) => {
+      const itemss = snapshot.docs.map((doc) => ({
+        ...doc.data(),
+        uid: doc.id,
+      } as Property));
+      setItems(itemss);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const filteredProps = items.filter(
     p => p.title.toLowerCase().includes(searchProperty.toLowerCase()) ||
-         p.location.city.toLowerCase().includes(searchProperty.toLowerCase())
+         p.city.toLowerCase().includes(searchProperty.toLowerCase())
   );
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
         <div>
-          <h1 className="text-[1.8rem] font-heading font-bold">Properties & Asset Listings</h1>
+          <h1 className="text-[1.5rem] sm:text-[1.8rem] font-heading font-bold">Properties & Asset Listings</h1>
           <p className="text-[0.85rem] text-text-tertiary mt-1">Add, update pricing, change status, or toggle featured placements for all properties.</p>
         </div>
 
         <button
           onClick={onOpenNewProperty}
-          className={newListingBtnClass}
+          className={`${newListingBtnClass} w-fit`}
         >
           <Plus size={16} /> Post New Luxury Estate
         </button>
@@ -55,8 +88,8 @@ export const PropertiesTab: React.FC<PropertiesTabProps> = ({
         </div>
       </div>
 
-      <div className="rounded-2xl border border-border-light bg-bg-secondary overflow-hidden [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)] shadow-[var(--glass-shadow)]">
-        <table className="w-full border-collapse text-[0.85rem] text-left">
+      <div className="rounded-2xl border border-border-light bg-bg-secondary overflow-x-auto [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)] shadow-[var(--glass-shadow)]">
+        <table className="w-full min-w-[820px] border-collapse text-[0.85rem] text-left">
           <thead>
             <tr className="bg-bg-tertiary border-b border-border-light text-text-tertiary uppercase tracking-[0.05em]">
               <th className="py-4 px-5">Listing Asset</th>
@@ -64,13 +97,12 @@ export const PropertiesTab: React.FC<PropertiesTabProps> = ({
               <th className="py-4 px-3">Location</th>
               <th className="py-4 px-3">Price</th>
               <th className="py-4 px-3">Status</th>
-              <th className="py-4 px-3">Featured</th>
               <th className="py-4 px-5 text-right">Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredProps.map(item => (
-              <tr key={item.id} className="border-b border-border-light [transition:background_0.2s]">
+              <tr key={item.uid} className="border-b border-border-light [transition:background_0.2s]">
                 <td className="py-4 px-5">
                   <div className="flex items-center gap-3.5">
                     <img src={item.images[0]} alt={item.title} className="w-14 h-10 object-cover rounded-[6px]" />
@@ -84,7 +116,8 @@ export const PropertiesTab: React.FC<PropertiesTabProps> = ({
                   <span className="bg-bg-tertiary text-text-secondary py-1 px-2.5 rounded text-[0.75rem] font-semibold">{item.type}</span>
                 </td>
                 <td className="py-4 px-3 text-text-secondary">
-                  {item.location.city}, {item.location.district}
+                  {item.city}, 
+                  {/* {item.district} */}
                 </td>
                 <td className="py-4 px-3 font-bold text-accent-gold">
                   ${(item.price / 1000000).toFixed(2)}M
@@ -94,14 +127,7 @@ export const PropertiesTab: React.FC<PropertiesTabProps> = ({
                     {item.status}
                   </span>
                 </td>
-                <td className="py-4 px-3">
-                  <button
-                    onClick={() => onToggleFeaturedProperty(item.id)}
-                    className={`${item.isFeatured ? 'bg-[rgba(200,122,83,0.2)] text-accent-gold border border-accent-gold' : 'bg-bg-tertiary text-text-tertiary border border-transparent'} py-1 px-2.5 rounded cursor-pointer text-[0.75rem] font-bold`}
-                  >
-                    {item.isFeatured ? '★ Featured' : 'Standard'}
-                  </button>
-                </td>
+
                 <td className="py-4 px-5 text-right">
                   <div className="flex gap-2 justify-end">
                     <button
@@ -112,7 +138,7 @@ export const PropertiesTab: React.FC<PropertiesTabProps> = ({
                       <Edit3 size={15} />
                     </button>
                     <button
-                      onClick={() => onDeleteProperty(item.id, item.title)}
+                      onClick={() => onDeleteProperty(item.uid, item.title)}
                       className="bg-red-500/15 border-none text-red-500 py-1.5 px-2.5 rounded-md cursor-pointer"
                       title="Delete Listing"
                     >

@@ -15,11 +15,11 @@ export const SystemSettingsTab: React.FC<SystemSettingsTabProps> = ({
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <h1 className="text-[1.8rem] font-heading font-bold">Platform Operations & Maintenance</h1>
+        <h1 className="text-[1.5rem] sm:text-[1.8rem] font-heading font-bold">Platform Operations & Maintenance</h1>
         <p className="text-[0.85rem] text-text-tertiary mt-1">Export data backups, reset mock database, or adjust system operating parameters.</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="rounded-2xl border border-border-light bg-bg-secondary p-7 flex flex-col gap-4 [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)] shadow-[var(--glass-shadow)]">
           <h3 className="text-[1.1rem] font-bold flex items-center gap-2.5">
             <Download size={18} className="text-accent-gold" /> Export System Snapshot

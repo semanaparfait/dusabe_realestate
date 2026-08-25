@@ -67,9 +67,9 @@ export const AgentsTab: React.FC<AgentsTabProps> = ({
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
         <div>
-          <h1 className="text-[1.8rem] font-heading font-bold">
+          <h1 className="text-[1.5rem] sm:text-[1.8rem] font-heading font-bold">
             Advising Group & Consultants
           </h1>
           <p className="text-[0.85rem] text-text-tertiary mt-1">
@@ -78,7 +78,7 @@ export const AgentsTab: React.FC<AgentsTabProps> = ({
           </p>
         </div>
 
-        <button onClick={onOpenNewAgent} className={newAdvisorBtnClass}>
+        <button onClick={onOpenNewAgent} className={`${newAdvisorBtnClass} w-fit`}>
           <Plus size={16} /> Register New Advisor
         </button>
       </div>
@@ -135,7 +135,7 @@ export const AgentsTab: React.FC<AgentsTabProps> = ({
       </div>
 
       <section className="rounded-2xl border border-border-light bg-bg-secondary p-6 shadow-[var(--glass-shadow)]">
-        <div className="mb-5 flex items-center justify-between gap-4">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
           <div>
             <h2 className="flex items-center gap-2 text-[1.25rem] font-bold">
               <Users size={19} className="text-accent-gold" /> Registered Users

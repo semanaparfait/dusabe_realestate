@@ -19,21 +19,21 @@ export const BlogPostTab: React.FC<BlogPostTabProps> = ({
 }) => {
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
         <div>
-          <h1 className="text-[1.8rem] font-heading font-bold">AURA Research Journals</h1>
+          <h1 className="text-[1.5rem] sm:text-[1.8rem] font-heading font-bold">AURA Research Journals</h1>
           <p className="text-[0.85rem] text-text-tertiary mt-1">Publish research articles on luxury real estate, taxation, and architecture.</p>
         </div>
 
         <button
           onClick={onOpenNewBlog}
-          className={publishArticleBtnClass}
+          className={`${publishArticleBtnClass} w-fit`}
         >
           <Plus size={16} /> Publish Article
         </button>
       </div>
 
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {blogPosts.map(post => (
           <div key={post.id} className="rounded-2xl border border-border-light bg-bg-secondary overflow-hidden flex flex-col [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)] shadow-[var(--glass-shadow)]">
             <img src={post.image} alt={post.title} className="w-full h-[160px] object-cover" />

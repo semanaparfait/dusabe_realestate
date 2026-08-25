@@ -7,7 +7,10 @@ import {
   FileText,
   Settings,
   LogOut,
-  ShieldCheck
+  ShieldCheck,
+  Menu,
+  X,
+  AlertTriangle
 } from 'lucide-react';
 import {
   type Property,
@@ -30,6 +33,8 @@ import { AgentModal } from '@/pages/Admin/Modals/AgentModal';
 import { PropertyModal } from '@/pages/Admin/Modals/PropertyModal';
 import { ReviewModal } from '@/pages/Admin/Modals/ReviewModal';
 import { BlogPostModal } from '@/pages/Admin/Modals/BlogPostModal';
+import { db } from '@/firebaseConfig';
+import { deleteDoc, doc, setDoc } from 'firebase/firestore';
 
 export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
   const [properties, setProperties] = useState<Property[]>(PROPERTIES);
@@ -38,11 +43,19 @@ export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>(BLOG_POSTS);
 
   const [activeTab, setActiveTab] = useState<'overview' | 'properties' | 'agents' | 'testimonials' | 'blogs' | 'settings'>('overview');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [toastVariant, setToastVariant] = useState<'success' | 'error'>('success');
 
-  const showToast = (msg: string) => {
+  const showToast = (msg: string, variant: 'success' | 'error' = 'success') => {
     setToastMessage(msg);
+    setToastVariant(variant);
     setTimeout(() => setToastMessage(null), 3500);
+  };
+
+  const selectTab = (tab: typeof activeTab) => {
+    setActiveTab(tab);
+    setSidebarOpen(false);
   };
 
   // Property Modal State
@@ -64,7 +77,8 @@ export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
     status: 'For Sale' as Property['status'],
     isFeatured: true,
     description: '',
-    images: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80',
+    images: ['https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80'] as string[],
+    videoUrl: '',
     amenities: 'Infinity Pool, Smart Home, Private Gym, Wine Cellar',
     agentId: 'agent-1'
   });
@@ -87,7 +101,8 @@ export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
       status: 'For Sale',
       isFeatured: true,
       description: 'A brand-new architectural sanctuary boasting ultra-high ceiling glass panels and bespoke finishes.',
-      images: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80',
+      images: ['https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80'],
+      videoUrl: '',
       amenities: 'Infinity Pool, Private Cinema, Wine Cellar, Smart Home System',
       agentId: agents[0]?.id || 'agent-1'
     });
@@ -112,27 +127,50 @@ export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
       status: item.status,
       isFeatured: item.isFeatured,
       description: item.description,
-      images: item.images.join(', '),
+      images: item.images,
+      videoUrl: item.videoUrl || '',
       amenities: item.amenities.join(', '),
       agentId: item.agentId
     });
     setPropertyModalOpen(true);
   };
 
-  const handleSaveProperty = (e: React.FormEvent) => {
+  const handleSaveProperty = async (e: React.FormEvent) => {
     e.preventDefault();
-    const imageList = propForm.images.split(',').map((s: string) => s.trim()).filter(Boolean);
-    const amenityList = propForm.amenities.split(',').map((s: string) => s.trim()).filter(Boolean);
+    if (!propForm.title.trim() || !propForm.city.trim() || !propForm.address.trim()) {
+      showToast('Title, city, and address are required.', 'error');
+      return;
+    }
+
+    const parseListInput = (value: unknown) => {
+      if (Array.isArray(value)) {
+        return value
+          .map((item) => String(item).trim())
+          .filter(Boolean);
+      }
+      if (typeof value === 'string') {
+        return value
+          .split(',')
+          .map((item) => item.trim())
+          .filter(Boolean);
+      }
+      return [];
+    };
+
+    const imageList = parseListInput(propForm.images);
+    const amenityList = parseListInput(propForm.amenities);
 
     if (editingPropertyId) {
-      setProperties(prev => prev.map(p => (p.id === editingPropertyId ? {
-        ...p,
+      const updatedProperty = properties.find((property) => property.id === editingPropertyId);
+      if (!updatedProperty) return;
+      const propertyData = {
+        ...updatedProperty,
         title: propForm.title,
         type: propForm.type,
         price: Number(propForm.price),
-        discountPrice: propForm.discountPrice > 0 ? Number(propForm.discountPrice) : undefined,
+        ...(propForm.discountPrice > 0 ? { discountPrice: Number(propForm.discountPrice) } : {}),
         location: {
-          ...p.location,
+          ...updatedProperty.location,
           city: propForm.city,
           district: propForm.district,
           neighborhood: propForm.neighborhood,
@@ -145,18 +183,31 @@ export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
         status: propForm.status,
         isFeatured: propForm.isFeatured,
         description: propForm.description,
-        images: imageList.length > 0 ? imageList : p.images,
-        amenities: amenityList.length > 0 ? amenityList : p.amenities,
+        images: imageList.length > 0 ? imageList : updatedProperty.images,
+        videoUrl: propForm.videoUrl?.trim() || updatedProperty.videoUrl,
+        amenities: amenityList.length > 0 ? amenityList : updatedProperty.amenities,
         agentId: propForm.agentId
-      } : p)));
-      showToast(`Property "${propForm.title}" updated successfully.`);
+      };
+      setProperties(prev => prev.map(p => (p.id === editingPropertyId ? propertyData : p)));
+      setPropertyModalOpen(false);
+      try {
+        await setDoc(doc(db, 'properties', editingPropertyId), propertyData);
+        showToast(`Property "${propForm.title}" updated successfully.`);
+      } catch (error) {
+        console.error('Failed to sync property update to the database.', error);
+        showToast(`Property "${propForm.title}" updated locally, but the database sync failed.`, 'error');
+      }
     } else {
       const newProp: Property = {
         id: `prop-${Date.now()}`,
         title: propForm.title,
         type: propForm.type,
         price: Number(propForm.price),
-        discountPrice: propForm.discountPrice > 0 ? Number(propForm.discountPrice) : undefined,
+        // Firestore's setDoc() throws a client-side error on any field whose
+        // value is `undefined` (e.g. "Unsupported field value: undefined"),
+        // so the key must be omitted entirely rather than set to undefined
+        // when there is no discount price.
+        ...(propForm.discountPrice > 0 ? { discountPrice: Number(propForm.discountPrice) } : {}),
         location: {
           city: propForm.city,
           district: propForm.district,
@@ -178,20 +229,32 @@ export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
         walkScore: 88,
         transitScore: 78,
         energyRating: 'A++',
-        videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
+        videoUrl: propForm.videoUrl?.trim() || '',
         virtualTourUrl: '',
         mapCoords: { x: 50, y: 50 }
       };
       setProperties(prev => [newProp, ...prev]);
-      showToast(`New Listing "${propForm.title}" broadcasted to database.`);
+      setPropertyModalOpen(false);
+      try {
+        await setDoc(doc(db, 'properties', newProp.id), newProp);
+        showToast(`New Listing "${propForm.title}" broadcasted to database.`);
+      } catch (error) {
+        console.error('Failed to save new property to the database.', error);
+        showToast(`Listing "${propForm.title}" added locally, but the database sync failed.`, 'error');
+      }
     }
-    setPropertyModalOpen(false);
   };
 
-  const handleDeleteProperty = (id: string, title: string) => {
+  const handleDeleteProperty = async (id: string, title: string) => {
     if (window.confirm(`Are you sure you want to remove listing "${title}"?`)) {
       setProperties(prev => prev.filter(p => p.id !== id));
-      showToast(`Property "${title}" deleted.`);
+      try {
+        await deleteDoc(doc(db, 'properties', id));
+        showToast(`Property "${title}" deleted.`);
+      } catch (error) {
+        console.error('Failed to delete property from the database.', error);
+        showToast(`Property "${title}" removed locally, but the database sync failed.`, 'error');
+      }
     }
   };
 
@@ -247,22 +310,45 @@ export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
     setAgentModalOpen(true);
   };
 
-  const handleSaveAgent = (e: React.FormEvent) => {
+  const handleSaveAgent = async (e: React.FormEvent) => {
     e.preventDefault();
     if (editingAgentId) {
+      const agent = agents.find((item) => item.id === editingAgentId);
+      if (!agent) return;
+      const updatedAgent = { ...agent, ...agentForm };
       setAgents(prev => prev.map(a => a.id === editingAgentId ? { ...a, ...agentForm } : a));
-      showToast(`Agent profile "${agentForm.name}" updated.`);
+      setAgentModalOpen(false);
+      try {
+        await setDoc(doc(db, 'agents', editingAgentId), updatedAgent);
+        showToast(`Agent profile "${agentForm.name}" updated.`);
+      } catch (error) {
+        console.error('Failed to sync agent update to the database.', error);
+        showToast(`Agent "${agentForm.name}" updated locally, but the database sync failed.`, 'error');
+      }
     } else {
-      setAgents(prev => [...prev, { id: `agent-${Date.now()}`, ...agentForm }]);
-      showToast(`Agent "${agentForm.name}" added to AURA Advising Group.`);
+      const newAgent = { id: `agent-${Date.now()}`, ...agentForm };
+      setAgents(prev => [...prev, newAgent]);
+      setAgentModalOpen(false);
+      try {
+        await setDoc(doc(db, 'agents', newAgent.id), newAgent);
+        showToast(`Agent "${agentForm.name}" added to AURA Advising Group.`);
+      } catch (error) {
+        console.error('Failed to save new agent to the database.', error);
+        showToast(`Agent "${agentForm.name}" added locally, but the database sync failed.`, 'error');
+      }
     }
-    setAgentModalOpen(false);
   };
 
-  const handleDeleteAgent = (id: string, name: string) => {
+  const handleDeleteAgent = async (id: string, name: string) => {
     if (window.confirm(`Delete agent profile "${name}"?`)) {
       setAgents(prev => prev.filter(a => a.id !== id));
-      showToast(`Agent "${name}" removed.`);
+      try {
+        await deleteDoc(doc(db, 'agents', id));
+        showToast(`Agent "${name}" removed.`);
+      } catch (error) {
+        console.error('Failed to delete agent from the database.', error);
+        showToast(`Agent "${name}" removed locally, but the database sync failed.`, 'error');
+      }
     }
   };
 
@@ -304,22 +390,45 @@ export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
     setTestModalOpen(true);
   };
 
-  const handleSaveTestimonial = (e: React.FormEvent) => {
+  const handleSaveTestimonial = async (e: React.FormEvent) => {
     e.preventDefault();
     if (editingTestId) {
-      setTestimonials(prev => prev.map(t => t.id === editingTestId ? { ...t, ...testForm } : t));
-      showToast(`Testimonial by "${testForm.name}" updated.`);
+      const testimonial = testimonials.find((item) => item.id === editingTestId);
+      if (!testimonial) return;
+      const updatedTestimonial = { ...testimonial, ...testForm };
+      setTestimonials(prev => prev.map(t => t.id === editingTestId ? updatedTestimonial : t));
+      setTestModalOpen(false);
+      try {
+        await setDoc(doc(db, 'testimonials', editingTestId), updatedTestimonial);
+        showToast(`Testimonial by "${testForm.name}" updated.`);
+      } catch (error) {
+        console.error('Failed to sync testimonial update to the database.', error);
+        showToast(`Testimonial by "${testForm.name}" updated locally, but the database sync failed.`, 'error');
+      }
     } else {
-      setTestimonials(prev => [...prev, { id: `test-${Date.now()}`, ...testForm }]);
-      showToast(`Testimonial by "${testForm.name}" published.`);
+      const newTestimonial = { id: `test-${Date.now()}`, ...testForm };
+      setTestimonials(prev => [...prev, newTestimonial]);
+      setTestModalOpen(false);
+      try {
+        await setDoc(doc(db, 'testimonials', newTestimonial.id), newTestimonial);
+        showToast(`Testimonial by "${testForm.name}" published.`);
+      } catch (error) {
+        console.error('Failed to save new testimonial to the database.', error);
+        showToast(`Testimonial by "${testForm.name}" published locally, but the database sync failed.`, 'error');
+      }
     }
-    setTestModalOpen(false);
   };
 
-  const handleDeleteTestimonial = (id: string) => {
+  const handleDeleteTestimonial = async (id: string) => {
     if (window.confirm('Delete this client endorsement?')) {
       setTestimonials(prev => prev.filter(t => t.id !== id));
-      showToast('Testimonial removed.');
+      try {
+        await deleteDoc(doc(db, 'testimonials', id));
+        showToast('Testimonial removed.');
+      } catch (error) {
+        console.error('Failed to delete testimonial from the database.', error);
+        showToast('Testimonial removed locally, but the database sync failed.', 'error');
+      }
     }
   };
 
@@ -364,22 +473,45 @@ export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
     setBlogModalOpen(true);
   };
 
-  const handleSaveBlog = (e: React.FormEvent) => {
+  const handleSaveBlog = async (e: React.FormEvent) => {
     e.preventDefault();
     if (editingBlogId) {
-      setBlogPosts(prev => prev.map(b => b.id === editingBlogId ? { ...b, ...blogForm } : b));
-      showToast(`Article "${blogForm.title}" updated.`);
+      const blogPost = blogPosts.find((item) => item.id === editingBlogId);
+      if (!blogPost) return;
+      const updatedBlogPost = { ...blogPost, ...blogForm };
+      setBlogPosts(prev => prev.map(b => b.id === editingBlogId ? updatedBlogPost : b));
+      setBlogModalOpen(false);
+      try {
+        await setDoc(doc(db, 'blogPosts', editingBlogId), updatedBlogPost);
+        showToast(`Article "${blogForm.title}" updated.`);
+      } catch (error) {
+        console.error('Failed to sync article update to the database.', error);
+        showToast(`Article "${blogForm.title}" updated locally, but the database sync failed.`, 'error');
+      }
     } else {
-      setBlogPosts(prev => [ { id: `blog-${Date.now()}`, ...blogForm }, ...prev]);
-      showToast(`Article "${blogForm.title}" published to AURA Journals.`);
+      const newBlogPost = { id: `blog-${Date.now()}`, ...blogForm };
+      setBlogPosts(prev => [newBlogPost, ...prev]);
+      setBlogModalOpen(false);
+      try {
+        await setDoc(doc(db, 'blogPosts', newBlogPost.id), newBlogPost);
+        showToast(`Article "${blogForm.title}" published to AURA Journals.`);
+      } catch (error) {
+        console.error('Failed to save new article to the database.', error);
+        showToast(`Article "${blogForm.title}" published locally, but the database sync failed.`, 'error');
+      }
     }
-    setBlogModalOpen(false);
   };
 
-  const handleDeleteBlog = (id: string, title: string) => {
+  const handleDeleteBlog = async (id: string, title: string) => {
     if (window.confirm(`Delete article "${title}"?`)) {
       setBlogPosts(prev => prev.filter(b => b.id !== id));
-      showToast(`Article deleted.`);
+      try {
+        await deleteDoc(doc(db, 'blogPosts', id));
+        showToast(`Article deleted.`);
+      } catch (error) {
+        console.error('Failed to delete article from the database.', error);
+        showToast('Article removed locally, but the database sync failed.', 'error');
+      }
     }
   };
 
@@ -407,28 +539,64 @@ export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
   };
 
   return (
-    <div className="min-h-screen w-screen bg-bg-primary text-text-primary grid grid-cols-[260px_1fr] font-sans overflow-hidden">
+    <div className="min-h-screen w-full bg-bg-primary text-text-primary font-sans lg:h-screen lg:overflow-hidden lg:grid lg:grid-cols-[260px_1fr]">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed top-6 right-6 z-[4000] bg-emerald-500/95 text-white py-3 px-6 rounded-lg shadow-card flex items-center gap-2.5 text-[0.9rem] font-semibold [animation:slide-up_0.3s_ease]">
-          <ShieldCheck size={18} />
+        <div className={`fixed top-4 right-4 left-4 sm:left-auto sm:right-6 sm:top-6 z-[4000] text-white py-3 px-6 rounded-lg shadow-card flex items-center gap-2.5 text-[0.9rem] font-semibold [animation:slide-up_0.3s_ease] ${toastVariant === 'error' ? 'bg-red-500/95' : 'bg-emerald-500/95'}`}>
+          {toastVariant === 'error' ? <AlertTriangle size={18} /> : <ShieldCheck size={18} />}
           {toastMessage}
         </div>
       )}
 
+      {/* Mobile Top Bar */}
+      <div className="lg:hidden sticky top-0 z-[2500] flex items-center justify-between gap-3 bg-bg-secondary border-b border-border-light py-3 px-4">
+        <div className="flex items-center gap-2.5">
+          <img src="/dusabe_logo.png" alt="DUSABE Logo" className="w-8 h-8 rounded-lg object-cover border border-accent-gold" />
+          <div className="text-[1rem] font-heading font-bold tracking-[0.08em] text-text-primary">
+            DUSABE<span className="text-accent-gold">.</span>
+          </div>
+        </div>
+        <button
+          onClick={() => setSidebarOpen(true)}
+          aria-label="Open admin menu"
+          className="p-2 rounded-lg border border-border-light bg-bg-tertiary text-text-primary cursor-pointer"
+        >
+          <Menu size={20} />
+        </button>
+      </div>
+
+      {/* Mobile Sidebar Backdrop */}
+      {sidebarOpen && (
+        <div
+          onClick={() => setSidebarOpen(false)}
+          className="lg:hidden fixed inset-0 z-[2900] bg-black/50"
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className="bg-bg-secondary border-r border-border-light py-[30px] px-5 flex flex-col justify-between h-screen">
+      <aside
+        className={`bg-bg-secondary border-r border-border-light py-[30px] px-5 flex flex-col justify-between h-screen w-[260px] fixed inset-y-0 left-0 z-[3000] [transition:transform_0.3s] overflow-y-auto ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:static`}
+      >
         <div>
-          <div className="mb-9 flex items-center gap-3">
-            <img src="/dusabe_logo.png" alt="DUSABE Logo" className="w-[38px] h-[38px] rounded-lg object-cover border border-accent-gold" />
-            <div>
-              <div className="text-[1.2rem] font-heading font-bold tracking-[0.08em] text-text-primary">
-                DUSABE<span className="text-accent-gold">.</span>
-              </div>
-              <div className="text-[0.55rem] uppercase tracking-[0.2em] text-accent-gold mt-0.5 font-bold">
-                REAL ESTATE ADMIN
+          <div className="mb-9 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <img src="/dusabe_logo.png" alt="DUSABE Logo" className="w-[38px] h-[38px] rounded-lg object-cover border border-accent-gold" />
+              <div>
+                <div className="text-[1.2rem] font-heading font-bold tracking-[0.08em] text-text-primary">
+                  DUSABE<span className="text-accent-gold">.</span>
+                </div>
+                <div className="text-[0.55rem] uppercase tracking-[0.2em] text-accent-gold mt-0.5 font-bold">
+                  REAL ESTATE ADMIN
+                </div>
               </div>
             </div>
+            <button
+              onClick={() => setSidebarOpen(false)}
+              aria-label="Close admin menu"
+              className="lg:hidden p-1.5 rounded-lg border border-border-light bg-bg-tertiary text-text-primary cursor-pointer"
+            >
+              <X size={16} />
+            </button>
           </div>
 
           <div className="flex flex-col gap-1.5">
@@ -445,7 +613,7 @@ export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
               return (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}
+                  onClick={() => selectTab(tab.id as any)}
                   className={`flex items-center gap-3 py-3 px-4 rounded-lg border-none text-[0.9rem] cursor-pointer text-left [transition:all_0.2s] border-l-[3px] ${isSelected ? 'bg-accent-gold/15 text-accent-gold font-semibold border-accent-gold' : 'bg-transparent text-text-secondary font-normal border-transparent'}`}
                 >
                   <Icon size={18} /> {tab.label}
@@ -468,7 +636,7 @@ export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
       </aside>
 
       {/* Main Container */}
-      <main className="py-10 px-[50px] h-screen overflow-y-auto bg-bg-primary">
+      <main className="py-6 px-4 sm:px-6 lg:py-10 lg:px-[50px] lg:h-screen lg:overflow-y-auto bg-bg-primary">
         {activeTab === 'overview' && <DashboardOverview properties={properties} agents={agents} />}
         {activeTab === 'properties' && (
           <PropertiesTab
