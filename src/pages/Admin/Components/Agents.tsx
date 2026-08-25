@@ -35,7 +35,7 @@ export const AgentsTab: React.FC<AgentsTabProps> = ({
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const snapshot = await getDocs(collection(db, "users"));
+        const snapshot = await getDocs(collection(db, "Users"));
         setUsers(
           snapshot.docs.map((userDocument) => {
             const data = userDocument.data();
