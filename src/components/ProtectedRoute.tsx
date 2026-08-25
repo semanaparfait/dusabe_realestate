@@ -17,7 +17,7 @@ const ProtectedRoute = () => {
       }
 
       try {
-        const userDocument = await getDoc(doc(db, "users", user.uid));
+        const userDocument = await getDoc(doc(db, "Users", user.uid));
         setStatus(
           userDocument.data()?.role === "owner" ? "owner" : "forbidden",
         );

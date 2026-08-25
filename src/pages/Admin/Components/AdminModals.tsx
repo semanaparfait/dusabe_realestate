@@ -66,7 +66,7 @@ export const AdminModals: React.FC<AdminModalsProps> = ({
                 <input type="text" required className={glassInputClass} value={propForm.title} onChange={e => setPropForm({ ...propForm, title: e.target.value })} />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className={fieldLabelClass}>Price (USD)</label>
+                <label className={fieldLabelClass}>Price (RWF)</label>
                 <input type="number" required className={glassInputClass} value={propForm.price} onChange={e => setPropForm({ ...propForm, price: Number(e.target.value) })} />
               </div>
               <div className="flex flex-col gap-1.5">
