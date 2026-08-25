@@ -173,7 +173,7 @@ export const AdminModals: React.FC<AdminModalsProps> = ({
               <textarea rows={3} placeholder="Testimonial Quote Comment" required className={glassInputClass} value={testForm.comment} onChange={e => setTestForm({ ...testForm, comment: e.target.value })} />
               <div className="flex justify-end gap-3 mt-3">
                 <button type="button" onClick={onCloseTestModal} className={cancelBtnClass}>Cancel</button>
-                <button type="submit" className={saveBtnClass}>Save Endorsement</button>
+                <button type="submit" className={saveBtnClass}>Save Endorsement testimony</button>
               </div>
             </form>
           </div>
