@@ -9,7 +9,8 @@ import {
   Layers,
   CheckCircle2
 } from 'lucide-react';
-import { type Property, type Agent } from '@/data';
+import { type Agent } from '@/data';
+import { type Property } from '@/pages/Admin/Components/Properties';
 
 interface DashboardOverviewProps {
   properties: Property[];

@@ -11,31 +11,15 @@ import { uploadImageToCloudflare } from "@/utils/uploadToCloudflare";
 import { toast } from "react-toastify";
 import { collection, doc, addDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
+import type { PropertyData } from "@/pages/Admin/AdminTypes/AdminTypes";
 
-export interface PropertyData {
-  id?: string;
-  title: string;
-  price: number;
-  discountPrice?: number;
-  type: string;
-  status: string;
-  city: string;
-  address: string;
-  beds: number;
-  baths: number;
-  area: number;
-  images: string[];
-  videoUrl?: string;
-  description: string;
-  createdAt?: any;
-  updatedAt?: any;
-}
+
 
 interface PropertyModalProps {
   isOpen: boolean;
   editingId: string | null;
   form: PropertyData;
-  setForm: React.Dispatch<React.SetStateAction<any>>;
+  setForm: React.Dispatch<React.SetStateAction<PropertyData>>;
   onClose: () => void;
   onSuccess?: () => void; // Callback to refresh property list in the parent tab
 }
@@ -113,7 +97,7 @@ export const PropertyModal: React.FC<PropertyModalProps> = ({
 
       const updatedImages = [...images, ...uploadedUrls];
       setImages(updatedImages);
-      setForm((prev: any) => ({ ...prev, images: updatedImages }));
+      setForm((prev: PropertyData) => ({ ...prev, images: updatedImages }));
       toast.success(`${uploadedUrls.length} image(s) uploaded to Cloudflare!`);
     } catch (err: any) {
       const errorMsg = err.message || "Failed to upload images to Cloudflare.";

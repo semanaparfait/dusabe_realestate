@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Activity,
   Building2,
@@ -13,18 +13,16 @@ import {
   AlertTriangle
 } from 'lucide-react';
 import {
-  type Property,
   type Agent,
   type Testimonial,
   type BlogPost,
-  PROPERTIES,
   AGENTS,
   TESTIMONIALS,
   BLOG_POSTS
 } from '@/data';
 
 import { DashboardOverview } from '@/pages/Admin/Components/Dashboard';
-import { PropertiesTab } from '@/pages/Admin/Components/Properties';
+import { PropertiesTab, type Property as FirestoreProperty } from '@/pages/Admin/Components/Properties';
 import { AgentsTab } from '@/pages/Admin/Components/Agents';
 import { ReviewsTab } from '@/pages/Admin/Components/Reviews';
 import { BlogPostTab } from '@/pages/Admin/Components/BlogPost';
@@ -34,10 +32,26 @@ import { PropertyModal } from '@/pages/Admin/Modals/PropertyModal';
 import { ReviewModal } from '@/pages/Admin/Modals/ReviewModal';
 import { BlogPostModal } from '@/pages/Admin/Modals/BlogPostModal';
 import { db } from '@/firebaseConfig';
-import { deleteDoc, doc, setDoc } from 'firebase/firestore';
+import { deleteDoc, doc, setDoc, collection, onSnapshot } from 'firebase/firestore';
+import type { PropertyData } from "@/pages/Admin/AdminTypes/AdminTypes";
 
 export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
-  const [properties, setProperties] = useState<Property[]>(PROPERTIES);
+  // Properties are the live Firestore collection, not the data.ts sample data —
+  // this listener keeps the dashboard, sidebar count, and testimonial picker
+  // in sync with whatever's actually in the database.
+  const [properties, setProperties] = useState<FirestoreProperty[]>([]);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, 'properties'), (snapshot) => {
+      const items = snapshot.docs.map((docSnap) => ({
+        ...docSnap.data(),
+        uid: docSnap.id,
+      } as FirestoreProperty));
+      setProperties(items);
+    });
+    return () => unsubscribe();
+  }, []);
+
   const [agents, setAgents] = useState<Agent[]>(AGENTS);
   const [testimonials, setTestimonials] = useState<Testimonial[]>(TESTIMONIALS);
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>(BLOG_POSTS);
@@ -61,26 +75,20 @@ export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
   // Property Modal State
   const [propertyModalOpen, setPropertyModalOpen] = useState(false);
   const [editingPropertyId, setEditingPropertyId] = useState<string | null>(null);
-  const [propForm, setPropForm] = useState({
+  const [propForm, setPropForm] = useState<PropertyData>({
     title: '',
-    type: 'Villa' as Property['type'],
+    type: 'Villa',
     price: 5000000,
     discountPrice: 0,
     city: 'Miami',
-    district: 'Biscayne',
-    neighborhood: 'Waterfront',
     address: '100 Ocean Blvd',
     beds: 4,
     baths: 5,
     area: 6000,
-    parking: 3,
-    status: 'For Sale' as Property['status'],
-    isFeatured: true,
+    status: 'For Sale',
     description: '',
-    images: ['https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80'] as string[],
-    videoUrl: '',
-    amenities: 'Infinity Pool, Smart Home, Private Gym, Wine Cellar',
-    agentId: 'agent-1'
+    images: ['https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80'],
+    videoUrl: ''
   });
 
   const handleOpenNewProperty = () => {
@@ -91,163 +99,41 @@ export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
       price: 12500000,
       discountPrice: 0,
       city: 'Los Angeles',
-      district: 'Bel Air',
-      neighborhood: 'Stone Canyon',
       address: '777 Sunset Ridge',
       beds: 5,
       baths: 6,
       area: 8500,
-      parking: 4,
       status: 'For Sale',
-      isFeatured: true,
       description: 'A brand-new architectural sanctuary boasting ultra-high ceiling glass panels and bespoke finishes.',
       images: ['https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80'],
-      videoUrl: '',
-      amenities: 'Infinity Pool, Private Cinema, Wine Cellar, Smart Home System',
-      agentId: agents[0]?.id || 'agent-1'
+      videoUrl: ''
     });
     setPropertyModalOpen(true);
   };
 
-  const handleOpenEditProperty = (item: Property) => {
-    setEditingPropertyId(item.id);
+  const handleOpenEditProperty = (item: FirestoreProperty) => {
+    setEditingPropertyId(item.uid);
     setPropForm({
       title: item.title,
       type: item.type,
       price: item.price,
       discountPrice: item.discountPrice || 0,
-      city: item.location.city,
-      district: item.location.district,
-      neighborhood: item.location.neighborhood,
-      address: item.location.address,
+      city: item.city,
+      address: item.address,
       beds: item.beds,
       baths: item.baths,
       area: item.area,
-      parking: item.parking,
       status: item.status,
-      isFeatured: item.isFeatured,
       description: item.description,
       images: item.images,
-      videoUrl: item.videoUrl || '',
-      amenities: item.amenities.join(', '),
-      agentId: item.agentId
+      videoUrl: item.videoUrl || ''
     });
     setPropertyModalOpen(true);
   };
 
-  const handleSaveProperty = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!propForm.title.trim() || !propForm.city.trim() || !propForm.address.trim()) {
-      showToast('Title, city, and address are required.', 'error');
-      return;
-    }
-
-    const parseListInput = (value: unknown) => {
-      if (Array.isArray(value)) {
-        return value
-          .map((item) => String(item).trim())
-          .filter(Boolean);
-      }
-      if (typeof value === 'string') {
-        return value
-          .split(',')
-          .map((item) => item.trim())
-          .filter(Boolean);
-      }
-      return [];
-    };
-
-    const imageList = parseListInput(propForm.images);
-    const amenityList = parseListInput(propForm.amenities);
-
-    if (editingPropertyId) {
-      const updatedProperty = properties.find((property) => property.id === editingPropertyId);
-      if (!updatedProperty) return;
-      const propertyData = {
-        ...updatedProperty,
-        title: propForm.title,
-        type: propForm.type,
-        price: Number(propForm.price),
-        ...(propForm.discountPrice > 0 ? { discountPrice: Number(propForm.discountPrice) } : {}),
-        location: {
-          ...updatedProperty.location,
-          city: propForm.city,
-          district: propForm.district,
-          neighborhood: propForm.neighborhood,
-          address: propForm.address
-        },
-        beds: Number(propForm.beds),
-        baths: Number(propForm.baths),
-        area: Number(propForm.area),
-        parking: Number(propForm.parking),
-        status: propForm.status,
-        isFeatured: propForm.isFeatured,
-        description: propForm.description,
-        images: imageList.length > 0 ? imageList : updatedProperty.images,
-        videoUrl: propForm.videoUrl?.trim() || updatedProperty.videoUrl,
-        amenities: amenityList.length > 0 ? amenityList : updatedProperty.amenities,
-        agentId: propForm.agentId
-      };
-      setProperties(prev => prev.map(p => (p.id === editingPropertyId ? propertyData : p)));
-      setPropertyModalOpen(false);
-      try {
-        await setDoc(doc(db, 'properties', editingPropertyId), propertyData);
-        showToast(`Property "${propForm.title}" updated successfully.`);
-      } catch (error) {
-        console.error('Failed to sync property update to the database.', error);
-        showToast(`Property "${propForm.title}" updated locally, but the database sync failed.`, 'error');
-      }
-    } else {
-      const newProp: Property = {
-        id: `prop-${Date.now()}`,
-        title: propForm.title,
-        type: propForm.type,
-        price: Number(propForm.price),
-        // Firestore's setDoc() throws a client-side error on any field whose
-        // value is `undefined` (e.g. "Unsupported field value: undefined"),
-        // so the key must be omitted entirely rather than set to undefined
-        // when there is no discount price.
-        ...(propForm.discountPrice > 0 ? { discountPrice: Number(propForm.discountPrice) } : {}),
-        location: {
-          city: propForm.city,
-          district: propForm.district,
-          neighborhood: propForm.neighborhood,
-          address: propForm.address
-        },
-        beds: Number(propForm.beds),
-        baths: Number(propForm.baths),
-        area: Number(propForm.area),
-        parking: Number(propForm.parking),
-        yearBuilt: 2026,
-        status: propForm.status,
-        rating: 5.0,
-        isFeatured: propForm.isFeatured,
-        images: imageList.length > 0 ? imageList : ['https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80'],
-        agentId: propForm.agentId,
-        amenities: amenityList.length > 0 ? amenityList : ['Infinity Pool', 'Smart Home System'],
-        description: propForm.description,
-        walkScore: 88,
-        transitScore: 78,
-        energyRating: 'A++',
-        videoUrl: propForm.videoUrl?.trim() || '',
-        virtualTourUrl: '',
-        mapCoords: { x: 50, y: 50 }
-      };
-      setProperties(prev => [newProp, ...prev]);
-      setPropertyModalOpen(false);
-      try {
-        await setDoc(doc(db, 'properties', newProp.id), newProp);
-        showToast(`New Listing "${propForm.title}" broadcasted to database.`);
-      } catch (error) {
-        console.error('Failed to save new property to the database.', error);
-        showToast(`Listing "${propForm.title}" added locally, but the database sync failed.`, 'error');
-      }
-    }
-  };
-
   const handleDeleteProperty = async (id: string, title: string) => {
     if (window.confirm(`Are you sure you want to remove listing "${title}"?`)) {
-      setProperties(prev => prev.filter(p => p.id !== id));
+      setProperties(prev => prev.filter(p => p.uid !== id));
       try {
         await deleteDoc(doc(db, 'properties', id));
         showToast(`Property "${title}" deleted.`);
@@ -256,11 +142,6 @@ export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
         showToast(`Property "${title}" removed locally, but the database sync failed.`, 'error');
       }
     }
-  };
-
-  const handleToggleFeaturedProperty = (id: string) => {
-    setProperties(prev => prev.map(p => p.id === id ? { ...p, isFeatured: !p.isFeatured } : p));
-    showToast('Featured status updated.');
   };
 
   // Agent Modal State
@@ -517,12 +398,15 @@ export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
 
   // System Settings Handlers
   const handleResetDatabase = () => {
-    if (window.confirm('Reset all properties, agents, testimonials, and articles back to default initial values?')) {
-      setProperties(PROPERTIES);
+    // Properties now live in Firestore and are excluded here on purpose —
+    // resetting them would mean deleting real listings, which this button
+    // shouldn't do silently. Only the still-local sample data (agents,
+    // testimonials, articles) is reset.
+    if (window.confirm('Reset agents, testimonials, and articles back to default sample values? (Properties are live in your database and are not affected.)')) {
       setAgents(AGENTS);
       setTestimonials(TESTIMONIALS);
       setBlogPosts(BLOG_POSTS);
-      showToast('Database reset to original default state successfully.');
+      showToast('Agents, testimonials, and articles reset to default sample values.');
     }
   };
 
@@ -640,11 +524,9 @@ export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
         {activeTab === 'overview' && <DashboardOverview properties={properties} agents={agents} />}
         {activeTab === 'properties' && (
           <PropertiesTab
-            properties={properties}
             onOpenNewProperty={handleOpenNewProperty}
             onOpenEditProperty={handleOpenEditProperty}
             onDeleteProperty={handleDeleteProperty}
-            onToggleFeaturedProperty={handleToggleFeaturedProperty}
           />
         )}
         {activeTab === 'agents' && (
@@ -684,7 +566,7 @@ export const AdminPage: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
         editingId={editingPropertyId}
         form={propForm}
         setForm={setPropForm}
-        onSave={handleSaveProperty}
+        onSuccess={() => showToast(editingPropertyId ? `Property "${propForm.title}" updated successfully.` : `New Listing "${propForm.title}" broadcasted to database.`)}
         onClose={() => setPropertyModalOpen(false)}
       />
       <AgentModal

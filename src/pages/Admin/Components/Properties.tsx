@@ -3,7 +3,7 @@ import { Plus, Search, Edit3, Trash2 } from 'lucide-react';
 import { db } from "@/firebaseConfig";
 import { collection, onSnapshot } from 'firebase/firestore';
 
-interface Property {
+export interface Property {
   uid: string;
   title: string;
   price: number;
@@ -23,21 +23,17 @@ interface Property {
 }
 
 interface PropertiesTabProps {
-  properties: Property[];
   onOpenNewProperty: () => void;
   onOpenEditProperty: (item: Property) => void;
   onDeleteProperty: (id: string, title: string) => void;
-  onToggleFeaturedProperty: (id: string) => void;
 }
 
 const newListingBtnClass = "relative overflow-hidden bg-[linear-gradient(135deg,var(--accent-gold)_0%,var(--accent-gold-dark)_100%)] text-black font-heading font-semibold border-none rounded-lg cursor-pointer shadow-[var(--glow-shadow)] [transition:transform_var(--transition-fast),box-shadow_var(--transition-fast),filter_var(--transition-fast)] hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0 after:content-[''] after:absolute after:top-0 after:-left-3/4 after:w-1/2 after:h-full after:[background:linear-gradient(to_right,rgba(255,255,255,0)_0%,rgba(255,255,255,0.3)_100%)] after:[transform:skewX(-25deg)] after:[transition:0.75s] hover:after:[animation:shine_0.85s] flex items-center gap-2 px-6 py-3 text-[0.85rem]";
 
 export const PropertiesTab: React.FC<PropertiesTabProps> = ({
-  properties,
   onOpenNewProperty,
   onOpenEditProperty,
-  onDeleteProperty,
-  onToggleFeaturedProperty
+  onDeleteProperty
 }) => {
   const [searchProperty, setSearchProperty] = useState('');
   const [items, setItems] = useState<Property[]>([]);
@@ -120,7 +116,7 @@ export const PropertiesTab: React.FC<PropertiesTabProps> = ({
                   {/* {item.district} */}
                 </td>
                 <td className="py-4 px-3 font-bold text-accent-gold">
-                  ${(item.price / 1000000).toFixed(2)}M
+                  RWF {(item.price / 1000000).toFixed(2)}M
                 </td>
                 <td className="py-4 px-3">
                   <span className={`${item.status === 'For Sale' ? 'bg-emerald-500/15 text-emerald-500' : 'bg-blue-400/15 text-blue-400'} py-1 px-2.5 rounded text-[0.75rem] font-bold`}>
