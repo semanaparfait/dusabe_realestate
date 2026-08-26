@@ -22,7 +22,8 @@ import {
 } from '@/data';
 
 import { DashboardOverview } from '@/pages/Admin/Components/Dashboard';
-import { PropertiesTab, type Property as FirestoreProperty } from '@/pages/Admin/Components/Properties';
+import { PropertiesTab } from '@/pages/Admin/Components/Properties';
+import type {  Property as FirestoreProperty } from '@/pages/Admin/AdminTypes/AdminTypes';
 import { AgentsTab } from '@/pages/Admin/Components/Agents';
 import { ReviewsTab } from '@/pages/Admin/Components/Reviews';
 import { BlogPostTab } from '@/pages/Admin/Components/BlogPost';

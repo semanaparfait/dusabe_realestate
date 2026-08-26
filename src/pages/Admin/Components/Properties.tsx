@@ -2,25 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Search, Edit3, Trash2 } from 'lucide-react';
 import { db } from "@/firebaseConfig";
 import { collection, onSnapshot } from 'firebase/firestore';
+import type { Property} from "@/pages/Admin/AdminTypes/AdminTypes";
 
-export interface Property {
-  uid: string;
-  title: string;
-  price: number;
-  discountPrice?: number;
-  type: string;
-  status: string;
-  city: string;
-  address: string;
-  beds: number;
-  baths: number;
-  area: number;
-  images: string[];
-  videoUrl?: string;
-  description: string;
-  createdAt?: any;
-  updatedAt?: any;
-}
+
 
 interface PropertiesTabProps {
   onOpenNewProperty: () => void;
@@ -85,7 +69,7 @@ export const PropertiesTab: React.FC<PropertiesTabProps> = ({
       </div>
 
       <div className="rounded-2xl border border-border-light bg-bg-secondary overflow-x-auto [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)] shadow-[var(--glass-shadow)]">
-        <table className="w-full min-w-[820px] border-collapse text-[0.85rem] text-left">
+        <table className="w-full min-w-[960px] border-collapse text-[0.85rem] text-left">
           <thead>
             <tr className="bg-bg-tertiary border-b border-border-light text-text-tertiary uppercase tracking-[0.05em]">
               <th className="py-4 px-5">Listing Asset</th>
@@ -93,6 +77,7 @@ export const PropertiesTab: React.FC<PropertiesTabProps> = ({
               <th className="py-4 px-3">Location</th>
               <th className="py-4 px-3">Price</th>
               <th className="py-4 px-3">Status</th>
+              <th className="py-4 px-3">Posted By</th>
               <th className="py-4 px-5 text-right">Actions</th>
             </tr>
           </thead>
@@ -122,6 +107,11 @@ export const PropertiesTab: React.FC<PropertiesTabProps> = ({
                   <span className={`${item.status === 'For Sale' ? 'bg-emerald-500/15 text-emerald-500' : 'bg-blue-400/15 text-blue-400'} py-1 px-2.5 rounded text-[0.75rem] font-bold`}>
                     {item.status}
                   </span>
+                </td>
+                <td className="py-4 px-3 text-text-secondary">
+                  {item.postedBy?.name || item.postedBy?.email || (
+                    <span className="text-text-tertiary italic">Unknown</span>
+                  )}
                 </td>
 
                 <td className="py-4 px-5 text-right">

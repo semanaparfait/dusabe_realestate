@@ -9,9 +9,34 @@ import {
 } from "@/pages/Admin/Modals/modalStyles";
 import { uploadImageToCloudflare } from "@/utils/uploadToCloudflare";
 import { toast } from "react-toastify";
-import { collection, doc, addDoc, updateDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "@/firebaseConfig";
-import type { PropertyData } from "@/pages/Admin/AdminTypes/AdminTypes";
+import { collection, doc, addDoc, updateDoc, getDoc, serverTimestamp } from "firebase/firestore";
+import { auth, db } from "@/firebaseConfig";
+import type { PropertyData, PostedByInfo } from "@/pages/Admin/AdminTypes/AdminTypes";
+
+// Builds a snapshot of the signed-in admin for attribution on the listing.
+// uid/email come from Firebase Auth; any extra profile fields (name, role, ...)
+// are pulled in from their Users/{uid} document if one exists.
+async function getCurrentAdminInfo(): Promise<PostedByInfo | null> {
+  const currentUser = auth.currentUser;
+  if (!currentUser) return null;
+
+  const info: PostedByInfo = {
+    uid: currentUser.uid,
+    email: currentUser.email,
+  };
+
+  try {
+    const profileSnap = await getDoc(doc(db, "Users", currentUser.uid));
+    if (profileSnap.exists()) {
+      const profile = profileSnap.data();
+      Object.assign(info, profile, { uid: currentUser.uid, email: currentUser.email });
+    }
+  } catch (err) {
+    console.error("Could not load admin profile for attribution.", err);
+  }
+
+  return info;
+}
 
 
 
@@ -132,6 +157,8 @@ export const PropertyModal: React.FC<PropertyModalProps> = ({
 
     setIsSaving(true);
 
+    const adminInfo = await getCurrentAdminInfo();
+
     const payload = {
       title: title.trim(),
       price: Number(price),
@@ -147,19 +174,24 @@ export const PropertyModal: React.FC<PropertyModalProps> = ({
       videoUrl: videoUrl.trim(),
       description: description.trim(),
       updatedAt: serverTimestamp(),
+      // Every save records who last touched the listing...
+      ...(adminInfo ? { lastEditedBy: adminInfo } : {}),
     };
 
     try {
       if (editingId) {
-        // Update existing document
+        // Update existing document. postedBy is deliberately left out of this
+        // payload — updateDoc() only patches the given fields, so whoever
+        // originally created the listing stays intact.
         const docRef = doc(db, "properties", editingId);
         await updateDoc(docRef, payload);
         toast.success("Property updated successfully in Firebase!");
       } else {
-        // Create new document
+        // Create new document — ...and creation additionally records who posted it.
         const colRef = collection(db, "properties");
         await addDoc(colRef, {
           ...payload,
+          ...(adminInfo ? { postedBy: adminInfo } : {}),
           createdAt: serverTimestamp(),
         });
         toast.success("New property published to Firebase!");
