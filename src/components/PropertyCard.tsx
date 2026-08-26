@@ -1,13 +1,13 @@
 import React from 'react';
-import { Heart, GitCompare, Eye, Navigation } from 'lucide-react';
-import { AGENTS, type Property, type Agent } from '../data';
+import { Heart, GitCompare, Eye, Navigation, Star } from 'lucide-react';
+
+import type { Property } from '@/data';
 
 interface PropertyCardProps {
   property: Property;
   currency: string;
   isFavorited: boolean;
   isInCompareList: boolean;
-  agents?: Agent[];
   onToggleFavorite: (id: string) => void;
   onToggleCompare: (id: string) => void;
   onQuickView: (property: Property) => void;
@@ -18,14 +18,10 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
   currency,
   isFavorited,
   isInCompareList,
-  agents,
   onToggleFavorite,
   onToggleCompare,
   onQuickView
 }) => {
-  // Find Agent dynamically
-  const agentList = agents && agents.length > 0 ? agents : AGENTS;
-  const agent = agentList.find(a => a.id === property.agentId) || agentList[0];
 
   // Helper for Currency Conversion (USD and RWF)
   const formatPrice = (priceUSD: number) => {
@@ -41,10 +37,16 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
     }
 
     if (priceUSD >= 1000000) {
-      return `$${(priceUSD / 1000000).toFixed(1)}M${suffix}`;
+      return `${(priceUSD / 1000000).toFixed(1)}M${suffix}`;
     }
-    return `$${priceUSD.toLocaleString()}${suffix}`;
+    return `${priceUSD.toLocaleString()}${suffix}`;
   };
+
+  const postedByName =
+    property.postedBy?.name ||
+    property.postedBy?.displayName ||
+    property.postedBy?.email ||
+    'DUSABE Team';
 
   return (
     <div className="group relative flex flex-col h-full rounded-2xl overflow-hidden shadow-card [transition:all_var(--transition-slow)] hover:-translate-y-2 hover:shadow-[0_20px_40px_-10px_rgba(15,23,42,0.15)] bg-[var(--glass-bg)] [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)] border border-[var(--glass-border)]">
@@ -95,11 +97,17 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
 
       {/* Card Information Body */}
       <div className="p-6 flex flex-col grow">
-        <div className="flex justify-between items-center mb-2.5">
-          <span className="font-heading text-[0.8rem] font-semibold uppercase tracking-[0.1em] text-accent-gold-dark">{property.type}</span>
-          <span className="flex items-center gap-1 text-[0.85rem] font-semibold font-serif italic text-accent-gold">
-            ★ {property.rating.toFixed(1)}
+
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[0.7rem] font-heading uppercase tracking-[0.08em] text-accent-gold font-semibold">
+            {property.type}
           </span>
+          {typeof property.rating === 'number' && (
+            <span className="flex items-center gap-1 text-[0.8rem] text-text-secondary">
+              <Star size={13} className="text-accent-gold" fill="currentColor" />
+              {property.rating.toFixed(1)}
+            </span>
+          )}
         </div>
 
         <h3 className="text-[1.3rem] mb-3 text-text-primary [transition:color_var(--transition-fast)] hover:text-[var(--secondary)]" onClick={() => onQuickView(property)}>
@@ -108,7 +116,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
 
         <div className="flex items-center gap-1.5 text-[0.85rem] text-text-secondary mb-[18px]">
           <Navigation size={14} className="text-accent-gold" />
-          <span>{property.location.address}, {property.location.city}</span>
+          <span>{property.location.address ? `${property.location.address}, ` : ''}{property.location.city}</span>
         </div>
 
         {/* Card Feature Specs Row */}
@@ -127,20 +135,19 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
           </div>
         </div>
 
-        {/* Footer info: price and agent tag */}
+        {/* Footer info: price and posting admin tag */}
         <div className="flex justify-between items-center mt-auto">
           <div className="flex flex-col">
             <span className="text-[0.75rem] text-text-tertiary uppercase">Investment Value</span>
             <span className="font-serif text-[1.4rem] italic font-bold text-text-primary">
-              {formatPrice(property.discountPrice || property.price)}
+             RWF {formatPrice(property.discountPrice || property.price)}
             </span>
           </div>
 
-          <div className="flex items-center gap-2 cursor-pointer" title={`Managed by ${agent.name}`}>
-            <img src={agent.image} alt={agent.name} className="w-[38px] h-[38px] rounded-full object-cover border border-accent-gold" />
+          <div className="flex items-center gap-2 cursor-pointer" title={`Posted by ${postedByName}`}>
             <div>
-              <p className="text-[0.8rem] font-semibold text-text-primary">{agent.name.split(' ')[0]}</p>
-              <p className="text-[0.65rem] text-text-tertiary">Expert</p>
+              <p className="text-[0.8rem] font-semibold text-text-primary">{postedByName.split(' ')[0]}</p>
+              <p className="text-[0.65rem] text-text-tertiary">Listing Agent</p>
             </div>
           </div>
         </div>

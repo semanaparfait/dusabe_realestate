@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "@/App.css";
 
 // Data & Types
@@ -7,18 +8,19 @@ import {
   type Agent,
   type Testimonial,
   type BlogPost,
-  PROPERTIES,
   AGENTS,
   TESTIMONIALS,
   BLOG_POSTS,
 } from "@/data";
+import { db } from "@/firebaseConfig";
+import { collection, onSnapshot } from "firebase/firestore";
+import { normalizeDbProperty } from "@/utils/normalizeDbProperty";
 
 // Components
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { FilterSection } from "@/components/FilterSection";
 import { PropertyCard } from "@/components/PropertyCard";
-import { PropertyDetailModal } from "@/components/PropertyDetailModal";
 import { AgentProfiles } from "@/components/AgentProfiles";
 import { WhyChooseUs } from "@/components/WhyChooseUs";
 import { Testimonials } from "@/components/Testimonials";
@@ -62,6 +64,8 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
 };
 
 function Home() {
+  const navigate = useNavigate();
+
   // Preloader
   const [loading, setLoading] = useState(true);
 
@@ -71,7 +75,20 @@ function Home() {
   const [language, setLanguage] = useState("en");
 
   // Properties & Data lists (dynamic to support adding/editing/deleting)
-  const [properties, setProperties] = useState<Property[]>(PROPERTIES);
+  // Live listings from the same Firestore `properties` collection the Admin
+  // panel manages — not the data.ts sample set.
+  const [properties, setProperties] = useState<Property[]>([]);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, "properties"), (snapshot) => {
+      const items = snapshot.docs.map((docSnap) =>
+        normalizeDbProperty({ id: docSnap.id, ...docSnap.data() }),
+      );
+      setProperties(items);
+    });
+    return () => unsubscribe();
+  }, []);
+
   const [agents] = useState<Agent[]>(AGENTS);
   const [testimonials] = useState<Testimonial[]>(TESTIMONIALS);
   const [blogPosts] = useState<BlogPost[]>(BLOG_POSTS);
@@ -97,8 +114,6 @@ function Home() {
   const [compareList, setCompareList] = useState<string[]>([]);
 
   // Open overlays
-  const [activePropertyDetail, setActivePropertyDetail] =
-    useState<Property | null>(null);
   const [activeDashboardRole, setActiveDashboardRole] = useState<
     "user" | "agent" | "admin" | null
   >(null);
@@ -339,10 +354,9 @@ function Home() {
                         currency={currency}
                         isFavorited={wishlist.includes(prop.id)}
                         isInCompareList={compareList.includes(prop.id)}
-                        agents={agents}
                         onToggleFavorite={handleToggleWishlist}
                         onToggleCompare={handleToggleCompare}
-                        onQuickView={(p) => setActivePropertyDetail(p)}
+                        onQuickView={(p) => navigate(`/property/${p.id}`)}
                       />
                     ))}
                   </div>
@@ -367,16 +381,6 @@ function Home() {
         {/* Footer */}
         <Footer />
 
-        {/* OVERLAY: Detail Modal */}
-        {activePropertyDetail && (
-          <PropertyDetailModal
-            property={activePropertyDetail}
-            currency={currency}
-            agents={agents}
-            onClose={() => setActivePropertyDetail(null)}
-          />
-        )}
-
         {/* OVERLAY: User / Agent Dashboard Modal */}
         {activeDashboardRole && activeDashboardRole !== "admin" && (
           <DashboardModal
@@ -386,7 +390,7 @@ function Home() {
             onRemoveWishlist={handleRemoveWishlist}
             onAddProperty={handleAddProperty}
             onDeleteProperty={handleDeleteProperty}
-            onQuickView={(p) => setActivePropertyDetail(p)}
+            onQuickView={(p) => navigate(`/property/${p.id}`)}
             onClose={() => setActiveDashboardRole(null)}
           />
         )}
@@ -413,7 +417,7 @@ function Home() {
           onRemoveCompare={handleRemoveCompare}
           onClearAll={handleClearCompare}
           currency={currency}
-          onQuickView={(p) => setActivePropertyDetail(p)}
+          onQuickView={(p) => navigate(`/property/${p.id}`)}
         />
 
         {/* WIDGET: Floating chatbot dialogue */}

@@ -109,7 +109,7 @@ export const PropertiesTab: React.FC<PropertiesTabProps> = ({
                   </span>
                 </td>
                 <td className="py-4 px-3 text-text-secondary">
-                  {item.postedBy?.name || item.postedBy?.email || (
+                  {item.postedBy?.name || item.postedBy?.displayName || item.postedBy?.email || (
                     <span className="text-text-tertiary italic">Unknown</span>
                   )}
                 </td>

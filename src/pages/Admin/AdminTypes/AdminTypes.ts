@@ -2,7 +2,9 @@
 export interface PostedByInfo {
   uid: string;
   email: string | null;
+  phoneNumber?: string;
   name?: string;
+  displayName?: string;
   role?: string;
   [key: string]: any;
 }

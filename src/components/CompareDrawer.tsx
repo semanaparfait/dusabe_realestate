@@ -163,23 +163,29 @@ export const CompareDrawer: React.FC<CompareDrawerProps> = ({
                   <tr>
                     <td className="border-b border-border-light p-4 text-left"><strong>Year Built</strong></td>
                     {items.map(item => (
-                      <td key={item.id} className="border-b border-border-light p-4 text-left">{item.yearBuilt}</td>
+                      <td key={item.id} className="border-b border-border-light p-4 text-left">{item.yearBuilt ?? '—'}</td>
                     ))}
                   </tr>
                   <tr>
                     <td className="border-b border-border-light p-4 text-left"><strong>Energy Class</strong></td>
                     {items.map(item => (
                       <td key={item.id} className="border-b border-border-light p-4 text-left">
-                        <span className="bg-emerald-500 text-white py-0.5 px-1.5 rounded text-[0.75rem] font-bold">
-                          {item.energyRating}
-                        </span>
+                        {item.energyRating ? (
+                          <span className="bg-emerald-500 text-white py-0.5 px-1.5 rounded text-[0.75rem] font-bold">
+                            {item.energyRating}
+                          </span>
+                        ) : (
+                          <span className="text-text-tertiary">—</span>
+                        )}
                       </td>
                     ))}
                   </tr>
                   <tr>
                     <td className="border-b border-border-light p-4 text-left"><strong>Walkability Index</strong></td>
                     {items.map(item => (
-                      <td key={item.id} className="border-b border-border-light p-4 text-left font-serif italic text-accent-gold">{item.walkScore}/100</td>
+                      <td key={item.id} className="border-b border-border-light p-4 text-left font-serif italic text-accent-gold">
+                        {typeof item.walkScore === 'number' ? `${item.walkScore}/100` : '—'}
+                      </td>
                     ))}
                   </tr>
                   <tr>

@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { AGENTS, type Property, type Agent } from '../data';
 import { MortgageCalculator } from './MortgageCalculator';
+// import type { Property  } from '@/pages/Admin/AdminTypes/AdminTypes';
 
 interface PropertyDetailModalProps {
   property: Property;
@@ -124,7 +125,9 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
               <div className="flex gap-4 items-center mb-6">
                 <span className="bg-primary text-white py-1.5 px-3.5 rounded-md font-heading text-[0.75rem] font-semibold uppercase tracking-[0.05em]">{property.status}</span>
                 <span className="font-heading text-[0.9rem] font-semibold uppercase tracking-[0.1em] text-accent-gold-dark">{property.type}</span>
-                <span className="bg-emerald-500 text-white py-1 px-2.5 rounded font-heading font-bold text-[0.8rem]">EU Energy {property.energyRating}</span>
+                {property.energyRating && (
+                  <span className="bg-emerald-500 text-white py-1 px-2.5 rounded font-heading font-bold text-[0.8rem]">EU Energy {property.energyRating}</span>
+                )}
               </div>
 
               <h2 className="text-[2.5rem] mb-2">{property.title}</h2>
@@ -164,51 +167,59 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
               </div>
 
               {/* Amenities */}
-              <div className="mt-[30px]">
-                <h3 className="text-[1.25rem] mb-3 border-b border-border-light pb-2">Estate Amenities</h3>
-                <div className="grid grid-cols-2 gap-4 mt-5 mb-[30px]">
-                  {property.amenities.map((amenity, idx) => (
-                    <div key={idx} className="flex items-center gap-2.5 text-[0.95rem] text-text-secondary">
-                      <div className="bg-accent-gold/15 text-accent-gold-dark rounded-full p-1 flex">
-                        <Check size={14} />
+              {property.amenities.length > 0 && (
+                <div className="mt-[30px]">
+                  <h3 className="text-[1.25rem] mb-3 border-b border-border-light pb-2">Estate Amenities</h3>
+                  <div className="grid grid-cols-2 gap-4 mt-5 mb-[30px]">
+                    {property.amenities.map((amenity, idx) => (
+                      <div key={idx} className="flex items-center gap-2.5 text-[0.95rem] text-text-secondary">
+                        <div className="bg-accent-gold/15 text-accent-gold-dark rounded-full p-1 flex">
+                          <Check size={14} />
+                        </div>
+                        <span>{amenity}</span>
                       </div>
-                      <span>{amenity}</span>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Walkability & Transit */}
-              <div className="mt-[30px]">
-                <h3 className="text-[1.25rem] mb-3 border-b border-border-light pb-2">Environmental Telemetry</h3>
-                <div className="flex gap-5 items-center my-6">
-                  <div className="w-20 h-20 relative flex items-center justify-center rounded-full bg-[var(--glass-bg)] [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)] border border-[var(--glass-border)] shadow-[var(--glass-shadow)]">
-                    <svg width="80" height="80" className="-rotate-90">
-                      <circle cx="40" cy="40" r="32" stroke="var(--border-light)" strokeWidth="4" fill="none" />
-                      <circle cx="40" cy="40" r="32" stroke="var(--accent-gold)" strokeWidth="5" fill="none" strokeDasharray="200" strokeDashoffset={200 - (200 * property.walkScore) / 100} />
-                    </svg>
-                    <span className="absolute font-heading text-[1.4rem] font-extrabold text-text-primary">{property.walkScore}</span>
-                  </div>
-                  <div>
-                    <h4 className="text-base">Walkability Rating</h4>
-                    <p className="text-[0.85rem]">Most tasks can be accomplished by walking to nearby high-end retail hubs.</p>
-                  </div>
-                </div>
+              {(typeof property.walkScore === 'number' || typeof property.transitScore === 'number') && (
+                <div className="mt-[30px]">
+                  <h3 className="text-[1.25rem] mb-3 border-b border-border-light pb-2">Environmental Telemetry</h3>
+                  {typeof property.walkScore === 'number' && (
+                    <div className="flex gap-5 items-center my-6">
+                      <div className="w-20 h-20 relative flex items-center justify-center rounded-full bg-[var(--glass-bg)] [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)] border border-[var(--glass-border)] shadow-[var(--glass-shadow)]">
+                        <svg width="80" height="80" className="-rotate-90">
+                          <circle cx="40" cy="40" r="32" stroke="var(--border-light)" strokeWidth="4" fill="none" />
+                          <circle cx="40" cy="40" r="32" stroke="var(--accent-gold)" strokeWidth="5" fill="none" strokeDasharray="200" strokeDashoffset={200 - (200 * property.walkScore) / 100} />
+                        </svg>
+                        <span className="absolute font-heading text-[1.4rem] font-extrabold text-text-primary">{property.walkScore}</span>
+                      </div>
+                      <div>
+                        <h4 className="text-base">Walkability Rating</h4>
+                        <p className="text-[0.85rem]">Most tasks can be accomplished by walking to nearby high-end retail hubs.</p>
+                      </div>
+                    </div>
+                  )}
 
-                <div className="flex gap-5 items-center my-6 mt-4">
-                  <div className="w-20 h-20 relative flex items-center justify-center rounded-full bg-[var(--glass-bg)] [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)] border border-[var(--glass-border)] shadow-[var(--glass-shadow)]">
-                    <svg width="80" height="80" className="-rotate-90">
-                      <circle cx="40" cy="40" r="32" stroke="var(--border-light)" strokeWidth="4" fill="none" />
-                      <circle cx="40" cy="40" r="32" stroke="var(--secondary)" strokeWidth="5" fill="none" strokeDasharray="200" strokeDashoffset={200 - (200 * property.transitScore) / 100} />
-                    </svg>
-                    <span className="absolute font-heading text-[1.4rem] font-extrabold text-text-primary">{property.transitScore}</span>
-                  </div>
-                  <div>
-                    <h4 className="text-base">Transit Access Rating</h4>
-                    <p className="text-[0.85rem]">Elite private limousine pads and proximity to arterial transport hubs.</p>
-                  </div>
+                  {typeof property.transitScore === 'number' && (
+                    <div className="flex gap-5 items-center my-6 mt-4">
+                      <div className="w-20 h-20 relative flex items-center justify-center rounded-full bg-[var(--glass-bg)] [backdrop-filter:var(--glass-blur)] [-webkit-backdrop-filter:var(--glass-blur)] border border-[var(--glass-border)] shadow-[var(--glass-shadow)]">
+                        <svg width="80" height="80" className="-rotate-90">
+                          <circle cx="40" cy="40" r="32" stroke="var(--border-light)" strokeWidth="4" fill="none" />
+                          <circle cx="40" cy="40" r="32" stroke="var(--secondary)" strokeWidth="5" fill="none" strokeDasharray="200" strokeDashoffset={200 - (200 * property.transitScore) / 100} />
+                        </svg>
+                        <span className="absolute font-heading text-[1.4rem] font-extrabold text-text-primary">{property.transitScore}</span>
+                      </div>
+                      <div>
+                        <h4 className="text-base">Transit Access Rating</h4>
+                        <p className="text-[0.85rem]">Elite private limousine pads and proximity to arterial transport hubs.</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </div>
+              )}
 
               {/* Mock Floor Plan Simulator */}
               <div className="bg-bg-tertiary rounded-xl p-5 mt-[30px]">

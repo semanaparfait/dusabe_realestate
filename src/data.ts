@@ -1,3 +1,15 @@
+// Snapshot of the admin who created/last edited a listing. Kept independent
+// of the Admin-internal AdminTypes.ts definition (same shape) so the public
+// site doesn't import from Admin-only modules.
+export interface PostedByInfo {
+  uid: string;
+  email: string | null;
+  name?: string;
+  displayName?: string;
+  role?: string;
+  [key: string]: any;
+}
+
 export interface Property {
   id: string;
   title: string;
@@ -14,20 +26,30 @@ export interface Property {
   baths: number;
   area: number; // sq ft
   parking: number;
-  yearBuilt: number;
+  // These are optional because listings sourced live from the database don't
+  // collect them yet (the Admin form only captures the fields below them).
+  // Components that show a badge for one of these (star rating, walk/transit
+  // score, energy class) hide it when the value is absent instead of
+  // fabricating a number — see src/utils/normalizeDbProperty.ts.
+  yearBuilt?: number;
   status: 'For Sale' | 'For Rent' | 'Off-Market';
-  rating: number;
+  rating?: number;
   isFeatured: boolean;
   images: string[];
   agentId: string;
   amenities: string[];
   description: string;
-  walkScore: number;
-  transitScore: number;
-  energyRating: 'A++' | 'A+' | 'A' | 'B' | 'C';
+  walkScore?: number;
+  transitScore?: number;
+  energyRating?: 'A++' | 'A+' | 'A' | 'B' | 'C';
   videoUrl: string;
   virtualTourUrl: string;
   mapCoords: { x: number; y: number }; // Relative percentage coordinates for custom interactive vector map [0-100]
+  // Multi-admin attribution — who created this listing and who last edited it.
+  // Optional because data.ts's sample listings and older Firestore docs
+  // predate this feature.
+  postedBy?: PostedByInfo;
+  lastEditedBy?: PostedByInfo;
 }
 
 export interface Agent {
